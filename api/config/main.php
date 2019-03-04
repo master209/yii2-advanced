@@ -53,9 +53,13 @@ return [
                 'GET profile' => 'profile/index',
                 'PUT,PATCH profile' => 'profile/update',
 
-                //'GET posts' => 'post/index',
-                //'PUT,PATCH posts' => 'post/update',
+//                'GET posts' => 'post/index',
+//                'PUT,PATCH posts' => 'post/update',
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'post'],
+
+//                'GET cars' => 'car/index',
+//                'PUT,PATCH cars' => 'car/update',
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'car'],
             ],
         ],
     ],
