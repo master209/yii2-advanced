@@ -49,16 +49,16 @@ class CarController extends ActiveController
     public function actions()
     {
         $actions = parent::actions();
-        unset($actions['create']);
+//        unset($actions['create']);
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
         return $actions;
     }
 
-    public function actionCreate()
+/*    public function actionCreate()
     {
         $model = new Car();
-        $model->user_id = Yii::$app->user->id;
 
+echo "Create<pre>"; print_r(Yii::$app->getRequest()); echo"</pre>"; die();
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
         if ($model->save()) {
             $response = Yii::$app->getResponse();
@@ -70,7 +70,7 @@ class CarController extends ActiveController
         }
 
         return $model;
-    }
+    }*/
 
     public function prepareDataProvider()
     {
@@ -81,11 +81,5 @@ class CarController extends ActiveController
     public function checkAccess($action, $model = null, $params = [])
     {
 //echo"<pre>"; print_r($action); echo"</pre>"; die();
-
-        if (in_array($action, ['update', 'delete'])) {
-            if (!Yii::$app->user->can(Rbac::MANAGE_POST, ['car' => $model])) {
-                throw  new ForbiddenHttpException('Forbidden.');
-            }
-        }
     }
 }

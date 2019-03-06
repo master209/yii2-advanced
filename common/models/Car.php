@@ -12,11 +12,8 @@ use yii\web\Linkable;
  * This is the model class for table "{{%car}}".
  *
  * @property integer $id
- * @property integer $user_id
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $title
- * @property string $content
+ * @property string $name
+ * @property number $year
  *
  * @property User $user
  */
@@ -30,7 +27,7 @@ class Car extends ActiveRecord      //implements Linkable
     public function rules()
     {
         return [
-            [['name'], 'string', 'max' => 100],
+            [['name'], 'string', 'max' => 255],
             [['year'], 'number'],
         ];
     }

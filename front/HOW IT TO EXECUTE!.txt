@@ -1,0 +1,2 @@
+cd "C:\Users\Игорь\PhpstormProjects\yii2-app-advanced\front"
+npm run dev
