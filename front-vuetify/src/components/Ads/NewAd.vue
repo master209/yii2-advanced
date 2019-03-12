@@ -12,26 +12,32 @@
             required
             :rules="[v => !!v || 'Title is required']"
           ></v-text-field>
-          <v-text-field
+          <v-textarea
             name="description"
             label="Ad description"
             type="text"
             v-model="description"
-            multi-line
             :rules="[v => !!v || 'Description is required']"
-          ></v-text-field>
+          ></v-textarea>
         </v-form>
         <v-layout row class="mb-3">
           <v-flex xs12>
-            <v-btn class="warning">
+              <v-btn class="warning" @click="triggerUpload">
               Upload
               <v-icon right dark>cloud_upload</v-icon>
             </v-btn>
+            <input
+                  ref="fileInput"
+                  type="file"
+                  style="display: none;"
+                  accept="image/*"
+                  @change="onFileChange"
+            >
           </v-flex>
         </v-layout>
         <v-layout row>
           <v-flex xs12>
-            <img src="" height="100">
+            <img :src="imageSrc" height="100" v-if="imageSrc">
           </v-flex>
         </v-layout>
         <v-layout row>
@@ -47,7 +53,8 @@
           <v-flex xs12>
             <v-spacer></v-spacer>
             <v-btn
-              :disabled="!valid"
+              :loading="loading"
+              :disabled="!valid || !image || loading"
               class="success"
               @click="createAd"
             >
@@ -67,22 +74,51 @@
         title: '',
         description: '',
         promo: false,
-        valid: false
+        valid: false,
+        image: null,    // объект File
+        imageSrc: ''    // само изображение в base64
+      }
+    },
+    computed: {
+      loading () {
+        return this.$store.getters.loading
       }
     },
     methods: {
       createAd () {
-        if (this.$refs.form.validate()) {
+        if (this.$refs.form.validate() && this.image) {
           // logic
           const ad = {
             title: this.title,
             description: this.description,
             promo: this.promo,
-            imageSrc: 'https://cdn-images-1.medium.com/max/850/1*nq9cdMxtdhQ0ZGL8OuSCUQ.jpeg'
+            image: this.image
           }
 
           this.$store.dispatch('createAd', ad)
+          .then(() => {
+            this.$router.push('/list')
+          })
+          .catch(() => {})
         }
+      },
+      triggerUpload () {
+        this.$refs.fileInput.click()
+      },
+      onFileChange (event) {
+        const file = event.target.files[0]
+        console.log('onFileChange: ', file)
+
+        const reader = new FileReader()   // стандартный класс JavaScript
+
+        // прослушка события на окончание загрузки файла (т.к. загрузка файла выполняется асинхр.)
+        reader.onload = e => {
+          this.imageSrc = reader.result   // само изображение в base64
+        }
+
+        // асинхронная операция; считывает изображение в base64 как атрибут src в тег <img>
+        reader.readAsDataURL(file)
+        this.image = file   // объект File
       }
     }
   }

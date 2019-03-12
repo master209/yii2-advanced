@@ -1,30 +1,59 @@
 import Vue from 'vue'
 import './plugins/vuetify'
-import App from './App'
+import App from './App.vue'
 import router from './router'
+import VueResource from 'vue-resource'
 import store from './store'
-import Vuetify from 'vuetify'
+import BuyModalComponent from '@/components/Shared/BuyModal'
 import * as fb from 'firebase'
-import 'vuetify/dist/vuetify.min.css'
-
-Vue.use(Vuetify)
 
 Vue.config.productionTip = false
+Vue.component('app-buy-modal', BuyModalComponent)
+
+Vue.use(VueResource);
+Vue.http.options.root = 'https://api.yii2-advanced.cyberdevel.ru/';
+
+/*
+// https://github.com/pagekit/vue-resource/blob/develop/docs/http.md#interceptors
+Vue.http.interceptors.push(function(request) {
+  console.log('from interceptors, request.method: ', request.method);
+  if (request.method === 'POST'
+    || request.method === 'PATCH'
+    || request.method === 'PUT'
+    || request.method === 'DELETE'
+  ) {
+    // request.headers.set('X-CSRF-TOKEN', 'TOKEN');
+    request.headers.set('Authorization', 'Bearer token-correct');
+  }
+});
+*/
 
 new Vue({
-  render: h => h(App),
   router,
   store,
-  components: { App },
-  template: '<App/>',
-  created () {
-    fb.initializeApp({
+  created: function () {
+    var config = {
       apiKey: 'AIzaSyCef7HxxH5g5Ar8pCV3rnineJ-UgHDRnLE',
       authDomain: 'vue-practice-25d09.firebaseapp.com',
       databaseURL: 'https://vue-practice-25d09.firebaseio.com',
       projectId: 'vue-practice-25d09',
       storageBucket: 'vue-practice-25d09.appspot.com',
       messagingSenderId: '591970981597'
+    }
+    fb.initializeApp(config)
+
+    fb.auth().onAuthStateChanged(user => {
+      // ! ВЫНИМАЕТСЯ объект user из local storage
+      // !!!сюда входит только если СОЗДАЕТСЯ приложение (загружается/перезагружается страница)
+      // после этого при прсстых переходах между страницами сюда не входит!
+      console.log('onAuthStateChanged user.uid: ')
+      if (user) {
+        console.log(user.uid)
+        this.$store.dispatch('autoLoginUser', user)
+      }
     })
-  }
+
+    this.$store.dispatch('fetchAds')
+  },
+  render: h => h(App)
 }).$mount('#app')

@@ -1,7 +1,7 @@
 <template>
   <v-container fluid fill-height>
     <v-layout align-center justify-center>
-      <v-flex xs12 sm8 md6>
+      <v-flex xs12 sm8 md6 lg4>
         <v-card class="elevation-12">
           <v-toolbar dark color="primary">
             <v-toolbar-title>Login form</v-toolbar-title>
@@ -10,11 +10,11 @@
             <v-form v-model="valid" ref="form" validation>
               <v-text-field
                 prepend-icon="person"
-                name="email"
-                label="Email"
-                type="email"
-                v-model="email"
-                :rules="emailRules"
+                name="username"
+                label="Username"
+                type="username"
+                v-model="username"
+                :rules="usernameRules"
               ></v-text-field>
               <v-text-field
                 prepend-icon="lock"
@@ -43,17 +43,17 @@
 </template>
 
 <script>
-  const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+  // const usernameRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
 
   export default {
     data () {
       return {
-        email: '',
+        username: '',
         password: '',
         valid: false,
-        emailRules: [
-          v => !!v || 'E-mail is required',
-          v => emailRegex.test(v) || 'E-mail must be valid'
+        usernameRules: [
+          v => !!v || 'Username is required',
+          // v => usernameRegex.test(v) || 'Username must be valid'
         ],
         passwordRules: [
           v => !!v || 'Password is required',
@@ -70,16 +70,43 @@
       onSubmit () {
         if (this.$refs.form.validate()) {
           const user = {
-            email: this.email,
+            username: this.username,
             password: this.password
           }
+          console.log('user: ', user);
 
+/*
           this.$store.dispatch('loginUser', user)
-            .then(() => {
-              this.$router.push('/')
+          .then(() => {
+            this.$router.push('/')
+          })
+          .catch(() => {})
+*/
+
+          this.$http.post('auth', user)
+            .then(response => {
+              console.log('from onSubmit, response: ', response.body);
+              this.cars = response.body
             })
-            .catch(err => console.log(err))
+            .catch((error) => {
+              console.log('from onSubmit, error: ', error.body);
+            })
         }
+      }
+    },
+    created () {
+      this.resource = this.$resource;
+      /*
+        get: {method: 'GET'},
+        save: {method: 'POST'},
+        query: {method: 'GET'},
+        update: {method: 'PUT'},
+        remove: {method: 'DELETE'},
+        delete: {method: 'DELETE'}
+      */
+
+      if (this.$route.query['loginError']) {
+        this.$store.dispatch('setError', 'Please log in to access this page.')
       }
     }
   }

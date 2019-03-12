@@ -7,7 +7,7 @@
             <v-toolbar-title>Registration form</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form v-model="valid" ref="form" lazy-validation>
+            <v-form v-model="valid" ref="form" validation>
               <v-text-field
                 prepend-icon="person"
                 name="email"
@@ -89,10 +89,11 @@
           }
 
           this.$store.dispatch('registerUser', user)
-            .then(() => {
-              this.$router.push('/')
-            })
-            .catch(err => console.log(err))
+          .then(() => {
+            // console.log(user)
+            this.$router.push('/')
+          })
+          .catch(() => {})
         }
       }
     }

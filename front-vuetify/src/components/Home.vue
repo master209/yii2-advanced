@@ -1,14 +1,13 @@
 <template>
-
-  <div>
+  <div v-if="!loading">
     <v-container fluid>
       <v-layout row>
         <v-flex xs12>
           <v-carousel>
             <v-carousel-item
-              v-for="ad in promoAds"
-              :key="ad.id"
-              :src="ad.imageSrc"
+                    v-for="ad in promoAds"
+                    :key="ad.id"
+                    :src="ad.imageSrc"
             >
               <div class="car-link">
                 <v-btn class="error" :to="'/ad/' + ad.id">{{ ad.title }}</v-btn>
@@ -21,18 +20,18 @@
     <v-container grid-list-lg>
       <v-layout row wrap>
         <v-flex
-          xs12
-          sm6
-          md4
-          v-for="ad of ads"
-          :key="ad.id"
+                xs12
+                sm6
+                md4
+                v-for="ad of ads"
+                :key="ad.id"
         >
           <v-card>
-            <v-card-media
-              :src="ad.imageSrc"
-              height="200px"
+            <v-img
+                    :src="ad.imageSrc"
+                    height="200px"
             >
-            </v-card-media>
+            </v-img>
             <v-card-title primary-title>
               <div>
                 <h3 class="headline mb-0">{{ad.title}}</h3>
@@ -41,10 +40,24 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn flat :to="'/ad/' + ad.id">Open</v-btn>
-              <v-btn raised class="primary">Buy</v-btn>
+              <v-btn :to="'/ad/' + ad.id">Open</v-btn>
+              <app-buy-modal :ad="ad"></app-buy-modal>
             </v-card-actions>
           </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
+  <div v-else>
+    <v-container>
+      <v-layout row>
+        <v-flex xs12 class="text-xs-center pt-5">
+          <v-progress-circular
+                  indeterminate
+                  :size="100"
+                  :width="4"
+                  color="purple"
+          ></v-progress-circular>
         </v-flex>
       </v-layout>
     </v-container>
@@ -52,16 +65,19 @@
 </template>
 
 <script>
-export default {
-  computed: {
-    promoAds () {
-      return this.$store.getters.promoAds
-    },
-    ads () {
-      return this.$store.getters.ads
+  export default {
+    computed: {
+      promoAds: function () {
+        return this.$store.getters.promoAds
+      },
+      ads () {
+        return this.$store.getters.ads
+      },
+      loading () {
+        return this.$store.getters.loading
+      }
     }
   }
-}
 </script>
 
 <style scoped>

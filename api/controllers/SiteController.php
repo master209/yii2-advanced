@@ -3,11 +3,39 @@
 namespace api\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use yii\rest\Controller;
 use api\models\LoginForm;
 
 class SiteController extends Controller
 {
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        $behaviors['corsFilter' ] = [
+            'class' => \yii\filters\Cors::className(),
+        ];
+
+        $behaviors['access'] = [
+            'class' => AccessControl::className(),
+            'rules' => [
+                [
+                    'actions' => ['login'],
+                    'allow' => true,
+                    'roles' => ['?'],
+                ],
+                [
+                    'actions' => ['create', 'update', 'delete', 'logout'],
+                    'allow' => true,
+                    'roles' => ['@'],
+                ],
+            ],
+        ];
+
+        return $behaviors;
+    }
+
     public function actionIndex()
     {
         return 'api';
@@ -25,10 +53,10 @@ class SiteController extends Controller
         }
     }
 
-    protected function verbs()
+/*    protected function verbs()
     {
         return [
-            'login' => ['post'],
+            'login' => ['options','post'],
         ];
-    }
+    }*/
 }

@@ -33,7 +33,9 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        const user = await fb.auth().signInWithEmailAndPassword(email, password)
+        // const user = await fb.auth().signInWithEmailAndPassword(email, password)
+        const user = await this.resource('login').get()
+        console.log('user.uid: ', user.uid)
         commit('setUser', new User(user.uid))
         commit('setLoading', false)
       } catch (error) {
@@ -41,11 +43,24 @@ export default {
         commit('setError', error.message)
         throw error
       }
+    },
+    autoLoginUser ({commit}, payload) {
+      // console.log('before autoLoginUser')
+      commit('setUser', new User(payload.uid))
+      // console.log('after autoLoginUser')
+    },
+    logoutUser ({commit}) {
+      console.log('logoutUser')
+      fb.auth().signOut()
+      commit('setUser', null)
     }
   },
   getters: {
     user (state) {
       return state.user
+    },
+    isUserLoggedIn (state) {
+      return state.user !== null
     }
   }
 }
