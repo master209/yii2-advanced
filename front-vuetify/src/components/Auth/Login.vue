@@ -76,7 +76,7 @@
           console.log('onSubmit user: ', user);
 
 /*
-          this.$store.dispatch('loginUser', user)
+          this.$store.dispatch('loginUser2', user)
           .then(() => {
             this.$router.push('/')
           })
@@ -85,7 +85,9 @@
           this.$http.post('auth', user)
             .then(response => {
               console.log('from onSubmit, response: ', response.body);
-              this.$store.dispatch('loginUser', user)
+              this.$store.dispatch('loginUser', {
+                'username': user.username, 'token': response.body.token
+              })
                 .then(() => {
                   this.$router.push('/')
                 })

@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import * as fb from 'firebase'
 
 class User {
@@ -8,12 +9,17 @@ class User {
 
 export default {
   state: {
+    token: null,
     user: null
   },
   mutations: {
     setUser (state, payload) {
       state.user = payload
       console.log('from setUser(), state.user: ', state.user)
+    },
+    setToken (state, payload) {
+      state.token = payload
+      console.log('from setToken(), state.token: ', state.token)
     }
   },
   actions: {
@@ -30,25 +36,29 @@ export default {
         throw error
       }
     },
-/*    async loginUser ({commit}, {username, password}) {
+/*
+    async loginUser2 ({commit}, {username, password}) {
       console.log('from loginUser, username: ', username)
       commit('clearError')
       commit('setLoading', true)
       try {
         // const user = await fb.auth().signInWithEmailAndPassword(username, password)
-        const user = await this.$http.post('auth', {username, password})
-        console.log('from loginUser, user: ', user)
+        console.log('from loginUser2, username, password: ', username, password)
+        const user = await Vue.$http.post('auth', {username, password})
         commit('setUser', new User(user.username))
         commit('setLoading', false)
       } catch (error) {
+        console.log('from loginUser2, catch error: ', error)
         commit('setLoading', false)
         commit('setError', error.bodyText)
         throw error
       }
-    },*/
-    loginUser ({commit}, {username, password}) {
-      console.log('from loginUser(): ', username, password)
+    },
+*/
+    loginUser ({commit}, {username, token}) {
+      console.log('from loginUser(): ', username, token)
       commit('setUser', new User(username))
+      commit('setToken', token)
     },
     autoLoginUser ({commit}, payload) {
       // console.log('before autoLoginUser')
@@ -62,6 +72,9 @@ export default {
     }
   },
   getters: {
+    token (state) {
+      return state.token
+    },
     user (state) {
       return state.user
     },

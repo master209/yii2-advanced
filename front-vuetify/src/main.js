@@ -22,8 +22,13 @@ Vue.http.interceptors.push(function(request) {
     || request.method === 'PUT'
     || request.method === 'DELETE'
   ) {
-    // request.headers.set('X-CSRF-TOKEN', 'TOKEN');
+
+// https://forum.vuejs.org/t/vue-resource-api-call-inside-mutation-doesnt-recognize-vue/2863/6
+    request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
+
     request.headers.set('Authorization', 'Bearer token-correct');
+
+    next();
   }
 });
 */
