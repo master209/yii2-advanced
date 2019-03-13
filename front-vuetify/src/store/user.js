@@ -36,16 +36,16 @@ export default {
         throw error
       }
     },
-/*
     async loginUser2 ({commit}, {username, password}) {
-      console.log('from loginUser, username: ', username)
       commit('clearError')
       commit('setLoading', true)
       try {
         // const user = await fb.auth().signInWithEmailAndPassword(username, password)
         console.log('from loginUser2, username, password: ', username, password)
-        const user = await Vue.$http.post('auth', {username, password})
-        commit('setUser', new User(user.username))
+// !!! https://stackoverflow.com/questions/45633408/cant-access-vue-resource-inside-action-vuex
+// ЗА ПРЕДЕЛАМИ vue instance (store in this case) use Vue.http, ВНУТРИ instance use  this.$http
+        const user = await Vue.http.post('auth', {username, password})
+        commit('setUser', new User(username))
         commit('setLoading', false)
       } catch (error) {
         console.log('from loginUser2, catch error: ', error)
@@ -54,12 +54,13 @@ export default {
         throw error
       }
     },
-*/
+/*
     loginUser ({commit}, {username, token}) {
       console.log('from loginUser(): ', username, token)
       commit('setUser', new User(username))
       commit('setToken', token)
     },
+*/
     autoLoginUser ({commit}, payload) {
       // console.log('before autoLoginUser')
       commit('setUser', new User(payload.username))

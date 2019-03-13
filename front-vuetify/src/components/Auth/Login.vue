@@ -75,13 +75,12 @@
           }
           console.log('onSubmit user: ', user);
 
-/*
           this.$store.dispatch('loginUser2', user)
           .then(() => {
             this.$router.push('/')
           })
           .catch(() => {})
-*/
+/*
           this.$http.post('auth', user)
             .then(response => {
               console.log('from onSubmit, response: ', response.body);
@@ -96,6 +95,7 @@
             .catch((error) => {
               console.log('from onSubmit, error: ', error.bodyText);
             })
+*/
         }
       }
     },
