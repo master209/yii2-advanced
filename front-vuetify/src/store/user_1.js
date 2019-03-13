@@ -1,8 +1,8 @@
 import * as fb from 'firebase'
 
 class User {
-  constructor (username) {
-    this.username = username
+  constructor (id) {
+    this.id = id
   }
 }
 
@@ -13,7 +13,6 @@ export default {
   mutations: {
     setUser (state, payload) {
       state.user = payload
-      console.log('from setUser(), state.user: ', state.user)
     }
   },
   actions: {
@@ -22,7 +21,7 @@ export default {
       commit('setLoading', true)
       try {
         const user = await fb.auth().createUserWithEmailAndPassword(username, password)
-        commit('setUser', new User(user.username))
+        commit('setUser', new User(user.uid))
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)
@@ -30,7 +29,7 @@ export default {
         throw error
       }
     },
-/*    async loginUser ({commit}, {username, password}) {
+    async loginUser ({commit}, {username, password}) {
       console.log('from loginUser, username: ', username)
       commit('clearError')
       commit('setLoading', true)
@@ -38,21 +37,17 @@ export default {
         // const user = await fb.auth().signInWithEmailAndPassword(username, password)
         const user = await this.$http.post('auth', {username, password})
         console.log('from loginUser, user: ', user)
-        commit('setUser', new User(user.username))
+        commit('setUser', new User(user.uid))
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)
         commit('setError', error.bodyText)
         throw error
       }
-    },*/
-    loginUser ({commit}, {username, password}) {
-      console.log('from loginUser(): ', username, password)
-      commit('setUser', new User(username))
     },
     autoLoginUser ({commit}, payload) {
       // console.log('before autoLoginUser')
-      commit('setUser', new User(payload.username))
+      commit('setUser', new User(payload.uid))
       // console.log('after autoLoginUser')
     },
     logoutUser ({commit}) {

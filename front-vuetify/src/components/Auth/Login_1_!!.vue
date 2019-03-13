@@ -73,7 +73,7 @@
             username: this.username,
             password: this.password
           }
-          console.log('onSubmit user: ', user);
+          console.log('user: ', user);
 
 /*
           this.$store.dispatch('loginUser', user)
@@ -82,14 +82,11 @@
           })
           .catch(() => {})
 */
+
           this.$http.post('auth', user)
             .then(response => {
               console.log('from onSubmit, response: ', response.body);
-              this.$store.dispatch('loginUser', user)
-                .then(() => {
-                  this.$router.push('/')
-                })
-                // .catch(() => {})
+              this.cars = response.body
             })
             .catch((error) => {
               console.log('from onSubmit, error: ', error.bodyText);
@@ -98,7 +95,7 @@
       }
     },
     created () {
-      this.resource = this.$resource;
+      // this.resource = this.$resource;
       /*
         get: {method: 'GET'},
         save: {method: 'POST'},
