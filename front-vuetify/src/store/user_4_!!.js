@@ -36,33 +36,31 @@ export default {
         throw error
       }
     },
-    async loginUser ({commit}, {username, password}) {
+    async loginUser2 ({commit}, {username, password}) {
       commit('clearError')
       commit('setLoading', true)
       try {
         // const user = await fb.auth().signInWithEmailAndPassword(username, password)
-        console.log('from loginUser(), username, password: ', username, password)
+        console.log('from loginUser2, username, password: ', username, password)
 // !!! https://stackoverflow.com/questions/45633408/cant-access-vue-resource-inside-action-vuex
 // ЗА ПРЕДЕЛАМИ vue instance (store in this case) use Vue.http, ВНУТРИ instance use  this.$http
-        const res = await Vue.http.post('auth', {username, password})
-        console.log('from loginUser(), response: ', res)
-        if (res.status === 200) {
-          if (res.body.token) {
-            console.log('from loginUser(), token: ', res.body.token)
-            commit('setUser', new User(username))
-            commit('setToken', res.body.token)
-          } else {
-            throw res.bodyText
-          }
-        }
+        const user = await Vue.http.post('auth', {username, password})
+        commit('setUser', new User(username))
         commit('setLoading', false)
       } catch (error) {
-        console.log('from loginUser(), catch error: ', error)
+        console.log('from loginUser2, catch error: ', error)
         commit('setLoading', false)
-        commit('setError', error)
+        commit('setError', error.bodyText)
         throw error
       }
     },
+/*
+    loginUser ({commit}, {username, token}) {
+      console.log('from loginUser(): ', username, token)
+      commit('setUser', new User(username))
+      commit('setToken', token)
+    },
+*/
     autoLoginUser ({commit}, payload) {
       // console.log('before autoLoginUser')
       commit('setUser', new User(payload.username))
