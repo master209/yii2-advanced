@@ -15,7 +15,6 @@
                 type="username"
                 v-model="username"
                 :rules="usernameRules"
-                :error-messages="messages.username"
               ></v-text-field>
               <v-text-field
                 prepend-icon="lock"
@@ -25,7 +24,6 @@
                 :counter="6"
                 v-model="password"
                 :rules="passwordRules"
-                :error-messages="messages.password"
               ></v-text-field>
             </v-form>
           </v-card-text>
@@ -52,34 +50,26 @@
       return {
         valid: false,
         username: '',
+        usernameRules: [
+          v => !!v || 'Необходимо заполнить «Логин»',
+          v => (v && v.length >= 2) || 'Логин должен быть не короче 2 символов',
+          v => (v && v.length <= 20) || 'Логин должен быть не длиннее 20 символов'
+        ],
         password: '',
-        messages: {
-          username: [],
-          password: [],
-        }
+        passwordRules: [
+          v => !!v || 'Необходимо заполнить «Пароль»',
+          v => (v && v.length >= 6) || 'Пароль должен быть не короче 6 символов',
+        ]
       }
     },
     computed: {
       loading () {
         return this.$store.getters.loading
-      },
-      usernameRules() {
-        return [
-          v => !!v || 'Необходимо заполнить «Логин»',
-          v => (v && v.length >= 2) || 'Логин должен быть не короче 2 символов',
-          v => (v && v.length <= 20) || 'Логин должен быть не длиннее 20 символов'
-        ]
-      },
-      passwordRules() {
-        return [
-          v => !!v || 'Необходимо заполнить «Пароль»',
-          v => (v && v.length >= 6) || 'Пароль должен быть не короче 6 символов'
-        ]
       }
     },
     methods: {
       onSubmit () {
-        if (this.valid && this.$refs.form.validate()) {
+        if (this.$refs.form.validate()) {
           const user = {
             username: this.username,
             password: this.password
@@ -90,20 +80,8 @@
           .then(() => {
             this.$router.push('/')
           })
-          .catch((errors) => {  // {"password":["Incorrect username or password."]}
-            this.valid = false;
-            console.log('from onSubmit, errors: ', JSON.parse(errors));
-// https://github.com/vuetifyjs/vuetify/issues/218
-// Form fields custom validation message
-            let _errors = JSON.parse(errors)
-            for (let field in _errors) {
-              let err = _errors[field]
-              console.log('field, err: ', field, err);
-              for (let mes in err) {
-                console.log('mes: ', err[mes]);
-                this.messages[field] = err[mes]
-              }
-            }
+          .catch((error) => {
+            console.log('from onSubmit, error: ', error);
           })
         }
       }

@@ -90,18 +90,17 @@
           .then(() => {
             this.$router.push('/')
           })
-          .catch((errors) => {  // {"password":["Incorrect username or password."]}
+          .catch((errors) => {
             this.valid = false;
-            console.log('from onSubmit, errors: ', JSON.parse(errors));
+            console.log('from onSubmit, errors: ', errors);
 // https://github.com/vuetifyjs/vuetify/issues/218
 // Form fields custom validation message
-            let _errors = JSON.parse(errors)
-            for (let field in _errors) {
-              let err = _errors[field]
-              console.log('field, err: ', field, err);
-              for (let mes in err) {
-                console.log('mes: ', err[mes]);
-                this.messages[field] = err[mes]
+            if (errors) {
+              for (let err in errors) {
+                for (let field in err) {
+                  console.log('field, err: ', field, err);
+                  this.messages[field] = err[field]
+                }
               }
             }
           })

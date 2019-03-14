@@ -86,16 +86,6 @@
       }
     },
     created () {
-      this.resource = this.$resource;
-      /*
-        get: {method: 'GET'},
-        save: {method: 'POST'},
-        query: {method: 'GET'},
-        update: {method: 'PUT'},
-        remove: {method: 'DELETE'},
-        delete: {method: 'DELETE'}
-      */
-
       if (this.$route.query['loginError']) {
         this.$store.dispatch('setError', 'Please log in to access this page.')
       }
