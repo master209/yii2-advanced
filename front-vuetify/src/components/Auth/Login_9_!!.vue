@@ -7,14 +7,14 @@
             <v-toolbar-title>Login form</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form v-model="validClient" ref="form" validation>
+            <v-form v-model="valid" ref="form" validation>
               <v-text-field
                 prepend-icon="person"
                 name="username"
                 label="Логин"
                 type="username"
                 v-model="username"
-                @focus="validateServer"
+                @focus="onServerValidate"
                 :rules="usernameRules"
                 :error-messages="messages.username"
               ></v-text-field>
@@ -25,7 +25,7 @@
                 type="password"
                 :counter="20"
                 v-model="password"
-                @focus="validateServer"
+                @focus="onServerValidate"
                 :rules="passwordRules"
                 :error-messages="messages.password"
               ></v-text-field>
@@ -37,7 +37,7 @@
               color="primary"
               @click="onSubmit"
               :loading="loading"
-              :disabled="!validClient || loading"
+              :disabled="!valid || loading"
             >Login</v-btn>
           </v-card-actions>
         </v-card>
@@ -52,10 +52,10 @@
   export default {
     data () {
       return {
-        validClient: false,
-        validServer: true,
+        valid: false,
         username: '',
         password: '',
+        wasServerValidate: false,
         messages: {
           username: [],
           password: [],
@@ -81,14 +81,14 @@
       }
     },
     methods: {
-      validateServer () {
-        if (!this.validServer) {    //если ошибка пришла с сервера,
-          this.validClient = true   //то при фокусе в инпуте разблокирую кнопку Submit на форме
+      onServerValidate () {
+        if (this.wasServerValidate) {
+          this.valid = true
           this.messages.password = null
         }
       },
       onSubmit () {
-        if (this.validClient && this.$refs.form.validate()) {
+        if (this.valid && this.$refs.form.validate()) {
           const user = {
             username: this.username,
             password: this.password
@@ -100,6 +100,7 @@
             this.$router.push('/')
           })
           .catch((errors) => {  // {"password":["Incorrect username or password."]}
+            this.valid = false;
             console.log('from onSubmit, errors: ', JSON.parse(errors));
 // https://github.com/vuetifyjs/vuetify/issues/218
 // Form fields custom validation message
@@ -110,7 +111,7 @@
               for (let mes in err) {
                 console.log('mes: ', err[mes]);
                 this.messages[field] = err[mes]
-                this.validServer = false;
+                this.wasServerValidate = true;
               }
             }
           })
