@@ -16,19 +16,14 @@ return [
     'components' => [
         'i18n' => [
             'translations' => [
-                'app' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@app/messages',
-                ],
-/*                '*' => [
+                '*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@app/messages',
                     'fileMap' => [
-                        'common' => 'common.php',
-                        'backend' => 'backend.php',
-                        'frontend' => 'frontend.php',
+                        'app' => 'app.php',
+                        'forms' => 'forms.php',
                     ],
-                ],*/
+                ],
             ],
         ],
         'request' => [

@@ -59,7 +59,7 @@ export default {
       } catch (error) {
         console.log('from loginUser(), catch error: ', error)
         commit('setLoading', false)
-        commit('setError', error)
+        // commit('setError', error)
         throw JSON.parse(error)
       }
     },

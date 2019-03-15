@@ -54,11 +54,13 @@ class SiteController extends Controller
             foreach ($model->errors as $i=>$err) {
                 $errors[$i] = $model->errors[$i];
             }
-
+//для проверки нескольких мессаг в одном поле
+//$errors = ["password" => ["Incorrect username or password.","Еще мессага!"]];
+//см. - front-vuetify\src\components\Auth\Login.vue - onSubmit ()
             //перевожу каждое сообщение об ошибке
             foreach ($errors as $key=>$err) {
                 foreach ($err as $k=>$mes) {
-                    $errors[$key][$k] = Yii::t('app', $errors[$key][$k]);
+                    $errors[$key][$k] = Yii::t('forms', $errors[$key][$k]);
                 }
             }
             return $errors;

@@ -108,6 +108,7 @@
               console.log('field, err: ', field, err);
               for (let mes in err) {
                 console.log('mes: ', err[mes]);
+                // this.messages[field] += ("<br>" + err[mes])  //для нескольких мессаг в одном поле
                 this.messages[field] = err[mes]
                 this.validServer = false;
               }
