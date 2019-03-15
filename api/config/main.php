@@ -8,11 +8,29 @@ $params = array_merge(
 
 return [
     'id' => 'app-api',
+    'language'=>'ru-RU',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'api\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
+        'i18n' => [
+            'translations' => [
+                'app' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                ],
+/*                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'fileMap' => [
+                        'common' => 'common.php',
+                        'backend' => 'backend.php',
+                        'frontend' => 'frontend.php',
+                    ],
+                ],*/
+            ],
+        ],
         'request' => [
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',

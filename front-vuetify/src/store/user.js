@@ -60,7 +60,7 @@ export default {
         console.log('from loginUser(), catch error: ', error)
         commit('setLoading', false)
         commit('setError', error)
-        throw error
+        throw JSON.parse(error)
       }
     },
     autoLoginUser ({commit}, payload) {

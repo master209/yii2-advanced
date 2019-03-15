@@ -49,7 +49,19 @@ class SiteController extends Controller
         if ($token = $model->auth()) {
             return $token;
         } else {
-            return $model->errors;
+            //копирую массив ошибок
+            $errors = [];
+            foreach ($model->errors as $i=>$err) {
+                $errors[$i] = $model->errors[$i];
+            }
+
+            //перевожу каждое сообщение об ошибке
+            foreach ($errors as $key=>$err) {
+                foreach ($err as $k=>$mes) {
+                    $errors[$key][$k] = Yii::t('app', $errors[$key][$k]);
+                }
+            }
+            return $errors;
         }
     }
 

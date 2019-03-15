@@ -68,15 +68,15 @@
       },
       usernameRules() {
         return [
-          v => !!v || 'Необходимо заполнить «Логин»',
-          v => (v && v.length >= 2) || 'Логин должен быть не короче 2 символов',
-          v => (v && v.length <= 20) || 'Логин должен быть не длиннее 20 символов'
+          v => !!v || 'Необходимо заполнить поле «Логин»',
+          v => (v && v.length >= 2) || 'не менее 2 символов',
+          v => (v && v.length <= 20) || 'не более 20 символов'
         ]
       },
       passwordRules() {
         return [
-          v => !!v || 'Необходимо заполнить «Пароль»',
-          v => (v && v.length >= 6) || 'Пароль должен быть не короче 6 символов'
+          v => !!v || 'Необходимо заполнить поле «Пароль»',
+          v => (v && v.length >= 6) || 'не менее 6 символов'
         ]
       }
     },
@@ -100,12 +100,11 @@
             this.$router.push('/')
           })
           .catch((errors) => {  // {"password":["Incorrect username or password."]}
-            console.log('from onSubmit, errors: ', JSON.parse(errors));
+            console.log('from onSubmit, errors: ', errors);
 // https://github.com/vuetifyjs/vuetify/issues/218
 // Form fields custom validation message
-            let _errors = JSON.parse(errors)
-            for (let field in _errors) {
-              let err = _errors[field]
+            for (let field in errors) {
+              let err = errors[field]
               console.log('field, err: ', field, err);
               for (let mes in err) {
                 console.log('mes: ', err[mes]);
@@ -119,7 +118,7 @@
     },
     created () {
       if (this.$route.query['loginError']) {
-        this.$store.dispatch('setError', 'Please log in to access this page.')
+        this.$store.dispatch('setError', 'Пожалуйста, авторизуйтесь для доступа к этой странице.')
       }
     }
   }
