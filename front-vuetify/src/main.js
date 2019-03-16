@@ -46,13 +46,6 @@ new Vue({
       messagingSenderId: '591970981597'
     }
     fb.initializeApp(config)
-
-    const user = localStorage.getItem('user')
-    console.log('main.js localStorage.user: ', user)
-    if(user) {
-      this.$store.dispatch('autoLoginUser', user)
-    }
-
     this.$store.dispatch('fetchAds')
   },
   render: h => h(App)

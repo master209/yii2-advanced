@@ -131,7 +131,7 @@ export default {
       })
     },
     myAds (state, getters) {
-      console.log('myAds user.id: ', getters.user.id)
+      console.log('myAds user.id: ', getters.user.username)
       return state.ads.filter(ad => {
         return ad.ownerId === getters.user.id
       })
