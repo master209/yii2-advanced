@@ -100,12 +100,19 @@
             this.$router.push('/')
           })
           .catch((errors) => {  // {"password":["Incorrect username or password."]}
+            console.log('from onSubmit, errors: ', errors);
+// https://github.com/vuetifyjs/vuetify/issues/218
+// Form fields custom validation message
             for (let field in errors) {
-              for (let mes in errors[field]) {
-                this.messages[field] = errors[field][mes]
+              let err = errors[field]
+              console.log('field, err: ', field, err);  // password ["Incorrect username or password"]
+              for (let mes in err) {
+                console.log('mes: ', err[mes]);   // Incorrect username or password
+                // this.messages[field] += ("<br>" + err[mes])  //для нескольких мессаг в одном поле
+                this.messages[field] = err[mes]
+                this.validServer = false;
               }
             }
-            this.validServer = false;
           })
         }
       }

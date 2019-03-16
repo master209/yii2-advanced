@@ -11,4 +11,6 @@ return [
     'NAV_LOGOUT' => 'Выход',
     'NAV_ADMIN' => 'Управление',
     'NAV_ADMIN_USERS' => 'Пользователи',
+
+    'Please login to access this page.' => 'Пожалуйста, авторизуйтесь для доступа к этой странице',
 ];
