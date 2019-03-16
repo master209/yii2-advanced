@@ -112,7 +112,7 @@
     },
     created () {
       if (this.$route.query['loginError']) {
-        this.$store.dispatch('setError', 'Пожалуйста, авторизуйтесь для доступа к этой странице.')
+        this.$store.dispatch('setError', 'Пожалуйста, авторизуйтесь для доступа к этой странице')
       }
     }
   }

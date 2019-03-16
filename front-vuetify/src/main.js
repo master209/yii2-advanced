@@ -47,16 +47,11 @@ new Vue({
     }
     fb.initializeApp(config)
 
-    fb.auth().onAuthStateChanged(user => {
-      // ! ВЫНИМАЕТСЯ объект user из local storage
-      // !!!сюда входит только если СОЗДАЕТСЯ приложение (загружается/перезагружается страница)
-      // после этого при прсстых переходах между страницами сюда не входит!
-      console.log('onAuthStateChanged user.uid: ')
-      if (user) {
-        console.log(user.uid)
-        this.$store.dispatch('autoLoginUser', user)
-      }
-    })
+    const user = localStorage.getItem('user')
+    console.log('main.js localStorage.user: ', user)
+    if(user) {
+      this.$store.dispatch('autoLoginUser', user)
+    }
 
     this.$store.dispatch('fetchAds')
   },

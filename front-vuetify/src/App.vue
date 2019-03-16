@@ -7,9 +7,9 @@
     >
     <v-list>
         <v-list-tile
-                v-for="link of links"
-                :key="link.title"
-                :to="link.url"
+            v-for="link of links"
+            :key="link.title"
+            :to="link.url"
         >
             <v-list-tile-action>
                 <v-icon>{{link.icon}}</v-icon>
@@ -20,8 +20,8 @@
         </v-list-tile>
 
         <v-list-tile
-                v-if="isUserLoggedIn"
-                @click="onLogout"
+            v-if="isUserLoggedIn"
+            @click="onLogout"
         >
             <v-list-tile-action>
                 <v-icon>exit_to_app</v-icon>
@@ -46,19 +46,19 @@
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
           <v-btn
-                  v-for="link in links"
-                  :key="link.title"
-                  :to="link.url"
-                  flat
+              v-for="link in links"
+              :key="link.title"
+              :to="link.url"
+              flat
           >
               <v-icon left>{{link.icon}}</v-icon>
               {{link.title}}
           </v-btn>
 
           <v-btn
-                  @click="onLogout"
-                  flat
-                  v-if="isUserLoggedIn"
+              @click="onLogout"
+              flat
+              v-if="isUserLoggedIn"
           >
               <v-icon left>exit_to_app</v-icon>
               Logout
@@ -73,11 +73,11 @@
 
     <template v-if="error">
       <v-snackbar
-              :timeout="5000"
-              :multi-line="true"
-              color="error"
-              @input="closeError"
-              :value="true"
+          :timeout="5000"
+          :multi-line="true"
+          color="error"
+          @input="closeError"
+          :value="true"
       >
           {{error}}
           <v-btn flat dark @click.native="closeError">Close</v-btn>

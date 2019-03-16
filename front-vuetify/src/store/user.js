@@ -16,6 +16,9 @@ export default {
     setUser (state, payload) {
       state.user = payload
       console.log('from setUser(), state.user: ', state.user)
+      if (state.user) {
+        localStorage.setItem('user', state.user.username);
+      }
     },
     setToken (state, payload) {
       state.token = payload
@@ -48,7 +51,6 @@ export default {
         console.log('from loginUser(), response: ', res)
         if (res.status === 200) {
           if (res.body.token) {
-            console.log('from loginUser(), token: ', res.body.token)
             commit('setUser', new User(username))
             commit('setToken', res.body.token)
           } else {
@@ -63,15 +65,13 @@ export default {
         throw JSON.parse(error)
       }
     },
-    autoLoginUser ({commit}, payload) {
-      // console.log('before autoLoginUser')
-      commit('setUser', new User(payload.username))
-      // console.log('after autoLoginUser')
+    autoLoginUser ({commit}, username) {
+      commit('setUser', new User(username))
     },
     logoutUser ({commit}) {
-      console.log('logoutUser')
-      fb.auth().signOut()
+      localStorage.removeItem('user');
       commit('setUser', null)
+      commit('setToken', null)
     }
   },
   getters: {
