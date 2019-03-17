@@ -2,21 +2,16 @@
 
 namespace api\controllers;
 
-use api\models\CarSearch;
-//use common\models\Car;
-//use common\rbac\Rbac;
+use api\models\AdsSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
-use yii\helpers\Url;
 use yii\rest\ActiveController;
-use yii\web\ForbiddenHttpException;
-use yii\web\ServerErrorHttpException;
 
-class CarController extends ActiveController
+class AdsController extends ActiveController
 {
-    public $modelClass = 'common\models\Car';
+    public $modelClass = 'common\models\Ads';
 
     public function behaviors()
     {
@@ -34,7 +29,7 @@ class CarController extends ActiveController
 
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['create', 'update', 'delete'],		//применять фильтрацию доступа только к этим экшенам
+            'only' => ['create', 'update', 'delete'],
             'rules' => [
                 [
                     'allow' => true,
@@ -49,32 +44,13 @@ class CarController extends ActiveController
     public function actions()
     {
         $actions = parent::actions();
-//        unset($actions['create']);
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
         return $actions;
     }
 
-/*    public function actionCreate()
-    {
-        $model = new Car();
-
-echo "Create<pre>"; print_r(Yii::$app->getRequest()); echo"</pre>"; die();
-        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
-        if ($model->save()) {
-            $response = Yii::$app->getResponse();
-            $response->setStatusCode(201);
-            $id = implode(',', array_values($model->getPrimaryKey(true)));
-            $response->getHeaders()->set('Location', Url::toRoute(['view', 'id' => $id], true));
-        } elseif (!$model->hasErrors()) {
-            throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
-        }
-
-        return $model;
-    }*/
-
     public function prepareDataProvider()
     {
-        $searchModel = new CarSearch();
+        $searchModel = new AdsSearch();
         return $searchModel->search(Yii::$app->request->queryParams);
     }
 

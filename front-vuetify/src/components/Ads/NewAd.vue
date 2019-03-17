@@ -86,13 +86,14 @@
     },
     methods: {
       createAd () {
-        if (this.$refs.form.validate() && this.image) {
+        if (this.$refs.form.validate() /*&& this.image*/) {
           // logic
           const ad = {
             title: this.title,
             description: this.description,
             promo: this.promo,
-            image: this.image
+            // image: this.image
+            imageSrc: 'https://cdn-images-1.medium.com/max/850/1*nq9cdMxtdhQ0ZGL8OuSCUQ.jpeg'
           }
 
           this.$store.dispatch('createAd', ad)

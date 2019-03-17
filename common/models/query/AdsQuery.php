@@ -4,7 +4,7 @@ namespace common\models\query;
 
 use yii\db\ActiveQuery;
 
-class CarQuery extends ActiveQuery
+class AdsQuery extends ActiveQuery
 {
     public function forUser($userId)
     {
@@ -18,7 +18,7 @@ class CarQuery extends ActiveQuery
 
     /**
      * @inheritdoc
-     * @return \common\models\Car[]|array
+     * @return \common\models\Ads[]|array
      */
     public function all($db = null)
     {
@@ -27,7 +27,7 @@ class CarQuery extends ActiveQuery
 
     /**
      * @inheritdoc
-     * @return \common\models\Car|array|null
+     * @return \common\models\Ads|array|null
      */
     public function one($db = null)
     {

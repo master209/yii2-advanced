@@ -2,10 +2,9 @@
 
 namespace common\models;
 
-use common\models\query\CarQuery;
+use common\models\query\AdsQuery;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\helpers\Url;
 use yii\web\Linkable;
 
 /**
@@ -17,7 +16,7 @@ use yii\web\Linkable;
  *
  * @property User $user
  */
-class Car extends ActiveRecord      //implements Linkable
+class Ads extends ActiveRecord      //implements Linkable
 {
     public static function tableName()
     {
@@ -57,11 +56,11 @@ class Car extends ActiveRecord      //implements Linkable
     }
 
     /**
-     * @return CarQuery
+     * @return AdsQuery
      */
     public static function find()
     {
-        return new CarQuery(get_called_class());
+        return new AdsQuery(get_called_class());
     }
 
 /*    public function extraFields()
@@ -74,7 +73,7 @@ class Car extends ActiveRecord      //implements Linkable
     public function getLinks()
     {
         return [
-            'self' => Url::to(['car/view', 'id' => $this->id], true),
+            'self' => Url::to(['cds/view', 'id' => $this->id], true),
         ];
     }
 */
