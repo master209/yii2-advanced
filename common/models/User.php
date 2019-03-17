@@ -209,6 +209,15 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Token::className(), ['user_id' => 'id']);
     }
 
+    // возвращает один последний действующий токен по юзеру с username, пришедшему с формы авторизации
+    public function getValidToken()
+    {
+        return $this->getTokens()
+            ->where(['>=', 'expired_at', time()])
+            ->orderBy('id DESC')
+            ->one();
+    }
+
     public function fields()
     {
         return [

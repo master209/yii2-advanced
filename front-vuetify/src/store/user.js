@@ -43,10 +43,7 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        // const user = await fb.auth().signInWithEmailAndPassword(username, password)
         console.log('from loginUser(), username, password: ', username, password)
-// !!! https://stackoverflow.com/questions/45633408/cant-access-vue-resource-inside-action-vuex
-// ЗА ПРЕДЕЛАМИ vue instance (store in this case) use Vue.http, ВНУТРИ instance use  this.$http
         const res = await Vue.http.post('auth', {username, password})
         console.log('from loginUser(), response: ', res)
         if (res.status === 200) {
