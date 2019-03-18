@@ -39,43 +39,38 @@ export default {
 
       // загруженное изобр. приходит как payload.image (см. NewAd.vue)
       // это объект File с формы
-      // const image = payload.image
+      const image = payload.image
 
       try {
         const newAd = new Ad(
           payload.title,
           payload.description,
-          getters.user.username,
+          getters.user.id,
           '', // ссылку на изображение не передаем через payload, это будет ссылка на fb.store
           payload.promo
         )
 
-        // const ad = await fb.database().ref('ads').push(newAd) // асинхр запись в БД (без изобр.)
-        console.log('from createAd(), ads object: ', newAd)
-        const res = await Vue.http.post('ads', {username, password})
-/*
+        console.log(newAd)
+        const ad = await fb.database().ref('ads').push(newAd) // асинхр запись в БД (без изобр.)
         const imageExt = image.name.slice(image.name.lastIndexOf('.'))  // расширение файла изобр.
 
         // загрузка изображения в storage с заданным именем (`ads/${ad.key}.${imageExt}`)
         const ref = fb.storage().ref().child(`ads/${ad.key}.${imageExt}`) // reference to image
         await ref.put(image)  // store image
-*/
 
         // получение URL загруженного изображения
-        // const imageSrc = await ref.getDownloadURL()
+        const imageSrc = await ref.getDownloadURL()
 
         // обновляем (update) в записи БД свойство imageSrc
-/*
         await fb.database().ref('ads').child(ad.key).update({
           imageSrc
         })
-*/
 
         commit('setLoading', false)
         commit('createAd', {
           ...newAd,
           id: ad.key,
-          // imageSrc
+          imageSrc
         })
       } catch (error) {
         commit('setError', error.message)
@@ -136,9 +131,9 @@ export default {
       })
     },
     myAds (state, getters) {
-      console.log('myAds user.username: ', getters.user.username)
+      console.log('myAds user.id: ', getters.user.username)
       return state.ads.filter(ad => {
-        return ad.ownerId === getters.user.username
+        return ad.ownerId === getters.user.id
       })
     },
     adById (state) {    // "ЭТО - ЗАМЫКАНИЕ"

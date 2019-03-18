@@ -8,7 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\Linkable;
 
 /**
- * This is the model class for table "{{%car}}".
+ * This is the model class for table "{{%ads}}".
  *
  * @property integer $id
  * @property string $name
@@ -16,18 +16,21 @@ use yii\web\Linkable;
  *
  * @property User $user
  */
-class Ads extends ActiveRecord      //implements Linkable
+class Ads extends ActiveRecord
 {
     public static function tableName()
     {
-        return '{{%car}}';
+        return '{{%ads}}';
     }
 
     public function rules()
     {
         return [
-            [['name'], 'string', 'max' => 255],
-            [['year'], 'number'],
+            [['owner_id'], 'number'],
+            [['title'], 'string', 'max' => 100],
+            [['description'], 'string'],
+            [['image_src'], 'string', 'max' => 500],
+            [['promo'], 'boolean'],
         ];
     }
 
@@ -35,8 +38,11 @@ class Ads extends ActiveRecord      //implements Linkable
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'year' => 'Year',
+            'owner_id' => 'Автор',
+            'title' => 'Заголовок',
+            'description' => 'Описание',
+            'image_src' => 'Картинка',
+            'promo' => 'Promo',
         ];
     }
 
@@ -63,18 +69,4 @@ class Ads extends ActiveRecord      //implements Linkable
         return new AdsQuery(get_called_class());
     }
 
-/*    public function extraFields()
-    {
-        return [
-            'author' => 'user',
-        ];
-    }
-
-    public function getLinks()
-    {
-        return [
-            'self' => Url::to(['cds/view', 'id' => $this->id], true),
-        ];
-    }
-*/
 }

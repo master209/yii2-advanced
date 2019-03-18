@@ -73,6 +73,7 @@ return [
 //                'GET cars' => 'car/index',
 //                'PUT,PATCH cars' => 'car/update',
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'car'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'ads'],
             ],
         ],
     ],
