@@ -3,13 +3,13 @@ import * as fb from 'firebase'
 import userStore from './user'
 
 class Ad {
-  constructor (title, description, ownerId, imageSrc = '', promo = false/*, id = null*/) {
+  constructor (title, description, ownerId, imageSrc = '', promo = false, id = null) {
     this.owner_id = ownerId
     this.title = title
     this.description = description
     this.image_src = imageSrc
     this.promo = promo
-    // this.id = id
+    this.id = id
   }
 }
 
@@ -22,6 +22,7 @@ export default {
       state.ads.push(payload)
     },
     loadAds (state, payload) {
+      console.log('actions loadAds() ads arr: ', payload)
       state.ads = payload
     },
     updateAd (state, {title, description, id}) {
@@ -35,7 +36,7 @@ export default {
   },
   actions: {
     async createAd ({commit, getters}, payload) {
-      console.log('actions createAd: ', payload)
+      console.log('actions createAd(): ', payload)
       commit('clearError')
       commit('setLoading', true)
 
@@ -98,15 +99,16 @@ export default {
       try {
         // const fbVal = await fb.database().ref('ads').once('value')
         const ads = await Vue.http.get('ads')
-        console.log('from fetchAds(), ads array: ', ads)
+// console.log('from fetchAds(), ads array: ', ads.body)
 
         const resultAds = []
-        Object.keys(ads).forEach(key => {
-          const ad = ads[key]
+        Object.keys(ads.body).forEach(key => {
+          const ad = ads.body[key]
           resultAds.push(   // формируется массив объектов
             new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, key)
           )
         })
+// console.log('from fetchAds(), resultAds: ', resultAds)
 
         commit('loadAds', resultAds)
         commit('setLoading', false)
