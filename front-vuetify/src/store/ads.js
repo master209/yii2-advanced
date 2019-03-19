@@ -1,13 +1,15 @@
+import Vue from 'vue'
 import * as fb from 'firebase'
+import userStore from './user'
 
 class Ad {
-  constructor (title, description, ownerId, imageSrc = '', promo = false, id = null) {
+  constructor (title, description, ownerId, imageSrc = '', promo = false/*, id = null*/) {
+    this.owner_id = ownerId
     this.title = title
     this.description = description
-    this.ownerId = ownerId
-    this.imageSrc = imageSrc
+    this.image_src = imageSrc
     this.promo = promo
-    this.id = id
+    // this.id = id
   }
 }
 
@@ -42,17 +44,23 @@ export default {
       // const image = payload.image
 
       try {
+// {owner_id: "3", title: "99", description: "999", image_src: "", promo: true}
         const newAd = new Ad(
           payload.title,
           payload.description,
-          getters.user.username,
+          getters.user.id,
           '', // ссылку на изображение не передаем через payload, это будет ссылка на fb.store
           payload.promo
         )
 
-        // const ad = await fb.database().ref('ads').push(newAd) // асинхр запись в БД (без изобр.)
-        console.log('from createAd(), ads object: ', newAd)
-        const res = await Vue.http.post('ads', {username, password})
+        console.log('from createAd(), ads object, token: ', newAd, userStore.state.token)
+        const res = await Vue.http.post('ads', newAd, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + userStore.state.token
+          }
+        })
+
 /*
         const imageExt = image.name.slice(image.name.lastIndexOf('.'))  // расширение файла изобр.
 
@@ -74,7 +82,7 @@ export default {
         commit('setLoading', false)
         commit('createAd', {
           ...newAd,
-          id: ad.key,
+          // id: ad.key,
           // imageSrc
         })
       } catch (error) {
@@ -88,14 +96,15 @@ export default {
       commit('setLoading', true)
 
       try {
-        const fbVal = await fb.database().ref('ads').once('value')
-        const ads = fbVal.val()
+        // const fbVal = await fb.database().ref('ads').once('value')
+        const ads = await Vue.http.get('ads')
+        console.log('from fetchAds(), ads array: ', ads)
 
         const resultAds = []
         Object.keys(ads).forEach(key => {
           const ad = ads[key]
           resultAds.push(   // формируется массив объектов
-            new Ad(ad.title, ad.description, ad.ownerId, ad.imageSrc, ad.promo, key)
+            new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, key)
           )
         })
 
@@ -136,9 +145,9 @@ export default {
       })
     },
     myAds (state, getters) {
-      console.log('myAds user.username: ', getters.user.username)
+      console.log('myAds user.id: ', getters.user.id)
       return state.ads.filter(ad => {
-        return ad.ownerId === getters.user.username
+        return ad.ownerId === getters.user.id
       })
     },
     adById (state) {    // "ЭТО - ЗАМЫКАНИЕ"

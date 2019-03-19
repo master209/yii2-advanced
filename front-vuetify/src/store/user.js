@@ -2,8 +2,8 @@ import Vue from 'vue'
 import * as fb from 'firebase'
 
 class User {
-  constructor (username) {
-    this.username = username
+  constructor (id) {
+    this.id = id
   }
 }
 
@@ -17,7 +17,7 @@ export default {
       state.user = payload
       console.log('from setUser(), state.user: ', state.user)
       if (state.user) {
-        localStorage.setItem('user', state.user.username);
+        localStorage.setItem('user', state.user.id);
       }
     },
     setToken (state, payload) {
@@ -48,7 +48,7 @@ export default {
         console.log('from loginUser(), response: ', res)
         if (res.status === 200) {
           if (res.body.token) {
-            commit('setUser', new User(username))
+            commit('setUser', new User(res.body.id))
             commit('setToken', res.body.token)
           } else {
             throw res.bodyText
@@ -62,8 +62,8 @@ export default {
         throw JSON.parse(error)
       }
     },
-    autoLoginUser ({commit}, username) {
-      commit('setUser', new User(username))
+    autoLoginUser ({commit}, id) {
+      commit('setUser', new User(id))
     },
     logoutUser ({commit}) {
       localStorage.removeItem('user');

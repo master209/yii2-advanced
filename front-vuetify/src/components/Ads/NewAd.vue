@@ -11,6 +11,7 @@
             v-model="title"
             required
             :rules="[v => !!v || 'Title is required']"
+            :error-messages="messages.title"
           ></v-text-field>
           <v-textarea
             name="description"
@@ -18,6 +19,7 @@
             type="text"
             v-model="description"
             :rules="[v => !!v || 'Description is required']"
+            :error-messages="messages.description"
           ></v-textarea>
         </v-form>
         <v-layout row class="mb-3">
@@ -76,7 +78,12 @@
         promo: false,
         valid: false,
         image: null,    // объект File
-        imageSrc: ''    // само изображение в base64
+        imageSrc: '',    // само изображение в base64
+        messages: {
+          title: [],
+          description: [],
+        }
+
       }
     },
     computed: {
@@ -100,7 +107,14 @@
           .then(() => {
             this.$router.push('/list')
           })
-          .catch(() => {})
+          .catch((errors) => {  //
+            for (let field in errors) {
+              for (let mes in errors[field]) {
+                this.messages[field] = errors[field][mes]
+              }
+            }
+          })
+
         }
       },
       triggerUpload () {

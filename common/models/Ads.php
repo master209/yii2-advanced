@@ -26,6 +26,7 @@ class Ads extends ActiveRecord
     public function rules()
     {
         return [
+            [['owner_id', 'title', 'description'], 'required'],
             [['owner_id'], 'number'],
             [['title'], 'string', 'max' => 100],
             [['description'], 'string'],
@@ -46,12 +47,12 @@ class Ads extends ActiveRecord
         ];
     }
 
-    public function behaviors()
+/*    public function behaviors()
     {
         return [
             TimestampBehavior::className(),
         ];
-    }
+    }*/
 
     /**
      * @return \yii\db\ActiveQuery
