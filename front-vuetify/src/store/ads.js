@@ -36,11 +36,13 @@ export default {
   },
   actions: {
     async createAd ({commit, getters}, payload) {
+/*
       if(!getters.token) {
         const error = 'actions createAd(): token is NULL'
         commit('setError', error)
         throw error
       }
+*/
       console.log('actions createAd(): ', payload)
       commit('clearError')
       commit('setLoading', true)
