@@ -2,27 +2,29 @@ import Vue from 'vue'
 import * as fb from 'firebase'
 
 class User {
-  constructor (id) {
+  constructor (id, token = null) {
     this.id = id
+    this.token = token
   }
 }
 
 export default {
   state: {
-    token: null,
+    // token: null,
     user: null
   },
   mutations: {
-    setUser (state, payload) {
+    setUser (state,payload) {
       state.user = payload
-      console.log('from setUser(), state.user: ', state.user)
-      if (state.user) {
-        localStorage.setItem('user', state.user.id);
+      console.log('from setUser(), user object: ', state.user)
+      if (state.user.id && state.user.token) {
+        localStorage.setItem('user_id', state.user.id);
+        localStorage.setItem('token', state.user.token);
       }
     },
     setToken (state, payload) {
-      state.token = payload
-      console.log('from setToken(), state.token: ', state.token)
+      state.user.token = payload
+      console.log('from setToken(), token: ', state.user.token)
     }
   },
   actions: {
@@ -30,8 +32,8 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        const user = await fb.auth().createUserWithEmailAndPassword(username, password)
-        commit('setUser', new User(user.username))
+        // const res = await fb.auth().createUserWithEmailAndPassword(username, password)
+        commit('setUser', new User(res.body.id))
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)
@@ -48,7 +50,7 @@ export default {
         console.log('from loginUser(), response: ', res)
         if (res.status === 200) {
           if (res.body.token) {
-            commit('setUser', new User(res.body.id))
+            commit('setUser', new User(res.body.id, res.body.token))
             commit('setToken', res.body.token)
           } else {
             throw res.bodyText
@@ -62,18 +64,19 @@ export default {
         throw JSON.parse(error)
       }
     },
-    autoLoginUser ({commit}, id) {
-      commit('setUser', new User(id))
+    autoLoginUser ({commit}, {id, token}) {
+      commit('setUser', new User(id, token))
     },
     logoutUser ({commit}) {
-      localStorage.removeItem('user');
-      commit('setUser', null)
+      localStorage.removeItem('user_id');
+      localStorage.removeItem('token');
+      commit('setUser', null, null)
       commit('setToken', null)
     }
   },
   getters: {
     token (state) {
-      return state.token
+      return state.user.token
     },
     user (state) {
       return state.user

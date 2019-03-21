@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import * as fb from 'firebase'
+import userStore from './user'
 
 class Ad {
-  constructor (title, description, ownerId, imageSrc = '', promo = false, id = null) {
+  constructor (title, description, owner_id, image_src = '', promo = false, id = null) {
     this.title = title
     this.description = description
-    this.ownerId = ownerId
-    this.imageSrc = imageSrc
+    this.owner_id = owner_id
+    this.image_src = image_src
     this.promo = promo
     this.id = id
   }
@@ -18,7 +19,6 @@ export default {
   },
   mutations: {
     createAd (state, payload) {
-      console.log('mutations createAd() ad: ', payload)
       state.ads.push(payload)
     },
     loadAds (state, payload) {
@@ -36,11 +36,6 @@ export default {
   },
   actions: {
     async createAd ({commit, getters}, payload) {
-      if(!getters.token) {
-        const error = 'actions createAd(): token is NULL'
-        commit('setError', error)
-        throw error
-      }
       console.log('actions createAd(): ', payload)
       commit('clearError')
       commit('setLoading', true)
@@ -50,23 +45,22 @@ export default {
       // const image = payload.image
 
       try {
-// {ownerId: "3", title: "99", description: "999", imageSrc: "", promo: true}
-        const newAd = {
-            title: payload.title,
-            description: payload.description,
-            owner_id: getters.user.id,
-            image_src:  '', // ссылка на изображение в fb.store
-            promo: payload.promo
-        }
+// {owner_id: "3", title: "99", description: "999", image_src: "", promo: true}
+        const newAd = new Ad(
+          payload.title,
+          payload.description,
+          getters.user.id,
+          '', // ссылку на изображение не передаем через payload, это будет ссылка на fb.store
+          payload.promo
+        )
 
-        console.log('from createAd(), ads object, token: ', newAd, getters.token)
+        console.log('from createAd(), ads object, token: ', newAd, userStore.state.token)
         const ad = await Vue.http.post('ads', newAd, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getters.token
+            'Authorization': 'Bearer ' + userStore.state.token
           }
         })
-        console.log('from createAd(), new ad object: ', ad)
 
 /*
         const imageExt = image.name.slice(image.name.lastIndexOf('.'))  // расширение файла изобр.
@@ -77,23 +71,20 @@ export default {
 */
 
         // получение URL загруженного изображения
-        // const imageSrc = await ref.getDownloadURL()
+        // const image_src = await ref.getDownloadURL()
 
-        // обновляем (update) в записи БД свойство imageSrc
+        // обновляем (update) в записи БД свойство image_src
 /*
         await fb.database().ref('ads').child(ad.key).update({
-          imageSrc
+          image_src
         })
 */
 
         commit('setLoading', false)
         commit('createAd', {
-          title: ad.body.title,
-          description: ad.body.description,
-          ownerId: ad.body.owner_id,
-          // imageSrc = imageSrc,
-          promo: ad.body.promo,
-          id: ad.body.id
+          ...newAd,
+          id: ad.key,
+          // image_src
         })
       } catch (error) {
         commit('setError', error.message)
@@ -156,9 +147,9 @@ export default {
       })
     },
     myAds (state, getters) {
+      console.log('myAds user.id: ', getters.user.id)
       return state.ads.filter(ad => {
-        console.log('myAds user.id, ad, ad.ownerId: ', getters.user.id, ad, ad.ownerId)
-        return ad.ownerId == getters.user.id
+        return ad.owner_id === getters.user.id
       })
     },
     adById (state) {    // "ЭТО - ЗАМЫКАНИЕ"
