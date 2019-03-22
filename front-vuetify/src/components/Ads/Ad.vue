@@ -3,10 +3,10 @@
     <v-layout row>
       <v-flex xs12>
         <v-card v-if="!loading">
-          <v-card-media
-            :src="ad.imageSrc"
-            height="300px"
-          ></v-card-media>
+          <!--<v-card-media-->
+            <!--:src="ad.imageSrc"-->
+            <!--height="300px"-->
+          <!--&gt;</v-card-media>-->
           <v-card-text>
             <h1 class="text--primary">{{ad.title}}</h1>
             <p>{{ad.description}}</p>
@@ -37,14 +37,13 @@ export default {
   props: ['id'],
   computed: {
     ad () {
-      const id = this.id
-      return this.$store.getters.adById(id)
+      return this.$store.getters.adById(this.id)
     },
     loading () {
       return this.$store.getters.loading
     },
     isOwner () {
-      return this.ad.ownerId === this.$store.getters.user.id
+      return this.ad.ownerId == this.$store.getters.user.id
     }
   },
   components: {

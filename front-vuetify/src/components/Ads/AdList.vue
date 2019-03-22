@@ -2,7 +2,7 @@
   <v-container>
     <v-layout row v-if="!loading && myAds.length !== 0">
       <v-flex xs12 sm8 offset-sm2 md6 offset-md3>
-        <h1 class="text--secondary mb-3">My ads</h1>
+        <h1 class="text--secondary mb-3">Мои объявления</h1>
         <v-card
           class="elevation-10 mb-3"
           v-for="ad in myAds"

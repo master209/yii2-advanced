@@ -1,13 +1,13 @@
 <template>
   <v-dialog width="400px" v-model="modal">
-    <v-btn class="warning" flat slot="activator">Edit</v-btn>
+    <v-btn class="warning" flat slot="activator">Редактировать</v-btn>
 
     <v-card>
       <v-container>
         <v-layout row>
           <v-flex xs12>
             <v-card-title>
-              <h1 class="text--primary">Edit ad</h1>
+              <h1 class="text--primary">Редактировать</h1>
             </v-card-title>
           </v-flex>
         </v-layout>
@@ -35,8 +35,8 @@
           <v-flex xs12>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn flat @click="onCancel">Cancel</v-btn>
-              <v-btn class="success" flat @click="onSave">Save</v-btn>
+              <v-btn flat @click="onCancel">Отмена</v-btn>
+              <v-btn class="success" flat @click="onSave">Сохранить</v-btn>
             </v-card-actions>
           </v-flex>
         </v-layout>
@@ -68,6 +68,9 @@ export default {
           title: this.editedTitle,
           description: this.editedDescription,
           id: this.ad.id
+        })
+        .catch((error) => {
+          console.log('EditAdModal.vue onSave() ERR: ', error)
         })
 
         this.modal = false

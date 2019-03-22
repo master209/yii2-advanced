@@ -2,7 +2,7 @@
   <v-container>
     <v-layout row>
       <v-flex xs12 sm6 offset-sm3>
-        <h1 class="text--secondary mb-3">Create new ad</h1>
+        <h1 class="text--secondary mb-3">Добавить новое объявление</h1>
         <v-form v-model="valid" ref="form" validation class="mb-3">
           <v-text-field
             name="title"
@@ -107,7 +107,7 @@
           .then(() => {
             this.$router.push('/list')
           })
-          .catch((errors) => {  //
+          .catch((errors) => {
             for (let field in errors) {
               for (let mes in errors[field]) {
                 this.messages[field] = errors[field][mes]

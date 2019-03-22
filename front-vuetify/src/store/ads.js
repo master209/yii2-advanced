@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import * as fb from 'firebase'
 
 class Ad {
   constructor (title, description, ownerId, imageSrc = '', promo = false, id = null) {
@@ -22,12 +21,12 @@ export default {
       state.ads.push(payload)
     },
     loadAds (state, payload) {
-      console.log('actions loadAds() ads arr: ', payload)
       state.ads = payload
+      console.log('mutations loadAds() ads arr: ', state.ads)
     },
     updateAd (state, {title, description, id}) {
       const ad = state.ads.find(a => {
-        return a.id === id
+        return a.id == id
       })
 
       ad.title = title
@@ -108,15 +107,13 @@ export default {
       commit('setLoading', true)
 
       try {
-        // const fbVal = await fb.database().ref('ads').once('value')
         const ads = await Vue.http.get('ads')
 // console.log('from fetchAds(), ads array: ', ads.body)
-
         const resultAds = []
         Object.keys(ads.body).forEach(key => {
           const ad = ads.body[key]
           resultAds.push(   // формируется массив объектов
-            new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, key)
+            new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, ad.id)
           )
         })
 // console.log('from fetchAds(), resultAds: ', resultAds)
@@ -129,22 +126,28 @@ export default {
         throw error
       }
     },
-    async updateAd ({commit}, {title, description, id}) {
+    async updateAd ({commit, getters}, {title, description, id}) {
       commit('clearError')
       commit('setLoading', true)
-
+      console.log('actions updateAd() title, description, id: ', title, description, id)
       try {
-        await fb.database().ref('ads').child(id).update({
-          title, description
-        })
-        commit('updateAd', {
-          title, description, id
+        const res = await Vue.http.put('ads/'+id, {title, description}, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getters.token
+          }
         })
         commit('setLoading', false)
+        commit('updateAd', {title, description, id})
+        console.log('actions updateAd(), new ad object: ', res)
       } catch (error) {
-        commit('setError', error.message)
         commit('setLoading', false)
-        throw error
+        console.log('actions updateAd() ERR: ', error)
+        if(!error.ok) {
+          const mes = 'actions updateAd() ERROR'
+          commit('setError', mes)
+          throw mes
+        }
       }
     }
   },
@@ -165,7 +168,7 @@ export default {
     },
     adById (state) {    // "ЭТО - ЗАМЫКАНИЕ"
       return adId => {  // откуда берется adId ???
-        return state.ads.find(ad => ad.id === adId)   // возвращает весь объект ad
+        return state.ads.find(ad => ad.id == adId)   // возвращает весь объект ad
       }
     }
 
