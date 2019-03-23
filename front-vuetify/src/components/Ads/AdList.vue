@@ -25,7 +25,7 @@
                 <v-btn
                   class="info"
                   :to="'/ad/' + ad.id"
-                >Open</v-btn>
+                >Открыть</v-btn>
               </v-card-actions>
             </v-flex>
           </v-layout>

@@ -47,6 +47,9 @@ new Vue({
     }
     fb.initializeApp(config)
     this.$store.dispatch('fetchAds')
+
+    store.dispatch('checkLoginUser')
+
   },
   render: h => h(App)
 }).$mount('#app')

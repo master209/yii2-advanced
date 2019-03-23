@@ -37,6 +37,7 @@ export default {
   props: ['id'],
   computed: {
     ad () {
+      console.log('Ad.vue this.id: ', this.id)
       return this.$store.getters.adById(this.id)
     },
     loading () {

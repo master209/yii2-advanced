@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from "./index";
 
 class User {
   constructor (id, token = null) {
@@ -54,6 +55,17 @@ export default {
         commit('setLoading', false)
         // commit('setError', error)
         throw JSON.parse(error)
+      }
+    },
+    checkLoginUser ({commit}) {
+      //для удержания сессии юзера проверяю его по localStorage
+      const user = {
+        id: localStorage.getItem('user_id'),
+        token: localStorage.getItem('token')
+      }
+      console.log('auth-guard, checkLoginUser.user: ', user)
+      if(user.id && user.token) {
+        store.dispatch('autoLoginUser', user)
       }
     },
     autoLoginUser ({commit}, {id, token}) {
