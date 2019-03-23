@@ -51,7 +51,6 @@ export default {
             new Order(o.name, o.phone, o.ad_id, o.done, o.id)
           )
         })
-// console.log('actions fetchOrders(), resultOrders: ', resultOrders)
 
         commit('loadOrders', resultOrders)
         commit('setLoading', false)
