@@ -17,13 +17,13 @@
             <v-card-text>
               <v-text-field
                 name="name"
-                label="Your name"
+                label="Ваше имя"
                 type="text"
                 v-model="name"
               ></v-text-field>
               <v-text-field
                 name="phone"
-                label="Your phone"
+                label="Ваш телефон"
                 type="text"
                 v-model="phone"
               ></v-text-field>

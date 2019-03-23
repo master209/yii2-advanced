@@ -1,4 +1,5 @@
-import * as fb from 'firebase'
+import Vue from 'vue'
+// import * as fb from 'firebase'
 
 class Order {
   constructor (name, phone, adId, done = false, id = null) {
@@ -17,6 +18,7 @@ export default {
   mutations: {
     loadOrders (state, payload) {
       state.orders = payload
+      console.log('mutations loadOrders() ads arr: ', state.orders)
     }
   },
   actions: {
@@ -38,15 +40,18 @@ export default {
       const resultOrders = []
 
       try {
-        const fbVal = await fb.database().ref(`/users/${getters.user.id}/orders`).once('value')
-        const orders = fbVal.val()
+        // const fbVal = await fb.database().ref(`/users/${getters.user.id}/orders`).once('value')
+        // const orders = fbVal.val()
+        const orders = await Vue.http.get('orders')
+// console.log('actions fetchOrders(), orders array: ', orders.body)
 
-        Object.keys(orders).forEach(key => {
-          const o = orders[key]
+        Object.keys(orders.body).forEach(key => {
+          const o = orders.body[key]
           resultOrders.push(
-            new Order(o.name, o.phone, o.adId, o.done, key)
+            new Order(o.name, o.phone, o.ad_id, o.done, o.id)
           )
         })
+// console.log('actions fetchOrders(), resultOrders: ', resultOrders)
 
         commit('loadOrders', resultOrders)
         commit('setLoading', false)
@@ -72,7 +77,11 @@ export default {
       return state.orders.filter(o => o.done)
     },
     undoneOrders (state) {
-      return state.orders.filter(o => !o.done)
+      console.log('getters undoneOrders() orders: ', state.orders)
+      return state.orders.filter(o => {
+        console.log('getters undoneOrders() o: ', o)
+        return !o.done
+      })
     },
     orders (state, getters) {
       return getters.undoneOrders.concat(getters.doneOrders)

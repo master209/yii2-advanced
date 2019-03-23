@@ -108,7 +108,7 @@ export default {
 
       try {
         const ads = await Vue.http.get('ads')
-// console.log('from fetchAds(), ads array: ', ads.body)
+// console.log('actions fetchAds(), ads array: ', ads.body)
         const resultAds = []
         Object.keys(ads.body).forEach(key => {
           const ad = ads.body[key]
@@ -116,13 +116,13 @@ export default {
             new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, ad.id)
           )
         })
-// console.log('from fetchAds(), resultAds: ', resultAds)
+console.log('from fetchAds(), resultAds: ', resultAds)
 
         commit('loadAds', resultAds)
         commit('setLoading', false)
       } catch (error) {
-        commit('setError', error.message)
         commit('setLoading', false)
+        commit('setError', error.message)
         throw error
       }
     },
