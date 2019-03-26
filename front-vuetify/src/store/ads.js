@@ -61,6 +61,7 @@ export default {
         }
 
         console.log('from createAd(), ads object, token: ', newAd, getters.token)
+        // const ad = await Vue.http.post('users/' + getters.user.id + '/ads', newAd, {
         const ad = await Vue.http.post('ads', newAd, {
           headers: {
             'Content-Type': 'application/json',
