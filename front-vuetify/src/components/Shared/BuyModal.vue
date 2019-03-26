@@ -78,6 +78,7 @@
       },
       onSave () {
         if (this.name !== '' && this.phone !== '') {
+          console.log('BuyModal.vue onSave() ad: ', this.ad)
           this.localLoading = true
           this.$store.dispatch('createOrder', {
             name: this.name,

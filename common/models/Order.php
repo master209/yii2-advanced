@@ -45,12 +45,12 @@ class Order extends ActiveRecord
         ];
     }
 
-/*    public function behaviors()
+    public function behaviors()
     {
         return [
             TimestampBehavior::className(),
         ];
-    }*/
+    }
 
     /**
      * @return \yii\db\ActiveQuery

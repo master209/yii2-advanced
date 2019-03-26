@@ -23,11 +23,13 @@ export default {
   },
   actions: {
     async createOrder ({commit}, {name, phone, adId, ownerId}) {
-      const order = new Order(name, phone, adId)
+      const order = new Order(name, phone, adId, ownerId)
+      console.log('actions createOrder() order: ', order)
       commit('clearError')
 
       try {
-        await fb.database().ref(`/users/${ownerId}/orders`).push(order)
+        // await fb.database().ref(`/users/${ownerId}/orders`).push(order)
+        // const order = await Vue.http.get('orders')
       } catch (error) {
         commit('setError', error.message)
         throw error
