@@ -75,6 +75,7 @@ return [
 //                '<controller:\w+>/<id:\d+>/<action:\w+>' => '<controller>/<action>',
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user-ad'],
                 'GET users/<user_id:\d+>/ads' => 'user-ad/index',
+                'POST users/<user_id:\d+>/ads' => 'user-ad/create',
 
 /*                [
                     'class' => 'yii\rest\UrlRule',

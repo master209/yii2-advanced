@@ -47,6 +47,17 @@ class Ad extends ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'description' => 'description',
+            'image_src' => 'image_src',
+            'promo' => 'promo',
+        ];
+    }
+
     public function behaviors()
     {
         return [

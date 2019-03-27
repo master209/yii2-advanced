@@ -21,6 +21,10 @@ class AdSearch extends Ad
     {
         $query = Ad::find();
 
+        if($params['user_id']) {
+            $query->where(['owner_id' => $params['user_id']]);
+        }
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
