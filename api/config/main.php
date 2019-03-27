@@ -76,17 +76,8 @@ return [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user-ad'],
                 'GET users/<user_id:\d+>/ads' => 'user-ad/index',
                 'POST users/<user_id:\d+>/ads' => 'user-ad/create',
-
-/*                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => 'user-ad',
-                    'patterns' => [
-                        'GET users/3/ads' => 'user-ad/index',
-                        'tokens' => [
-                            '{id}' => '<user_id:\d+>'
-                        ],
-                    ],
-                ],*/
+                'GET users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/view',
+//                'users/<user_id:\d+>/posts/<id:\d+>/<action:\w+>' => 'user-ad/<action>',
 
 /*                [
                     'class' => 'yii\rest\UrlRule',
