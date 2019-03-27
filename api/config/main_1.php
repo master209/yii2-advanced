@@ -5,6 +5,7 @@ $params = array_merge(
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
 );
+
 return [
     'id' => 'app-api',
     'language'=>'ru-RU',
@@ -31,15 +32,15 @@ return [
                 'application/xml' => 'yii\web\XmlParser',
             ],
         ],
-        /*        'response' => [
-                    'formatters' => [
-                        'json' => [
-                            'class' => 'yii\web\JsonResponseFormatter',
-                            'prettyPrint' => YII_DEBUG,
-                            'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
-                        ],
-                    ],
-                ],*/
+/*        'response' => [
+            'formatters' => [
+                'json' => [
+                    'class' => 'yii\web\JsonResponseFormatter',
+                    'prettyPrint' => YII_DEBUG,
+                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+                ],
+            ],
+        ],*/
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => false,
@@ -56,36 +57,35 @@ return [
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
+            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
                 'auth' => 'site/login',
+
                 'GET profile' => 'profile/index',
                 'PUT,PATCH profile' => 'profile/update',
+
 //                'GET posts' => 'post/index',
 //                'PUT,PATCH posts' => 'post/update',
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'post'],
+
 //                'GET cars' => 'car/index',
 //                'PUT,PATCH cars' => 'car/update',
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'car'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'ad'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'order'],
 
-//                '<_c:[\w-]+>/<id:\d+>/<_a:[\w-]+>' => '<_c>/<_a>',
-//                '<controller:\w+>/<id:\d+>/<action:\w+>' => '<controller>/<action>',
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'user-ad'],
-                'GET users/<user_id:\d+>/ads' => 'user-ad/index',
-
-/*                [
+                [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'user-ad',
+                    'controller' => 'user-ads',
                     'patterns' => [
-                        'GET users/3/ads' => 'user-ad/index',
-                        'tokens' => [
-                            '{id}' => '<user_id:\d+>'
-                        ],
+                        'GET users_/{id}/ads' => 'index',
+/*                        'tokens' => [
+                            '{id}' => '<id:\w+>'
+                        ],*/
                     ],
-                ],*/
+                ],
 
 /*                [
                     'class' => 'yii\rest\UrlRule',
@@ -100,8 +100,6 @@ return [
                         '' => 'options',
                     ],
                 ],*/
-
-            ],
         ],
     ],
     'params' => $params,
