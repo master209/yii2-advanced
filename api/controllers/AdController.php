@@ -52,6 +52,12 @@ class AdController extends ActiveController
         return $actions;
     }
 
+    public function prepareDataProvider()
+    {
+        $searchModel = new AdSearch();
+        return $searchModel->search(Yii::$app->request->queryParams);
+    }
+
     public function actionCreate()
     {
         $model = new $this->modelClass;
@@ -75,12 +81,6 @@ class AdController extends ActiveController
         }
 
         return $model;
-    }
-
-    public function prepareDataProvider()
-    {
-        $searchModel = new AdSearch();
-        return $searchModel->search(Yii::$app->request->queryParams);
     }
 
     public function checkAccess($action, $model = null, $params = [])
