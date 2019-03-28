@@ -75,7 +75,7 @@ class AdController extends ActiveController
             $response = Yii::$app->getResponse();
             $response->setStatusCode(201);
             $id = implode(',', array_values($model->getPrimaryKey(true)));
-            $response->getHeaders()->set('Location', Url::toRoute(['view', 'id' => $id], true));
+//            $response->getHeaders()->set('Location', Url::toRoute(['view', 'id' => $id], true));
         } elseif (!$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
         }
@@ -92,7 +92,7 @@ class AdController extends ActiveController
 /*                if (!Yii::$app->user->can(Rbac::ADMIN_POST, ['post' => $model])) {
                     throw new ForbiddenHttpException(sprintf('%s forbidden.', $action));
                 }*/
-                throw new ForbiddenHttpException(sprintf('%s forbidden.', $action));
+                throw new ForbiddenHttpException(sprintf('checkAccess %s forbidden.', $action));
             }
         }
 

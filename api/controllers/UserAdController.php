@@ -10,6 +10,7 @@ use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\Controller;
 use yii\helpers\Url;
+use yii\web\ForbiddenHttpException;
 use yii\web\ServerErrorHttpException;
 
 class UserAdController extends Controller
@@ -18,7 +19,7 @@ class UserAdController extends Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['only'] = ['create', 'update', 'delete'];
+        $behaviors['authenticator']['only'] = ['view', 'create', 'update', 'delete'];
         $behaviors['authenticator']['authMethods'] = [
             HttpBasicAuth::className(),
             HttpBearerAuth::className(),
@@ -30,7 +31,7 @@ class UserAdController extends Controller
 
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['create', 'update', 'delete'],
+            'only' => ['view', 'create', 'update', 'delete'],
             'rules' => [
                 [
                     'allow' => true,
@@ -58,7 +59,7 @@ class UserAdController extends Controller
             $response = Yii::$app->getResponse();
             $response->setStatusCode(201);
             $id = implode(',', array_values($model->getPrimaryKey(true)));
-            $response->getHeaders()->set('Location', Url::toRoute(['view', 'id' => $id], true));
+//            $response->getHeaders()->set('Location', Url::toRoute(['view', 'id' => $id], true));
         } elseif (!$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
         }
@@ -68,7 +69,10 @@ class UserAdController extends Controller
 
     public function actionView($id)
     {
-        echo "actionView id<pre>"; print_r($id); echo"</pre>"; die();
+        $model = $this->findModel($id);
+        if ($model && $this->checkAccess('view', $model)) {
+            return $model;
+        }
     }
 
     public function verbs()
@@ -82,6 +86,19 @@ class UserAdController extends Controller
 
     public function checkAccess($action, $model = null, $params = [])
     {
-//        echo "checkAccess action<pre>"; print_r($action); echo"</pre>"; die();
+//        echo $model->owner_id."<pre>"; print_r(\Yii::$app->user->id); echo"</pre>"; die();      //DEBUG!
+
+        if ($action === 'view') {
+            if ($model->owner_id !== \Yii::$app->user->id) {
+                throw new ForbiddenHttpException(sprintf('checkAccess %s forbidden.', $action));
+            }
+        }
+
+        return true;
+    }
+
+    public function findModel($id)
+    {
+        return Ad::findOne($id);
     }
 }
