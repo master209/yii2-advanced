@@ -96,20 +96,32 @@ class UserAdController extends Controller
         }
     }
 
+    public function actionDelete($id)
+    {
+        if(!$model = $this->findModel($id))
+            throw new ServerErrorHttpException('Failed to delete by NULL model '.$id);
+
+        if ($this->checkAccess('delete', $model) && $model->delete())
+            Yii::$app->getResponse()->setStatusCode(204);
+        else
+            throw new ServerErrorHttpException('Failed to delete the object.');
+    }
+
     public function verbs()
     {
         return [
             'index' => ['get'],
             'create' => ['post'],
             'update' => ['put', 'patch'],
+            'delete' => ['delete'],
         ];
     }
 
     public function checkAccess($action, $model = null, $params = [])
     {
-//        echo $model->owner_id."<pre>"; print_r(\Yii::$app->user->id); echo"</pre>"; die();      //DEBUG!
+//echo $model->owner_id."<pre>"; print_r(\Yii::$app->user->id); echo"</pre>"; die();      //DEBUG!
 
-        if ($action === 'view' || $action === 'update') {
+        if ($action === 'view' || $action === 'update' || $action === 'delete') {
             if ($model->owner_id !== \Yii::$app->user->id) {
                 throw new ForbiddenHttpException(sprintf('checkAccess %s forbidden for target owner_id %s', $action, $model->owner_id));
             }
