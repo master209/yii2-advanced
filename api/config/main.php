@@ -77,7 +77,8 @@ return [
                 'GET users/<user_id:\d+>/ads' => 'user-ad/index',
                 'POST users/<user_id:\d+>/ads' => 'user-ad/create',
                 'GET users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/view',
-//                'users/<user_id:\d+>/posts/<id:\d+>/<action:\w+>' => 'user-ad/<action>',
+                'PUT,PATCH users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/update',
+//                'users/<user_id:\d+>/ads/<id:\d+>/<action:\w+>' => 'user-ad/<action>',
 
 /*                [
                     'class' => 'yii\rest\UrlRule',

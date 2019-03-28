@@ -45,7 +45,6 @@ class UserAdController extends Controller
 
     public function actionIndex($user_id = null)
     {
-//            echo "actionIndex user_id<pre>"; print_r($user_id); echo"</pre>"; die();
         $searchModel = new AdSearch();
         return $searchModel->search(['user_id' => $user_id]);
     }
@@ -53,12 +52,14 @@ class UserAdController extends Controller
     public function actionCreate()
     {
         $model = new Ad();
+
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
         $model->owner_id = Yii::$app->user->id;  //!берем владельца не из запроса, а через токен (Yii::$app->user->id)
+
         if ($model->save()) {
             $response = Yii::$app->getResponse();
             $response->setStatusCode(201);
-            $id = implode(',', array_values($model->getPrimaryKey(true)));
+//            $id = implode(',', array_values($model->getPrimaryKey(true)));
 //            $response->getHeaders()->set('Location', Url::toRoute(['view', 'id' => $id], true));
         } elseif (!$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
@@ -67,10 +68,30 @@ class UserAdController extends Controller
         return $model;
     }
 
+    public function actionUpdate($id)
+    {
+        if(!$model = $this->findModel($id)) {
+            throw new ServerErrorHttpException('Failed to update by NULL model '.$id);
+        }
+
+        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        if ($this->checkAccess('update', $model) && $model->save()) {
+            $response = Yii::$app->getResponse();
+            $response->setStatusCode(201);
+        } elseif (!$model->hasErrors()) {
+            throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
+        }
+
+        return $model;
+    }
+
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-        if ($model && $this->checkAccess('view', $model)) {
+        if(!$model = $this->findModel($id)) {
+            throw new ServerErrorHttpException('Failed to view by NULL model '.$id);
+        }
+
+        if ($this->checkAccess('view', $model)) {
             return $model;
         }
     }
@@ -88,9 +109,9 @@ class UserAdController extends Controller
     {
 //        echo $model->owner_id."<pre>"; print_r(\Yii::$app->user->id); echo"</pre>"; die();      //DEBUG!
 
-        if ($action === 'view') {
+        if ($action === 'view' || $action === 'update') {
             if ($model->owner_id !== \Yii::$app->user->id) {
-                throw new ForbiddenHttpException(sprintf('checkAccess %s forbidden.', $action));
+                throw new ForbiddenHttpException(sprintf('checkAccess %s forbidden for target owner_id %s', $action, $model->owner_id));
             }
         }
 
