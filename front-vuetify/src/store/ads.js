@@ -103,12 +103,13 @@ export default {
         throw error   // "позволяет в промисе обработать ошибку"
       }
     },
-    async fetchAds ({commit}) {
+    async fetchAds ({commit, getters}) {
       commit('clearError')
       commit('setLoading', true)
 
       try {
         const ads = await Vue.http.get('ads')
+        // const ads = await Vue.http.get(`users/${getters.user.id}/ads`)
 // console.log('actions fetchAds(), ads array: ', ads.body)
         const resultAds = []
         Object.keys(ads.body).forEach(key => {

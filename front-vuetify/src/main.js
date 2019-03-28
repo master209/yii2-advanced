@@ -46,8 +46,8 @@ new Vue({
       messagingSenderId: '591970981597'
     }
     fb.initializeApp(config)
-    store.dispatch('fetchAds')
     store.dispatch('checkLoginUser')
+    store.dispatch('fetchAds')
   },
   render: h => h(App)
 }).$mount('#app')

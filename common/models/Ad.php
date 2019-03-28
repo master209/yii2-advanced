@@ -51,6 +51,7 @@ class Ad extends ActiveRecord
     {
         return [
             'id' => 'id',
+            'owner_id' => 'owner_id',
             'title' => 'title',
             'description' => 'description',
             'image_src' => 'image_src',
