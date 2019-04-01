@@ -16,9 +16,9 @@ export default {
     orders: []
   },
   mutations: {
-    loadOrders (state, payload) {
+    setOrders (state, payload) {
       state.orders = payload
-      console.log('mutations loadOrders() ads arr: ', state.orders)
+      console.log('mutations setOrders() ads arr: ', state.orders)
     }
   },
   actions: {
@@ -54,7 +54,7 @@ export default {
           )
         })
 
-        commit('loadOrders', resultOrders)
+        commit('setOrders', resultOrders)
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)

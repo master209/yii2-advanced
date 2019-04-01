@@ -15,6 +15,15 @@ use yii\web\ServerErrorHttpException;
 
 class UserAdController extends Controller
 {
+    /**
+     * @var array the HTTP verbs that are supported by the collection URL
+     */
+    public $collectionOptions = ['GET', 'POST', 'HEAD', 'OPTIONS'];
+    /**
+     * @var array the HTTP verbs that are supported by the resource URL
+     */
+    public $resourceOptions = ['GET', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
+
     public function behaviors()
     {
         $behaviors = parent::behaviors();
@@ -105,6 +114,19 @@ class UserAdController extends Controller
             Yii::$app->getResponse()->setStatusCode(204);
         else
             throw new ServerErrorHttpException('Failed to delete the object.');
+    }
+
+    public function actionOptions($id = null)
+    {
+//echo "actionOptions<pre>"; print_r(Yii::$app->getRequest()->getMethod()); echo"</pre>"; die();      //DEBUG!
+
+        if (Yii::$app->getRequest()->getMethod() !== 'OPTIONS') {
+            Yii::$app->getResponse()->setStatusCode(405);
+        }
+        $options = $id === null ? $this->collectionOptions : $this->resourceOptions;
+        $headers = Yii::$app->getResponse()->getHeaders();
+        $headers->set('Allow', implode(', ', $options));
+        $headers->set('Access-Control-Allow-Methods', implode(', ', $options));
     }
 
     public function verbs()

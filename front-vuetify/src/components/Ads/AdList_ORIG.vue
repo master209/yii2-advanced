@@ -59,9 +59,6 @@
       loading () {
         return this.$store.getters.loading
       }
-    },
-    created () {
-      this.$store.dispatch('fetchMyAds')
     }
   }
 </script>

@@ -13,8 +13,7 @@ class Ad {
 
 export default {
   state: {
-    ads: [],
-    myAds: []
+    ads: []
   },
   mutations: {
     createAd (state, payload) {
@@ -24,10 +23,6 @@ export default {
     setAds (state, payload) {
       state.ads = payload
       console.log('mutations setAds() ads arr: ', state.ads)
-    },
-    setMyAds (state, payload) {
-      state.myAds = payload
-      console.log('mutations setMyAds() myAds arr: ', state.myAds)
     },
     updateAd (state, {title, description, id}) {
       const ad = state.ads.find(a => {
@@ -114,6 +109,7 @@ export default {
 
       try {
         const ads = await Vue.http.get('ads')
+        // const ads = await Vue.http.get(`users/${getters.user.id}/ads`)
 // console.log('actions fetchAds(), ads array: ', ads.body)
         const resultAds = []
         Object.keys(ads.body).forEach(key => {
@@ -132,36 +128,12 @@ console.log('from fetchAds(), resultAds: ', resultAds)
         throw error
       }
     },
-    async fetchMyAds ({commit, getters}) {
-      commit('clearError')
-      commit('setLoading', true)
-
-      try {
-        const ads = await Vue.http.get(`users/${getters.user.id}/ads`)
-console.log('actions fetchMyAds(), ads array: ', ads.body)
-        const resultAds = []
-        Object.keys(ads.body).forEach(key => {
-          const ad = ads.body[key]
-          resultAds.push(
-            new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, ad.id)
-          )
-        })
-console.log('from fetchMyAds(), resultAds: ', resultAds)
-
-        commit('setMyAds', resultAds)
-        commit('setLoading', false)
-      } catch (error) {
-        commit('setLoading', false)
-        commit('setError', error.message)
-        throw error
-      }
-    },
     async updateAd ({commit, getters}, {title, description, id}) {
       commit('clearError')
       commit('setLoading', true)
       console.log('actions updateAd() title, description, id: ', title, description, id)
       try {
-        const res = await Vue.http.put(`users/${getters.user.id}/ads/${id}`, {title, description}, {
+        const res = await Vue.http.put('ads/'+id, {title, description}, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + getters.token
@@ -175,9 +147,8 @@ console.log('from fetchMyAds(), resultAds: ', resultAds)
         console.log('actions updateAd() ERR: ', error)
         if(!error.ok) {
           const mes = 'actions updateAd() ERROR'
-          // commit('setError', mes)
-          // throw mes
-          window.location = '/login?loginError=true'  // TODO: 401 Unauthorized error - ОБРАБОТАТЬ ЗДЕСЬ
+          commit('setError', mes)
+          throw mes
         }
       }
     }
@@ -191,8 +162,11 @@ console.log('from fetchMyAds(), resultAds: ', resultAds)
         return ad.promo
       })
     },
-    myAds (state) {
-      return state.myAds
+    myAds (state, getters) {
+      return state.ads.filter(ad => {
+        console.log('myAds user.id, ad, ad.ownerId: ', getters.user.id, ad, ad.ownerId)
+        return ad.ownerId == getters.user.id
+      })
     },
     adById (state) {    // "ЭТО - ЗАМЫКАНИЕ"
       return adId => {  // откуда берется adId ???

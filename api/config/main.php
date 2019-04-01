@@ -79,6 +79,7 @@ return [
                 'GET users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/view',
                 'PUT,PATCH users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/update',
                 'DELETE users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/delete',
+                'OPTIONS users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/options',
 //                'users/<user_id:\d+>/ads/<id:\d+>/<action:\w+>' => 'user-ad/<action>',
 
 /*                [
