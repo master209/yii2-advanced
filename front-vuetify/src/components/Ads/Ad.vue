@@ -13,7 +13,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <addEditAdModal :ad="ad" v-if="isOwner"></addEditAdModal>
+            <add-edit-ad-modal :ad="ad" v-if="isOwner"></add-edit-ad-modal>
             <app-buy-modal :ad="ad"></app-buy-modal>
           </v-card-actions>
         </v-card>
@@ -48,7 +48,7 @@ export default {
     }
   },
   components: {
-    addEditAdModal: EditAdModal
+    'add-edit-ad-modal': EditAdModal
   }
 }
 </script>
