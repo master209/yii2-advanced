@@ -175,9 +175,8 @@ console.log('from fetchMyAds(), resultAds: ', resultAds)
         console.log('actions updateAd() ERR: ', error)
         if(!error.ok) {
           const mes = 'actions updateAd() ERROR'
-          // commit('setError', mes)
-          // throw mes
-          window.location = '/login?loginError=true'  // TODO: 401 Unauthorized error - ОБРАБОТАТЬ ЗДЕСЬ
+          commit('setError', mes)
+          throw mes
         }
       }
     }

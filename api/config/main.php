@@ -60,6 +60,7 @@ return [
             'rules' => [
                 '' => 'site/index',
                 'auth' => 'site/login',
+                'POST,OPTIONS check-identity' => 'site/check-identity',
                 'GET profile' => 'profile/index',
                 'PUT,PATCH profile' => 'profile/update',
 //                'GET posts' => 'post/index',

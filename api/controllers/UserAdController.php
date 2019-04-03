@@ -134,7 +134,7 @@ class UserAdController extends Controller
         return [
             'index' => ['get'],
             'create' => ['post'],
-            'update' => ['put', 'patch'],
+            'update' => ['put', 'patch', 'options'],
             'delete' => ['delete'],
         ];
     }

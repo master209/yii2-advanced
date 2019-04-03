@@ -57,21 +57,46 @@ export default {
         throw JSON.parse(error)
       }
     },
-    checkLoginUser ({commit}) {
+    async checkLoginUser ({commit}) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const res = await Vue.http.post('check-identity', {'token':localStorage.getItem('token')})
+        console.log('actions checkLoginUser(), response: ', res)
+        commit('setLoading', false)
+        if (res.status === 200) {
+          if (res.body.token) {
+            commit('setUser', new User(res.body.user_id, res.body.token))
+          } else {
+            throw res.bodyText
+          }
+        }
+      } catch (error) {
+        console.log('actions checkLoginUser(), catch error: ', error.body)
+        commit('setLoading', false)
+        store.dispatch('logoutUser')
+        // commit('setError', error.body)
+        // throw JSON.parse(error.body)
+      }
+    },
+/*
+    checkLoginUser__ ({commit}) {
       //для удержания сессии юзера проверяю его по localStorage
       const user = {
         id: localStorage.getItem('user_id'),
         token: localStorage.getItem('token')
       }
-      console.log('auth-guard, checkLoginUser.user: ', user)
+      console.log('checkLoginUser.user: ', user)
       if(user.id && user.token) {
         store.dispatch('autoLoginUser', user)
       }
     },
+*/
     autoLoginUser ({commit}, {id, token}) {
       commit('setUser', new User(id, token))
     },
     logoutUser ({commit}) {
+      console.log('actions logoutUser()')
       localStorage.removeItem('user_id');
       localStorage.removeItem('token');
       commit('setUser', null, null)

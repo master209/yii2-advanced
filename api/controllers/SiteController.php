@@ -5,7 +5,9 @@ namespace api\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\rest\Controller;
+use common\models\User;
 use api\models\LoginForm;
+use yii\web\ForbiddenHttpException;
 
 class SiteController extends Controller
 {
@@ -21,7 +23,7 @@ class SiteController extends Controller
             'class' => AccessControl::className(),
             'rules' => [
                 [
-                    'actions' => ['login'],
+                    'actions' => ['login', 'check-identity'],
                     'allow' => true,
                     'roles' => ['?'],
                 ],
@@ -67,10 +69,19 @@ class SiteController extends Controller
         }
     }
 
-/*    protected function verbs()
+    public function actionCheckIdentity()   //check-identity
     {
-        return [
-            'login' => ['options','post'],
-        ];
-    }*/
+        if ($user = User::findIdentityByAccessToken(Yii::$app->request->bodyParams['token']))
+            return ['user_id' => $user->id, 'token' => $user->getValidToken()->token];
+        else
+            throw new ForbiddenHttpException(sprintf('check-identity forbidden: token is expiered'));
+    }
+
+        protected function verbs()
+        {
+            return [
+                'login' => ['options','post'],
+                'check-identity' => ['options','post'],
+            ];
+        }
 }

@@ -44,6 +44,9 @@ export default {
       return this.$store.getters.loading
     },
     isOwner () {
+      if(!this.$store.getters.user) {
+        return false
+      }
       return this.ad.ownerId == this.$store.getters.user.id
     }
   },
