@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import AuthGuard from './auth-guard'
 import Home from '@/components/Home'
+import ErrorCmp from '@/components/Error'
 import Ad from '@/components/Ads/Ad'
 import AdList from '@/components/Ads/AdList'
 import NewAd from '@/components/Ads/NewAd'
@@ -51,6 +52,10 @@ export default new Router({
       name: 'orders',
       component: Orders,
       beforeEnter: AuthGuard
+    },
+    {
+      path: '*',          // обработка несуществующего роута
+      component: ErrorCmp
     }
   ],
   mode: 'history'

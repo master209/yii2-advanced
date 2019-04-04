@@ -35,11 +35,12 @@ import EditAdModal from './EditAdModal'
 
 export default {
   props: ['id'],
+  data () {
+    return {
+      ad: [],
+    }
+  },
   computed: {
-    ad () {
-      console.log('Ad.vue this.id: ', this.id)
-      return this.$store.getters.adById(this.id)
-    },
     loading () {
       return this.$store.getters.loading
     },
@@ -49,6 +50,13 @@ export default {
       }
       return this.ad.ownerId == this.$store.getters.user.id
     }
+  },
+  created () {
+    this.$store.dispatch('fetchAds')
+      .then(() => {
+        console.log('Ad.vue this.id: ', this.id)
+        this.ad =  this.$store.getters.adById(this.id)
+      })
   },
   components: {
     'add-edit-ad-modal': EditAdModal

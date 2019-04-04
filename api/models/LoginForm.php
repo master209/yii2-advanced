@@ -57,7 +57,7 @@ class LoginForm extends Model
             } else {
                 $_token = new Token();
                 $_token->user_id = $this->getUser()->id;
-                $_token->generateToken(time() + 3600 * 24);   //60 + 3
+                $_token->generateToken(time() + 3600 * 24 * 365);   //60 + 3
                 $token = $_token->save() ? $_token : null;
 //echo"NEW token<pre>"; print_r($token); echo"</pre>";    //DEBUG
             }

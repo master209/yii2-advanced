@@ -58,10 +58,13 @@ export default {
       }
     },
     async checkLoginUser ({commit}) {
+      const token = localStorage.getItem('token');
+      console.log('actions checkLoginUser(), token: ', token)
+      if(token === null) return false
       commit('clearError')
       commit('setLoading', true)
       try {
-        const res = await Vue.http.post('check-identity', {'token':localStorage.getItem('token')})
+        const res = await Vue.http.post('check-identity', {'token':token})
         console.log('actions checkLoginUser(), response: ', res)
         commit('setLoading', false)
         if (res.status === 200) {

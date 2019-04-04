@@ -160,6 +160,7 @@ console.log('from fetchMyAds(), resultAds: ', resultAds)
       commit('clearError')
       commit('setLoading', true)
       console.log('actions updateAd() title, description, id: ', title, description, id)
+      console.log('actions updateAd() token: ', getters.token)
       try {
         const res = await Vue.http.put(`users/${getters.user.id}/ads/${id}`, {title, description}, {
           headers: {
@@ -175,8 +176,9 @@ console.log('from fetchMyAds(), resultAds: ', resultAds)
         console.log('actions updateAd() ERR: ', error)
         if(!error.ok) {
           const mes = 'actions updateAd() ERROR'
-          commit('setError', mes)
-          throw mes
+          // commit('setError', mes)
+          // throw mes
+          window.location = '/login?loginError=true'  // если токен истек, а воспользовались кнопкой "Редактировать"
         }
       }
     }
