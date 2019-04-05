@@ -74,6 +74,7 @@ return [
 
 //                '<_c:[\w-]+>/<id:\d+>/<_a:[\w-]+>' => '<_c>/<_a>',
 //                '<controller:\w+>/<id:\d+>/<action:\w+>' => '<controller>/<action>',
+
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user-ad'],
                 'GET users/<user_id:\d+>/ads' => 'user-ad/index',
                 'POST users/<user_id:\d+>/ads' => 'user-ad/create',
@@ -81,6 +82,15 @@ return [
                 'PUT,PATCH users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/update',
                 'DELETE users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/delete',
                 'OPTIONS users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/options',
+
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'user-order'],
+                'GET users/<user_id:\d+>/orders' => 'user-order/index',
+                'POST users/<user_id:\d+>/orders' => 'user-order/create',
+                'GET users/<user_id:\d+>/orders/<id:\d+>' => 'user-order/view',
+                'PUT,PATCH users/<user_id:\d+>/orders/<id:\d+>' => 'user-order/update',
+                'DELETE users/<user_id:\d+>/orders/<id:\d+>' => 'user-order/delete',
+                'OPTIONS users/<user_id:\d+>/orders/<id:\d+>' => 'user-order/options',
+
 //                'users/<user_id:\d+>/ads/<id:\d+>/<action:\w+>' => 'user-ad/<action>',
 
 /*                [

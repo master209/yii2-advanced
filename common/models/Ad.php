@@ -66,12 +66,14 @@ class Ad extends ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'owner_id']);
+    }
+
+    public function getOrders()
+    {
+        return $this->hasMany(Order::className(), ['ad_id' => 'id']);
     }
 
     /**
@@ -82,4 +84,11 @@ class Ad extends ActiveRecord
         return new AdQuery(get_called_class());
     }
 
+    public function extraFields()
+    {
+        return [
+            'user' => 'user',
+            'orders' => 'orders',
+        ];
+    }
 }

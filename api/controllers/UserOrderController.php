@@ -2,8 +2,8 @@
 
 namespace api\controllers;
 
-use common\models\Ad;
-use api\models\AdSearch;
+use common\models\Order;
+use api\models\OrderSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
@@ -13,7 +13,7 @@ use yii\helpers\Url;
 use yii\web\ForbiddenHttpException;
 use yii\web\ServerErrorHttpException;
 
-class UserAdController extends Controller
+class UserOrderController extends Controller
 {
     /**
      * @var array the HTTP verbs that are supported by the collection URL
@@ -35,22 +35,7 @@ class UserAdController extends Controller
         ];
 
         $behaviors['corsFilter' ] = [
-            'class' => \yii\filters\Cors::className(),
-/*            'cors' => [                         //https://www.yiiframework.com/doc/api/2.0/yii-filters-cors
-                // restrict access to
-                'Origin' => ['http://localhost:8080', 'http://localhost:8081'],
-                // Allow only POST and PUT methods
-                'Access-Control-Request-Method' => ['GET', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-
-                // Allow only headers 'X-Wsse'
-                'Access-Control-Request-Headers' => ['X-Wsse'],
-                // Allow credentials (cookies, authorization headers, etc.) to be exposed to the browser
-                'Access-Control-Allow-Credentials' => true,
-                // Allow OPTIONS caching
-                'Access-Control-Max-Age' => 3600,
-                // Allow the X-Pagination-Current-Page header to be exposed to the browser.
-                'Access-Control-Expose-Headers' => ['X-Pagination-Current-Page'],
-            ]*/
+            'class' => \yii\filters\Cors::className()
         ];
 
         $behaviors['access'] = [
@@ -69,13 +54,13 @@ class UserAdController extends Controller
 
     public function actionIndex($user_id = null)
     {
-        $searchModel = new AdSearch();
+        $searchModel = new OrderSearch();
         return $searchModel->search(['user_id' => $user_id]);
     }
 
     public function actionCreate()
     {
-        $model = new Ad();
+        $model = new Order();
 
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
         $model->owner_id = Yii::$app->user->id;  //!берем владельца не из запроса, а через токен (Yii::$app->user->id)
@@ -111,13 +96,15 @@ class UserAdController extends Controller
 
     public function actionView($id)
     {
+echo "actionView<pre>"; print_r($id); echo"</pre>"; die();      //DEBUG!
+
         if(!$model = $this->findModel($id)) {
             throw new ServerErrorHttpException('Failed to view by NULL model '.$id);
         }
 
-        if ($this->checkAccess('view', $model)) {
+//        if ($this->checkAccess('view', $model)) {
             return $model;
-        }
+//        }
     }
 
     public function actionDelete($id)
@@ -131,7 +118,7 @@ class UserAdController extends Controller
             throw new ServerErrorHttpException('Failed to delete the object.');
     }
 
-    public function actionOptions($id = null)
+/*    public function actionOptions($id = null)
     {
 //echo "actionOptions<pre>"; print_r(Yii::$app->getRequest()->getMethod()); echo"</pre>"; die();      //DEBUG!
 
@@ -142,7 +129,7 @@ class UserAdController extends Controller
         $headers = Yii::$app->getResponse()->getHeaders();
         $headers->set('Allow', implode(', ', $options));
         $headers->set('Access-Control-Allow-Methods', implode(', ', $options));
-    }
+    }*/
 
     public function verbs()
     {
@@ -170,6 +157,6 @@ class UserAdController extends Controller
 
     public function findModel($id)
     {
-        return Ad::findOne($id);
+        return Order::findOne($id);
     }
 }
