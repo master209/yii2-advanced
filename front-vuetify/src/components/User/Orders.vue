@@ -9,12 +9,12 @@
           color="purple"
         ></v-progress-circular>
       </v-flex>
-      <v-flex xs12 sm6 offset-sm3 v-else-if="!loading && orders.length !== 0">
+      <v-flex xs12 sm6 offset-sm3 v-else-if="!loading && myOrders.length !== 0">
         <h1 class="text--secondary mb-3">Заказы</h1>
         <v-list two-line subheader>
           <v-list-tile
             avatar
-            v-for="order in orders"
+            v-for="order in myOrders"
             :key="order.id"
           >
             <v-list-tile-action>
@@ -50,8 +50,8 @@
       loading () {
         return this.$store.getters.loading
       },
-      orders () {
-        return this.$store.getters.orders
+      myOrders () {
+        return this.$store.getters.myOrders
       }
     },
     methods: {
@@ -64,7 +64,7 @@
       }
     },
     created () {
-      this.$store.dispatch('fetchOrders')
+      this.$store.dispatch('fetchMyOrders')
     }
   }
 </script>

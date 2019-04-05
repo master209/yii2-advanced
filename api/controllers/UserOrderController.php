@@ -28,7 +28,7 @@ class UserOrderController extends Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['only'] = ['view', 'create', 'update', 'delete'];
+        $behaviors['authenticator']['only'] = [/*'view', */'create', 'update', 'delete'];
         $behaviors['authenticator']['authMethods'] = [
             HttpBasicAuth::className(),
             HttpBearerAuth::className(),
@@ -40,7 +40,7 @@ class UserOrderController extends Controller
 
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['view', 'create', 'update', 'delete'],
+            'only' => [/*'view', */'create', 'update', 'delete'],
             'rules' => [
                 [
                     'allow' => true,
@@ -96,7 +96,7 @@ class UserOrderController extends Controller
 
     public function actionView($id)
     {
-echo "actionView<pre>"; print_r($id); echo"</pre>"; die();      //DEBUG!
+//echo "actionView<pre>"; print_r($id); echo"</pre>"; die();      //DEBUG!
 
         if(!$model = $this->findModel($id)) {
             throw new ServerErrorHttpException('Failed to view by NULL model '.$id);

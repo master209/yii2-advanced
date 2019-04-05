@@ -13,13 +13,18 @@ class Order {
 
 export default {
   state: {
-    orders: []
+    orders: [],
+    myOrders: []
   },
   mutations: {
     setOrders (state, payload) {
       state.orders = payload
       console.log('mutations setOrders() ads arr: ', state.orders)
-    }
+    },
+    setMyOrders (state, payload) {
+      state.myOrders = payload
+      console.log('mutations setMyOrders() myOrders arr: ', state.myOrders)
+    },
   },
   actions: {
     async createOrder ({commit}, {name, phone, adId, ownerId}) {
@@ -35,30 +40,52 @@ export default {
         throw error
       }
     },
-    async fetchOrders ({commit, getters}) {
+/*    async fetchOrders ({commit, getters}) {
       commit('setLoading', true)
       commit('clearError')
-
-      const resultOrders = []
-
       try {
         // const fbVal = await fb.database().ref(`/users/${getters.user.id}/orders`).once('value')
         // const orders = fbVal.val()
-        const orders = await Vue.http.get('orders')
+        const objs = await Vue.http.get('orders')
 // console.log('actions fetchOrders(), orders array: ', orders.body)
 
-        Object.keys(orders.body).forEach(key => {
-          const o = orders.body[key]
-          resultOrders.push(
+        const _arr = []
+        Object.keys(objs.body).forEach(key => {
+          const o = objs.body[key]
+          _arr.push(
             new Order(o.name, o.phone, o.ad_id, o.done, o.id)
           )
         })
 
-        commit('setOrders', resultOrders)
+        commit('setOrders', _arr)
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)
         commit('setError', error.message)
+      }
+    },*/
+    async fetchMyOrders ({commit, getters}) {
+      commit('clearError')
+      commit('setLoading', true)
+
+      try {
+        const objs = await Vue.http.get(`users/${getters.user.id}/orders`)
+        console.log('actions fetchMyOrders(), orders array: ', objs.body)
+        const _arr = []
+        Object.keys(objs.body).forEach(key => {
+          const o = objs.body[key]
+          _arr.push(
+            new Order(o.name, o.phone, o.ad_id, o.done, o.id)
+          )
+        })
+        console.log('from fetchMyOrders(), _arr: ', _arr)
+
+        commit('setMyOrders', _arr)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        // throw error
       }
     },
     async markOrderDone ({commit, getters}, payload) {
@@ -84,8 +111,13 @@ export default {
         return !o.done
       })
     },
+    myOrders (state) {
+      return state.myOrders
+    },
+/*
     orders (state, getters) {
       return getters.undoneOrders.concat(getters.doneOrders)
     }
+*/
   }
 }

@@ -60,6 +60,11 @@ class Order extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    public function getAd()
+    {
+        return $this->hasMany(Ad::className(), ['id' => 'ad_id']);
+    }
+
     /**
      * @return OrderQuery
      */

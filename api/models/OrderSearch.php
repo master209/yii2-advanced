@@ -19,7 +19,11 @@ class OrderSearch extends Order
      */
     public function search($params)
     {
-        $query = Order::find();
+        $query = Order::find()->joinWith('ad', false);
+
+        if(isset($params['user_id'])) {
+            $query->where(['owner_id' => $params['user_id']]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

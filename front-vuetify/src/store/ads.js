@@ -113,18 +113,18 @@ export default {
       commit('setLoading', true)
 
       try {
-        const ads = await Vue.http.get('ads')
-// console.log('actions fetchAds(), ads array: ', ads.body)
-        const resultAds = []
-        Object.keys(ads.body).forEach(key => {
-          const ad = ads.body[key]
-          resultAds.push(   // формируется массив объектов
-            new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, ad.id)
+        const objs = await Vue.http.get('ads')
+// console.log('actions fetchAds(), ads array: ', objs.body)
+        const _arr = []
+        Object.keys(objs.body).forEach(key => {
+          const o = objs.body[key]
+          _arr.push(   // формируется массив объектов
+            new Ad(o.title, o.description, o.owner_id, o.image_src, o.promo, o.id)
           )
         })
-console.log('from fetchAds(), resultAds: ', resultAds)
+console.log('from fetchAds(), _arr: ', _arr)
 
-        commit('setAds', resultAds)
+        commit('setAds', _arr)
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)
@@ -137,18 +137,18 @@ console.log('from fetchAds(), resultAds: ', resultAds)
       commit('setLoading', true)
 
       try {
-        const ads = await Vue.http.get(`users/${getters.user.id}/ads`)
-console.log('actions fetchMyAds(), ads array: ', ads.body)
-        const resultAds = []
-        Object.keys(ads.body).forEach(key => {
-          const ad = ads.body[key]
-          resultAds.push(
-            new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, ad.id)
+        const objs = await Vue.http.get(`users/${getters.user.id}/ads`)
+console.log('actions fetchMyAds(), ads array: ', objs.body)
+        const _arr = []
+        Object.keys(objs.body).forEach(key => {
+          const o = objs.body[key]
+          _arr.push(
+            new Ad(o.title, o.description, o.owner_id, o.image_src, o.promo, o.id)
           )
         })
-console.log('from fetchMyAds(), resultAds: ', resultAds)
+console.log('from fetchMyAds(), _arr: ', _arr)
 
-        commit('setMyAds', resultAds)
+        commit('setMyAds', _arr)
         commit('setLoading', false)
       } catch (error) {
         commit('setLoading', false)
