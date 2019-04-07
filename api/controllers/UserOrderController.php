@@ -28,7 +28,7 @@ class UserOrderController extends Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['only'] = [/*'view', */'create', 'update', 'delete'];
+        $behaviors['authenticator']['only'] = [/*'view', */'create', 'update', 'delete', 'mark-done'];
         $behaviors['authenticator']['authMethods'] = [
             HttpBasicAuth::className(),
             HttpBearerAuth::className(),
@@ -40,7 +40,7 @@ class UserOrderController extends Controller
 
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => [/*'view', */'create', 'update', 'delete'],
+            'only' => [/*'view', */'create', 'update', 'delete', 'mark-done'],
             'rules' => [
                 [
                     'allow' => true,
@@ -94,10 +94,21 @@ class UserOrderController extends Controller
         return $model;
     }
 
+    public function actionMarkDone($user_id, $order_id)   //    /users/3/orders/2/mark-done
+    {
+echo "actionMarkDone - $user_id<pre>"; print_r($order_id); echo"</pre>"; die();      //DEBUG!
+
+        if(!$model = $this->findModel($id)) {
+            throw new ServerErrorHttpException('Failed to mark-done by NULL model '.$order_id);
+        }
+
+        if ($this->checkAccess('mark-done', $model) && $model->save()) {
+        }
+
+    }
+
     public function actionView($id)
     {
-//echo "actionView<pre>"; print_r($id); echo"</pre>"; die();      //DEBUG!
-
         if(!$model = $this->findModel($id)) {
             throw new ServerErrorHttpException('Failed to view by NULL model '.$id);
         }
@@ -138,6 +149,7 @@ class UserOrderController extends Controller
             'view' => ['get'],
             'create' => ['post'],
             'update' => ['put', 'patch', 'options'],
+            'mark-done' => ['put', 'patch', 'options'],
             'delete' => ['delete'],
         ];
     }
@@ -146,8 +158,8 @@ class UserOrderController extends Controller
     {
 //echo $model->owner_id."<pre>"; print_r(\Yii::$app->user->id); echo"</pre>"; die();      //DEBUG!
 
-        if ($action === 'view' || $action === 'update' || $action === 'delete') {
-            if ($model->owner_id !== \Yii::$app->user->id) {
+        if ($action === 'mark-done' || $action === 'update' || $action === 'delete') {
+            if ($model->ad->owner_id !== \Yii::$app->user->id) {
                 throw new ForbiddenHttpException(sprintf('checkAccess %s forbidden for target owner_id %s', $action, $model->owner_id));
             }
         }

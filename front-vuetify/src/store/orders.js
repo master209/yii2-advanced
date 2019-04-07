@@ -25,6 +25,14 @@ export default {
       state.myOrders = payload
       console.log('mutations setMyOrders() myOrders arr: ', state.myOrders)
     },
+    markOrderDone (state, {id}) {
+      const ad = state.myOrders.find(a => {
+        return a.id == id
+      })
+
+      ad.title = title
+      ad.description = description
+    }
   },
   actions: {
     async createOrder ({commit}, {name, phone, adId, ownerId}) {
@@ -90,13 +98,27 @@ export default {
     },
     async markOrderDone ({commit, getters}, payload) {
       commit('clearError')
+      console.log('actions markOrderDone() title, description, id: ', title, description, id)
+      console.log('actions markOrderDone() token: ', getters.token)
       try {
-        await fb.database().ref(`/users/${getters.user.id}/orders`).child(payload).update({
-          done: true
+        const res = await Vue.http.put(`users/${getters.user.id}/orders/${id}/mark-done`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getters.token
+          }
         })
+        commit('setLoading', false)
+        commit('markOrderDone', {id})
+        console.log('actions markOrderDone(), new ad object: ', res)
       } catch (error) {
-        commit('setError', error.message)
-        throw error
+        commit('setLoading', false)
+        console.log('actions markOrderDone() ERR: ', error)
+        if(!error.ok) {
+          const mes = 'actions markOrderDone() ERROR'
+          // commit('setError', mes)
+          // throw mes
+          window.location = '/login?loginError=true'  // если токен истек, а воспользовались кнопкой "Редактировать"
+        }
       }
     }
   },

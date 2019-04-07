@@ -85,11 +85,13 @@ return [
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user-order'],
                 'GET users/<user_id:\d+>/orders' => 'user-order/index',
-                'POST users/<user_id:\d+>/orders' => 'user-order/create',
-                'GET users/<user_id:\d+>/orders/<id:\d+>' => 'user-order/view',
-                'PUT,PATCH users/<user_id:\d+>/orders/<id:\d+>' => 'user-order/update',
-                'DELETE users/<user_id:\d+>/orders/<id:\d+>' => 'user-order/delete',
-                'OPTIONS users/<user_id:\d+>/orders/<id:\d+>' => 'user-order/options',
+//                'POST users/<user_id:\d+>/orders' => 'user-order/create',
+                'GET users/<user_id:\d+>/orders/<order_id:\d+>' => 'user-order/view',
+                'PUT,PATCH users/<user_id:\d+>/orders/<order_id:\d+>/' => 'user-order/update',
+                'PUT,PATCH users/<user_id:\d+>/orders/<order_id:\d+>/mark-done' => 'user-order/mark-done',
+//                'DELETE users/<user_id:\d+>/orders/<order_id:\d+>' => 'user-order/delete',
+//                'OPTIONS users/<user_id:\d+>/orders/<order_id:\d+>' => 'user-order/options',
+
 
 //                'users/<user_id:\d+>/ads/<id:\d+>/<action:\w+>' => 'user-ad/<action>',
 
