@@ -61,7 +61,7 @@
       }
     },
     created () {
-      this.$store.dispatch('fetchMyAds')
+      this.$store.dispatch('myAds')
     }
   }
 </script>

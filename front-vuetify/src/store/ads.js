@@ -25,17 +25,19 @@ export default {
       state.ads = payload
       console.log('mutations setAds() ads arr: ', state.ads)
     },
+    setAd (state, payload) {
+      let id = payload.id
+      state.ads[id] = payload
+      console.log('mutations setAd() ad: ', state.ads[id])
+    },
     setMyAds (state, payload) {
       state.myAds = payload
       console.log('mutations setMyAds() myAds arr: ', state.myAds)
     },
     updateAd (state, {title, description, id}) {
-      const ad = state.ads.find(a => {
-        return a.id == id
-      })
-
-      ad.title = title
-      ad.description = description
+      state.ads[id].title = title
+      state.ads[id].description = description
+      console.log('mutations updateAd() ads: ', state.ads)
     }
   },
   actions: {
@@ -108,7 +110,9 @@ export default {
         throw error   // "позволяет в промисе обработать ошибку"
       }
     },
-    async fetchAds ({commit, getters}) {
+
+
+    async fetchAds ({commit}) {
       commit('clearError')
       commit('setLoading', true)
 
@@ -132,13 +136,15 @@ console.log('from fetchAds(), _arr: ', _arr)
         throw error
       }
     },
-    async fetchMyAds ({commit, getters}) {
+
+
+    async myAds ({commit, getters}) {
       commit('clearError')
       commit('setLoading', true)
 
       try {
         const objs = await Vue.http.get(`users/${getters.user.id}/ads`)
-console.log('actions fetchMyAds(), ads array: ', objs.body)
+console.log('actions myAds(), ads array: ', objs.body)
         const _arr = []
         Object.keys(objs.body).forEach(key => {
           const o = objs.body[key]
@@ -146,10 +152,31 @@ console.log('actions fetchMyAds(), ads array: ', objs.body)
             new Ad(o.title, o.description, o.owner_id, o.image_src, o.promo, o.id)
           )
         })
-console.log('from fetchMyAds(), _arr: ', _arr)
+console.log('from myAds(), _arr: ', _arr)
 
         commit('setMyAds', _arr)
         commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
+    },
+
+
+    async adById ({commit, getters}, payload) {
+      commit('clearError')
+      commit('setLoading', true)
+
+      try {
+        console.log('actions adById() ad id: ', payload)
+        const o = await Vue.http.get(`ads/${payload}`)      //  ads/31
+        const ad = o.body
+console.log('actions adById(), ad: ', ad)
+        commit('setLoading', false)
+        const _ad = new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, ad.id)
+        commit('setAd', _ad)
+        return _ad
       } catch (error) {
         commit('setLoading', false)
         commit('setError', error.message)
@@ -169,8 +196,8 @@ console.log('from fetchMyAds(), _arr: ', _arr)
           }
         })
         commit('setLoading', false)
+        console.log('actions updateAd(), new ad object: ', res.body)
         commit('updateAd', {title, description, id})
-        console.log('actions updateAd(), new ad object: ', res)
       } catch (error) {
         commit('setLoading', false)
         console.log('actions updateAd() ERR: ', error)
@@ -194,12 +221,6 @@ console.log('from fetchMyAds(), _arr: ', _arr)
     },
     myAds (state) {
       return state.myAds
-    },
-    adById (state) {    // "ЭТО - ЗАМЫКАНИЕ"
-      return adId => {  // откуда берется adId ???
-        return state.ads.find(ad => ad.id == adId)   // возвращает весь объект ad
-      }
     }
-
   }
 }

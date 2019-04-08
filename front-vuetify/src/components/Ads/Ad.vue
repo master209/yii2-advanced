@@ -38,24 +38,34 @@ export default {
   data () {
     return {
       ad: [],
+      isOwner: false
     }
   },
   computed: {
     loading () {
       return this.$store.getters.loading
-    },
-    isOwner () {
-      if(!this.$store.getters.user) {
-        return false
-      }
-      return this.ad.ownerId == this.$store.getters.user.id
+    }
+  },
+  methods: {
+    markDone (order) {
+      this.$store.dispatch('markOrderDone', order.id)
+        .then(() => {
+          order.done = true
+        })
+        .catch(() => {})
     }
   },
   created () {
-    this.$store.dispatch('fetchAds')
-      .then(() => {
-        console.log('Ad.vue this.id: ', this.id)
-        this.ad =  this.$store.getters.adById(this.id)
+    console.log('Ad.vue this.id: ', this.id)
+    this.$store.dispatch('adById', this.id)
+      .then((ad) => {
+        this.ad = ad
+        if(!this.$store.getters.user) {
+          return false
+        }
+        this.isOwner = (this.ad.ownerId == this.$store.getters.user.id)
+        // console.log('Ad.vue user.id: ', this.$store.getters.user.id)
+        console.log('Ad.vue this.isOwner: ', this.isOwner)
       })
   },
   components: {

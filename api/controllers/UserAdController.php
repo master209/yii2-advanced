@@ -28,7 +28,7 @@ class UserAdController extends Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['only'] = ['view', 'create', 'update', 'delete'];
+        $behaviors['authenticator']['only'] = [/*'index', */'view', 'create', 'update', 'delete'];
         $behaviors['authenticator']['authMethods'] = [
             HttpBasicAuth::className(),
             HttpBearerAuth::className(),
@@ -109,6 +109,10 @@ class UserAdController extends Controller
         return $model;
     }
 
+    /*  /users/3/ads/31
+     * Это закрытый роут. Доступен только для тех ролей, которым разрешено знать,
+     * что владельцем ads/31 является users/3
+     */
     public function actionView($id)
     {
         if(!$model = $this->findModel($id)) {
