@@ -39,8 +39,9 @@ export default {
       console.log('mutations setMyAds() myAds arr: ', state.myAds)
     },
     updateAd (state, {title, description, id}) {
-      state.ads[id].title = title
-      state.ads[id].description = description
+      const ad = state.ads.find(a => a.id == id)
+      ad.title = title
+      ad.description = description
       console.log('mutations updateAd() ads: ', state.ads)
     }
   },
