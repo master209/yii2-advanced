@@ -43,6 +43,9 @@ export default {
       try {
         // await fb.database().ref(`/users/${ownerId}/orders`).push(order)
         // const order = await Vue.http.get('orders')
+        const o = await Vue.http.put('orders', order)
+        commit('setLoading', false)
+        console.log('actions createOrder(), new order object: ', o.body)
       } catch (error) {
         commit('setError', error.message)
         throw error
@@ -101,7 +104,7 @@ export default {
       console.log('actions markOrderDone() title, description, id: ', title, description, id)
       console.log('actions markOrderDone() token: ', getters.token)
       try {
-        const res = await Vue.http.put(`users/${getters.user.id}/orders/${id}/mark-done`, {
+        const o = await Vue.http.put(`users/${getters.user.id}/orders/${id}/mark-done`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + getters.token
@@ -109,7 +112,7 @@ export default {
         })
         commit('setLoading', false)
         commit('markOrderDone', {id})
-        console.log('actions markOrderDone(), new ad object: ', res)
+        console.log('actions markOrderDone(), new ad object: ', o)
       } catch (error) {
         commit('setLoading', false)
         console.log('actions markOrderDone() ERR: ', error)
