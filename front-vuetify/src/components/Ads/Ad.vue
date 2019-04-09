@@ -59,6 +59,9 @@ export default {
     console.log('Ad.vue this.id: ', this.id)
     this.$store.dispatch('adById', this.id)
       .then((ad) => {
+console.log('Ad.vue getters.ad: ', this.$store.getters.ad(this.id))
+// this.$store.getters.ad(this.id)
+
         this.ad = ad
         if(!this.$store.getters.user) {
           return false

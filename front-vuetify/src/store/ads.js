@@ -27,8 +27,14 @@ export default {
     },
     setAd (state, payload) {
       let id = payload.id
-      state.ads[id] = payload
-      console.log('mutations setAd() ad: ', state.ads[id])
+      const ad = state.ads.find(a => {
+        return a.id == id
+      })
+      if(ad === undefined) {      //если в массиве ads[] не найдено элемента с (a.id == id),
+        state.ads[0] = payload    // то добавляю его как единственный элемент
+        console.log('mutations setAd() ads[0]: ', state.ads[0])
+      }
+      console.log('mutations setAd() ads: ', state.ads)
     },
     setMyAds (state, payload) {
       state.myAds = payload
@@ -183,6 +189,8 @@ console.log('actions adById(), ad: ', ad)
         throw error
       }
     },
+
+
     async updateAd ({commit, getters}, {title, description, id}) {
       commit('clearError')
       commit('setLoading', true)
@@ -213,6 +221,9 @@ console.log('actions adById(), ad: ', ad)
   getters: {
     ads (state) {
       return state.ads
+    },
+    ad: (state) => (id) => {                      // You can also pass arguments to getters
+      return state.ads.find(ad => ad.id == id)    // https://vuex.vuejs.org/guide/getters.html
     },
     promoAds (state) {
       return state.ads.filter(ad => {
