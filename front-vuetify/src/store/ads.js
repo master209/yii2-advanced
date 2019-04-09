@@ -26,10 +26,8 @@ export default {
       console.log('mutations setAds() ads arr: ', state.ads)
     },
     setAd (state, payload) {
-      let id = payload.id
-      const ad = state.ads.find(a => {
-        return a.id == id
-      })
+      const id = payload.id
+      const ad = state.ads.find(a => a.id == id)
       if(ad === undefined) {      //если в массиве ads[] не найдено элемента с (a.id == id),
         state.ads[0] = payload    // то добавляю его как единственный элемент
         console.log('mutations setAd() ads[0]: ', state.ads[0])
@@ -180,12 +178,13 @@ console.log('from myAds(), _arr: ', _arr)
         const ad = o.body
 console.log('actions adById(), ad: ', ad)
         commit('setLoading', false)
-        const _ad = new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, ad.id)
-        commit('setAd', _ad)
-        return _ad
+        commit('setAd', new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, ad.id))
       } catch (error) {
+        if(error.body.status == 404) {
+          // TODO:обработать 404
+        }
         commit('setLoading', false)
-        commit('setError', error.message)
+        commit('setError', error.body.name)
         throw error
       }
     },

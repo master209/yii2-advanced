@@ -56,19 +56,21 @@ export default {
     }
   },
   created () {
-    console.log('Ad.vue this.id: ', this.id)
+    console.log('Ad.vue created this.id: ', this.id)
     this.$store.dispatch('adById', this.id)
-      .then((ad) => {
-console.log('Ad.vue getters.ad: ', this.$store.getters.ad(this.id))
-// this.$store.getters.ad(this.id)
-
-        this.ad = ad
+      .then(() => {
+        this.ad = this.$store.getters.ad(this.id)
+        console.log('Ad.vue created getters.ad: ', this.ad)
         if(!this.$store.getters.user) {
           return false
         }
         this.isOwner = (this.ad.ownerId == this.$store.getters.user.id)
         // console.log('Ad.vue user.id: ', this.$store.getters.user.id)
-        console.log('Ad.vue this.isOwner: ', this.isOwner)
+        console.log('Ad.vue created this.isOwner: ', this.isOwner)
+      })
+      .catch((error) => {
+        console.log('Ad.vue created catch error: ', error)
+        // TODO: вместо контента на странице - вывести ошибку 404
       })
   },
   components: {
