@@ -34,16 +34,24 @@ export default {
       ad.description = description
     }
   },
+
+
   actions: {
-    async createOrder ({commit}, {name, phone, adId, ownerId}) {
-      const order = new Order(name, phone, adId, ownerId)
-      console.log('actions createOrder() order: ', order)
+
+
+    async createOrder ({commit}, {name, phone, adId/*, ownerId*/}) {
+      const newOrder = {
+        name,
+        phone,
+        ad_id: adId,
+        // owner_id: ownerId
+      }
+
+      console.log('actions createOrder() order: ', newOrder)
       commit('clearError')
 
       try {
-        // await fb.database().ref(`/users/${ownerId}/orders`).push(order)
-        // const order = await Vue.http.get('orders')
-        const o = await Vue.http.put('orders', order)
+        const o = await Vue.http.post('orders', newOrder)
         commit('setLoading', false)
         console.log('actions createOrder(), new order object: ', o.body)
       } catch (error) {
@@ -51,6 +59,8 @@ export default {
         throw error
       }
     },
+
+
 /*    async fetchOrders ({commit, getters}) {
       commit('setLoading', true)
       commit('clearError')
@@ -75,12 +85,19 @@ export default {
         commit('setError', error.message)
       }
     },*/
+
+
     async fetchMyOrders ({commit, getters}) {
       commit('clearError')
       commit('setLoading', true)
 
       try {
-        const objs = await Vue.http.get(`users/${getters.user.id}/orders`)
+        const objs = await Vue.http.get(`users/${getters.user.id}/orders`,  {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getters.token
+          }
+        })
         console.log('actions fetchMyOrders(), orders array: ', objs.body)
         const _arr = []
         Object.keys(objs.body).forEach(key => {
@@ -99,6 +116,8 @@ export default {
         // throw error
       }
     },
+
+
     async markOrderDone ({commit, getters}, payload) {
       commit('clearError')
       console.log('actions markOrderDone() title, description, id: ', title, description, id)
@@ -125,6 +144,8 @@ export default {
       }
     }
   },
+
+
   getters: {
     doneOrders (state) {
       return state.orders.filter(o => o.done)

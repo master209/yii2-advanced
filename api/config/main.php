@@ -90,7 +90,7 @@ return [
                 'PUT,PATCH users/<user_id:\d+>/orders/<order_id:\d+>/' => 'user-order/update',
                 'PUT,PATCH users/<user_id:\d+>/orders/<order_id:\d+>/mark-done' => 'user-order/mark-done',
 //                'DELETE users/<user_id:\d+>/orders/<order_id:\d+>' => 'user-order/delete',
-//                'OPTIONS users/<user_id:\d+>/orders/<order_id:\d+>' => 'user-order/options',
+                'OPTIONS users/<user_id:\d+>/orders' => 'user-order/options',
 
 
 //                'users/<user_id:\d+>/ads/<id:\d+>/<action:\w+>' => 'user-ad/<action>',

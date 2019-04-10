@@ -84,7 +84,7 @@
             name: this.name,
             phone: this.phone,
             adId: this.ad.id,
-            ownerId: this.ad.ownerId
+            // ownerId: this.ad.ownerId
           })
           .finally(() => {  // ".finally() вызывается в любом случае - если .than() или .catch()"
             this.name = ''

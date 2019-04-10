@@ -28,7 +28,7 @@ class UserOrderController extends Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['only'] = [/*'view', */'create', 'update', 'delete', 'mark-done'];
+        $behaviors['authenticator']['only'] = ['index', 'create', 'update', 'delete', 'mark-done'];
         $behaviors['authenticator']['authMethods'] = [
             HttpBasicAuth::className(),
             HttpBearerAuth::className(),
@@ -40,7 +40,7 @@ class UserOrderController extends Controller
 
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => [/*'view', */'create', 'update', 'delete', 'mark-done'],
+            'only' => ['index', 'create', 'update', 'delete', 'mark-done'],
             'rules' => [
                 [
                     'allow' => true,
@@ -145,7 +145,7 @@ echo "actionMarkDone - $user_id<pre>"; print_r($order_id); echo"</pre>"; die(); 
     public function verbs()
     {
         return [
-            'index' => ['get'],
+            'index' => ['get', 'options'],
             'view' => ['get'],
             'create' => ['post'],
             'update' => ['put', 'patch', 'options'],
