@@ -118,28 +118,28 @@ export default {
     },
 
 
-    async markOrderDone ({commit, getters}, payload) {
+    async markOrderDone ({commit, getters}, {order_id}) {
       commit('clearError')
-      console.log('actions markOrderDone() title, description, id: ', title, description, id)
-      console.log('actions markOrderDone() token: ', getters.token)
+      console.log('actions markOrderDone() token, order_id: ', getters.token, order_id)
       try {
-        const o = await Vue.http.put(`users/${getters.user.id}/orders/${id}/mark-done`, {
+        // const o = await Vue.http.put(`users/${getters.user.id}/orders/${id}/mark-done`, {
+        const o = await Vue.http.put(`orders/${order_id}/mark-done`, {}, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + getters.token
           }
         })
         commit('setLoading', false)
-        commit('markOrderDone', {id})
+        commit('markOrderDone', {order_id})
         console.log('actions markOrderDone(), new ad object: ', o)
       } catch (error) {
         commit('setLoading', false)
         console.log('actions markOrderDone() ERR: ', error)
         if(!error.ok) {
           const mes = 'actions markOrderDone() ERROR'
-          // commit('setError', mes)
-          // throw mes
-          window.location = '/login?loginError=true'  // если токен истек, а воспользовались кнопкой "Редактировать"
+          commit('setError', mes)
+          throw mes
+          // window.location = '/login?loginError=true'  // если токен истек, а воспользовались кнопкой "Редактировать"
         }
       }
     }

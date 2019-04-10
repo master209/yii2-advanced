@@ -28,7 +28,7 @@ class UserAdController extends Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['only'] = [/*'index', */'view', 'create', 'update', 'delete'];
+        $behaviors['authenticator']['only'] = ['index', 'view', 'create', 'update', 'delete'];
         $behaviors['authenticator']['authMethods'] = [
             HttpBasicAuth::className(),
             HttpBearerAuth::className(),
@@ -55,7 +55,7 @@ class UserAdController extends Controller
 
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['view', 'create', 'update', 'delete'],
+            'only' => ['index', 'view', 'create', 'update', 'delete'],
             'rules' => [
                 [
                     'allow' => true,
@@ -151,7 +151,7 @@ class UserAdController extends Controller
     public function verbs()
     {
         return [
-            'index' => ['get'],
+            'index' => ['get', 'options'],
             'view' => ['get'],
             'create' => ['post'],
             'update' => ['put', 'patch', 'options'],

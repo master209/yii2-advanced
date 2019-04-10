@@ -75,7 +75,7 @@ class OrderController extends Controller
 )*/
 
         if(!Ad::findOne($model->ad_id)) {
-            throw new ServerErrorHttpException('Failed to create: ad by this id is not exist');
+            throw new ServerErrorHttpException('Failed to create: ad by id '.$model->ad_id.' - not exist');
         }
 
 //echo "actionCreate<pre>"; print_r($model->attributes); echo"</pre>"; die();      //DEBUG!
@@ -109,19 +109,6 @@ class OrderController extends Controller
         return $model;
     }
 
-    public function actionMarkDone($user_id, $order_id)   //    /users/3/orders/2/mark-done
-    {
-echo "actionMarkDone - $user_id<pre>"; print_r($order_id); echo"</pre>"; die();      //DEBUG!
-
-        if(!$model = $this->findModel($id)) {
-            throw new ServerErrorHttpException('Failed to mark-done by NULL model '.$order_id);
-        }
-
-        if ($this->checkAccess('mark-done', $model) && $model->save()) {
-        }
-
-    }
-
     public function actionView($id)
     {
         if(!$model = $this->findModel($id)) {
@@ -144,9 +131,22 @@ echo "actionMarkDone - $user_id<pre>"; print_r($order_id); echo"</pre>"; die(); 
             throw new ServerErrorHttpException('Failed to delete the object.');
     }
 
+    public function actionMarkDone($order_id)   //    orders/2/mark-done
+    {
+        if(!$model = $this->findModel($order_id)) {
+            throw new ServerErrorHttpException('Failed to mark-done by NULL model '.$order_id);
+        }
+
+        echo "actionMarkDone<pre>"; print_r($order_id); echo"</pre>"; die();      //DEBUG!
+
+        if ($this->checkAccess('mark-done', $model) && $model->save()) {
+        }
+
+    }
+
     public function actionOptions($id = null)
     {
-//echo "actionOptions<pre>"; print_r(Yii::$app->getRequest()->getMethod()); echo"</pre>"; die();      //DEBUG!
+echo "actionOptions<pre>"; print_r(Yii::$app->getRequest()->getMethod()); echo"</pre>"; die();      //DEBUG!
 
         if (Yii::$app->getRequest()->getMethod() !== 'OPTIONS') {
             Yii::$app->getResponse()->setStatusCode(405);

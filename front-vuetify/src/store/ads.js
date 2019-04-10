@@ -45,7 +45,11 @@ export default {
       console.log('mutations updateAd() ads: ', state.ads)
     }
   },
+
+
   actions: {
+
+
     async createAd ({commit, getters}, payload) {
 /*
       if(!getters.token) {
@@ -148,7 +152,12 @@ console.log('from fetchAds(), _arr: ', _arr)
       commit('setLoading', true)
 
       try {
-        const objs = await Vue.http.get(`users/${getters.user.id}/ads`)
+        const objs = await Vue.http.get(`users/${getters.user.id}/ads`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getters.token
+          }
+        })
 console.log('actions myAds(), ads array: ', objs.body)
         const _arr = []
         Object.keys(objs.body).forEach(key => {
@@ -211,9 +220,9 @@ console.log('actions adById(), ad: ', ad)
         console.log('actions updateAd() ERR: ', error)
         if(!error.ok) {
           const mes = 'actions updateAd() ERROR'
-          // commit('setError', mes)
-          // throw mes
-          window.location = '/login?loginError=true'  // если токен истек, а воспользовались кнопкой "Редактировать"
+          commit('setError', mes)
+          throw mes
+          // window.location = '/login?loginError=true'  // если токен истек, а воспользовались кнопкой "Редактировать"
         }
       }
     }

@@ -28,7 +28,7 @@ class UserOrderController extends Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['only'] = ['index', 'create', 'update', 'delete', 'mark-done'];
+        $behaviors['authenticator']['only'] = ['index', 'create', 'update', 'delete'];
         $behaviors['authenticator']['authMethods'] = [
             HttpBasicAuth::className(),
             HttpBearerAuth::className(),
@@ -40,7 +40,7 @@ class UserOrderController extends Controller
 
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['index', 'create', 'update', 'delete', 'mark-done'],
+            'only' => ['index', 'create', 'update', 'delete'],
             'rules' => [
                 [
                     'allow' => true,
@@ -94,19 +94,6 @@ class UserOrderController extends Controller
         return $model;
     }
 
-    public function actionMarkDone($user_id, $order_id)   //    /users/3/orders/2/mark-done
-    {
-echo "actionMarkDone - $user_id<pre>"; print_r($order_id); echo"</pre>"; die();      //DEBUG!
-
-        if(!$model = $this->findModel($id)) {
-            throw new ServerErrorHttpException('Failed to mark-done by NULL model '.$order_id);
-        }
-
-        if ($this->checkAccess('mark-done', $model) && $model->save()) {
-        }
-
-    }
-
     public function actionView($id)
     {
         if(!$model = $this->findModel($id)) {
@@ -129,7 +116,7 @@ echo "actionMarkDone - $user_id<pre>"; print_r($order_id); echo"</pre>"; die(); 
             throw new ServerErrorHttpException('Failed to delete the object.');
     }
 
-/*    public function actionOptions($id = null)
+    public function actionOptions($id = null)
     {
 //echo "actionOptions<pre>"; print_r(Yii::$app->getRequest()->getMethod()); echo"</pre>"; die();      //DEBUG!
 
@@ -140,7 +127,7 @@ echo "actionMarkDone - $user_id<pre>"; print_r($order_id); echo"</pre>"; die(); 
         $headers = Yii::$app->getResponse()->getHeaders();
         $headers->set('Allow', implode(', ', $options));
         $headers->set('Access-Control-Allow-Methods', implode(', ', $options));
-    }*/
+    }
 
     public function verbs()
     {
@@ -149,7 +136,6 @@ echo "actionMarkDone - $user_id<pre>"; print_r($order_id); echo"</pre>"; die(); 
             'view' => ['get'],
             'create' => ['post'],
             'update' => ['put', 'patch', 'options'],
-            'mark-done' => ['put', 'patch', 'options'],
             'delete' => ['delete'],
         ];
     }
@@ -158,7 +144,7 @@ echo "actionMarkDone - $user_id<pre>"; print_r($order_id); echo"</pre>"; die(); 
     {
 //echo $model->owner_id."<pre>"; print_r(\Yii::$app->user->id); echo"</pre>"; die();      //DEBUG!
 
-        if ($action === 'mark-done' || $action === 'update' || $action === 'delete') {
+        if ($action === 'update' || $action === 'delete') {
             if ($model->ad->owner_id !== \Yii::$app->user->id) {
                 throw new ForbiddenHttpException(sprintf('checkAccess %s forbidden for target owner_id %s', $action, $model->owner_id));
             }

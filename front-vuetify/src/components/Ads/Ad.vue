@@ -46,15 +46,6 @@ export default {
       return this.$store.getters.loading
     }
   },
-  methods: {
-    markDone (order) {
-      this.$store.dispatch('markOrderDone', order.id)
-        .then(() => {
-          order.done = true
-        })
-        .catch(() => {})
-    }
-  },
   created () {
     console.log('Ad.vue created this.id: ', this.id)
     this.$store.dispatch('adById', this.id)
