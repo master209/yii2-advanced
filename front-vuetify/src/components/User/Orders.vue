@@ -56,8 +56,11 @@
     },
     methods: {
       markDone (order) {
-console.log('Orders.vue markDone() order ', order.id)
-        this.$store.dispatch('markOrderDone', {order_id: order.id})
+console.log('Orders.vue markDone() order_id, done ', order.id, order.done)
+        this.$store.dispatch('markOrderDone', {
+          order_id: order.id,
+          done: !order.done
+        })
 /*
           .then(() => {
             order.done = true

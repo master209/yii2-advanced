@@ -117,12 +117,12 @@ export default {
     },
 
 
-    async markOrderDone ({commit, getters}, {order_id}) {
+    async markOrderDone ({commit, getters}, {order_id, done}) {
       commit('clearError')
-      console.log('actions markOrderDone() token, order_id: ', getters.token, order_id)
+      console.log('actions markOrderDone() order_id, done: ', order_id, done)
       try {
         // const o = await Vue.http.put(`users/${getters.user.id}/orders/${id}/mark-done`, {
-        const o = await Vue.http.put(`orders/${order_id}/mark-done`, {}, {
+        const o = await Vue.http.put(`orders/${order_id}/mark-done`, {done}, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + getters.token

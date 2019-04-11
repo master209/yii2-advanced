@@ -131,15 +131,14 @@ class OrderController extends Controller
             throw new ServerErrorHttpException('Failed to delete the object.');
     }
 
-    public function actionMarkDone($order_id, $done = true)   //    orders/2/mark-done
+    public function actionMarkDone($order_id)   //    orders/2/mark-done
     {
-//echo "actionMarkDone<pre>"; print_r($model->attributes); echo"</pre>"; die();      //DEBUG!
-
         if(!$model = $this->findModel($order_id)) {
             throw new ServerErrorHttpException('Failed to mark-done by NULL model '.$order_id);
         }
 
-        $model->done = $done;
+        $param = Yii::$app->getRequest()->getBodyParams();
+        $model->done = $param['done'];
 
         if ($this->checkAccess('mark-done', $model) && $model->save()) {
             $response = Yii::$app->getResponse();
