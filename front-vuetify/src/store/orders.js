@@ -25,13 +25,12 @@ export default {
       state.myOrders = payload
       console.log('mutations setMyOrders() myOrders arr: ', state.myOrders)
     },
-    markOrderDone (state, {id}) {
+    markOrderDone (state, {order_id, done}) {
+      console.log('mutations markOrderDone() order_id, done: ', order_id, done)
       const ad = state.myOrders.find(a => {
-        return a.id == id
+        return a.id == order_id
       })
-
-      ad.title = title
-      ad.description = description
+      ad.done = done
     }
   },
 
@@ -130,7 +129,10 @@ export default {
           }
         })
         commit('setLoading', false)
-        commit('markOrderDone', {order_id})
+        commit('markOrderDone', {
+          order_id,
+          done:o.body.done
+        })
         console.log('actions markOrderDone(), new ad object: ', o)
       } catch (error) {
         commit('setLoading', false)

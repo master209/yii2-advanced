@@ -62,7 +62,7 @@ class Order extends ActiveRecord
 
     public function getAd()
     {
-        return $this->hasMany(Ad::className(), ['id' => 'ad_id']);
+        return $this->hasOne(Ad::className(), ['id' => 'ad_id']);
     }
 
     /**

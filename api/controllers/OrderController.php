@@ -131,22 +131,29 @@ class OrderController extends Controller
             throw new ServerErrorHttpException('Failed to delete the object.');
     }
 
-    public function actionMarkDone($order_id)   //    orders/2/mark-done
+    public function actionMarkDone($order_id, $done = true)   //    orders/2/mark-done
     {
+//echo "actionMarkDone<pre>"; print_r($model->attributes); echo"</pre>"; die();      //DEBUG!
+
         if(!$model = $this->findModel($order_id)) {
             throw new ServerErrorHttpException('Failed to mark-done by NULL model '.$order_id);
         }
 
-        echo "actionMarkDone<pre>"; print_r($order_id); echo"</pre>"; die();      //DEBUG!
+        $model->done = $done;
 
         if ($this->checkAccess('mark-done', $model) && $model->save()) {
+            $response = Yii::$app->getResponse();
+            $response->setStatusCode(201);
+        } elseif (!$model->hasErrors()) {
+            throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
         }
 
+        return $model;
     }
 
-    public function actionOptions($id = null)
+    public function actionOptions(/*$id = null*/)
     {
-echo "actionOptions<pre>"; print_r(Yii::$app->getRequest()->getMethod()); echo"</pre>"; die();      //DEBUG!
+/*echo "actionOptions<pre>"; print_r(Yii::$app->getRequest()->getMethod()); echo"</pre>"; die();      //DEBUG!
 
         if (Yii::$app->getRequest()->getMethod() !== 'OPTIONS') {
             Yii::$app->getResponse()->setStatusCode(405);
@@ -154,7 +161,7 @@ echo "actionOptions<pre>"; print_r(Yii::$app->getRequest()->getMethod()); echo"<
         $options = $id === null ? $this->collectionOptions : $this->resourceOptions;
         $headers = Yii::$app->getResponse()->getHeaders();
         $headers->set('Allow', implode(', ', $options));
-        $headers->set('Access-Control-Allow-Methods', implode(', ', $options));
+        $headers->set('Access-Control-Allow-Methods', implode(', ', $options));*/
     }
 
     public function verbs()
@@ -171,14 +178,12 @@ echo "actionOptions<pre>"; print_r(Yii::$app->getRequest()->getMethod()); echo"<
 
     public function checkAccess($action, $model = null, $params = [])
     {
-//echo $model->owner_id."<pre>"; print_r(\Yii::$app->user->id); echo"</pre>"; die();      //DEBUG!
-
+//echo "<pre>"; print_r($model->ad->owner_id === \Yii::$app->user->id); echo"</pre>"; die();      //DEBUG!
         if ($action === 'mark-done' || $action === 'update' || $action === 'delete') {
             if ($model->ad->owner_id !== \Yii::$app->user->id) {
-                throw new ForbiddenHttpException(sprintf('checkAccess %s forbidden for target owner_id %s', $action, $model->owner_id));
+                throw new ForbiddenHttpException(sprintf('checkAccess action \'%s\' forbidden for target owner_id %s', $action, $model->ad->owner_id));
             }
         }
-
         return true;
     }
 
