@@ -37,7 +37,7 @@ export default {
   props: ['id'],
   data () {
     return {
-      ad: [],
+      ad: {},
       isOwner: false
     }
   },
