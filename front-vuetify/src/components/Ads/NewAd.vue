@@ -6,26 +6,26 @@
         <v-form v-model="valid" ref="form" validation class="mb-3">
           <v-text-field
             name="title"
-            label="Ad title"
+            label="Заголовок"
             type="text"
             v-model="title"
             required
-            :rules="[v => !!v || 'Title is required']"
+            :rules="[v => !!v || 'Заголовок является обязательным']"
             :error-messages="messages.title"
           ></v-text-field>
           <v-textarea
             name="description"
-            label="Ad description"
+            label="Описание"
             type="text"
             v-model="description"
-            :rules="[v => !!v || 'Description is required']"
+            :rules="[v => !!v || 'Описание является обязательным']"
             :error-messages="messages.description"
           ></v-textarea>
         </v-form>
         <v-layout row class="mb-3">
           <v-flex xs12>
               <v-btn class="warning" @click="triggerUpload">
-              Upload
+              Файл
               <v-icon right dark>cloud_upload</v-icon>
             </v-btn>
             <input
@@ -39,13 +39,13 @@
         </v-layout>
         <v-layout row>
           <v-flex xs12>
-            <img :src="imageSrc" height="100" v-if="imageSrc">
+            <img :src="imageSrc" height="120" v-if="imageSrc">
           </v-flex>
         </v-layout>
         <v-layout row>
           <v-flex xs12>
             <v-switch
-              label="Add to promo?"
+              label="Добавить в промо?"
               v-model="promo"
               color="primary"
             ></v-switch>
@@ -56,11 +56,11 @@
             <v-spacer></v-spacer>
             <v-btn
               :loading="loading"
-              :disabled="!valid || loading"
+              :disabled="!valid || !image || loading"
               class="success"
               @click="createAd"
             >
-              Create ad
+              Создать объяву
             </v-btn>
           </v-flex>
         </v-layout>
@@ -93,14 +93,14 @@
     },
     methods: {
       createAd () {
-        if (this.$refs.form.validate() /*&& this.image*/) {
+        if (this.$refs.form.validate() && this.image) {
           // logic
           const ad = {
             title: this.title,
             description: this.description,
             promo: this.promo,
-            // image: this.image
-            imageSrc: 'https://cdn-images-1.medium.com/max/850/1*nq9cdMxtdhQ0ZGL8OuSCUQ.jpeg'
+            image: this.image
+            // imageSrc: 'https://cdn-images-1.medium.com/max/850/1*nq9cdMxtdhQ0ZGL8OuSCUQ.jpeg'
           }
 
           this.$store.dispatch('createAd', ad)
@@ -129,6 +129,7 @@
         // прослушка события на окончание загрузки файла (т.к. загрузка файла выполняется асинхр.)
         reader.onload = e => {
           this.imageSrc = reader.result   // само изображение в base64
+          // console.log('onFileChange imageSrc: ', this.imageSrc)
         }
 
         // асинхронная операция; считывает изображение в base64 как атрибут src в тег <img>

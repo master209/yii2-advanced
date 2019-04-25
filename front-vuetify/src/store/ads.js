@@ -58,13 +58,14 @@ export default {
         throw error
       }
 */
-      console.log('actions createAd(): ', payload)
+      // console.log('actions createAd(): ', payload)
       commit('clearError')
       commit('setLoading', true)
 
       // загруженное изобр. приходит как payload.image (см. NewAd.vue)
       // это объект File с формы
-      // const image = payload.image
+      const image = payload.image
+console.log('actions createAd() image: ', payload.image)
 
       try {
 // {ownerId: "3", title: "99", description: "999", imageSrc: "", promo: true}
