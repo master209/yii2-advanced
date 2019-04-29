@@ -12,15 +12,11 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\FileForm;
+use yii\web\UploadedFile;
 
-/**
- * Site controller
- */
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
@@ -49,9 +45,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         return [
@@ -133,14 +126,29 @@ class SiteController extends Controller
         }
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return mixed
-     */
     public function actionAbout()
     {
-        return $this->render('about');
+        $model = new FileForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+/*
+yii\web\UploadedFile Object
+(
+    [name] => 1!.jpg
+    [tempName] => /var/www/p324657/data/mod-tmp/phpjC3cEV
+    [type] => image/jpeg
+    [size] => 7370
+    [error] => 0
+)
+*/
+//echo "actionAbout<pre>"; print_r($model->file); echo"</pre>";   //die();
+            if ($model->uploadFile()) {
+                $model->save(false);
+            }
+        } else
+            return $this->render('file', [		// 'about'
+                'model' => $model,
+            ]);
     }
 
     /**
