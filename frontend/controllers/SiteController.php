@@ -135,16 +135,35 @@ class SiteController extends Controller
 yii\web\UploadedFile Object
 (
     [name] => 1!.jpg
-    [tempName] => /var/www/p324657/data/mod-tmp/phpjC3cEV
+    [tempName] => /var/www/p324657/data/mod-tmp/phpjC3cEV                   !!!
     [type] => image/jpeg
     [size] => 7370
     [error] => 0
 )
 */
 //echo "actionAbout<pre>"; print_r($model->file); echo"</pre>";   //die();
-/*            if ($model->uploadFile()) {
+
+/*
+Request Headers:
+            :authority: yii2-advanced.cyberdevel.ru
+:method: POST
+:path: /index.php?r=site%2Fabout
+:scheme: https
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng;q=0.8,application/signed-exchange;v=b3
+accept-encoding: gzip, deflate, br
+accept-language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7
+cache-control: max-age=0
+content-length: 20387
+content-type: multipart/form-data; boundary=----WebKitFormBoundaryiffQud1GAYmYMxvD
+cookie: advanced-frontend=4582a8832d64490665b8dbce56eee93f; _csrf-frontend=3a64caf66a8b4c64e083bff5fc50af9fd3eabdedd2fc57ee51380b709f7f3012a%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22cAXM6nQoBr7eSlV5foCqno3RGKcFF5MG%22%3B%7D
+origin: https://yii2-advanced.cyberdevel.ru
+referer: https://yii2-advanced.cyberdevel.ru/index.php?r=site%2Fabout
+upgrade-insecure-requests: 1
+user-agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36
+*/
+            if ($model->uploadFile()) {
                 $model->save(false);
-            }*/
+            }
         } else
             return $this->render('file', [		// 'about'
                 'model' => $model,
