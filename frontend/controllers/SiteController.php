@@ -142,9 +142,9 @@ yii\web\UploadedFile Object
 )
 */
 //echo "actionAbout<pre>"; print_r($model->file); echo"</pre>";   //die();
-            if ($model->uploadFile()) {
+/*            if ($model->uploadFile()) {
                 $model->save(false);
-            }
+            }*/
         } else
             return $this->render('file', [		// 'about'
                 'model' => $model,
