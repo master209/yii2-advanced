@@ -15,16 +15,22 @@ $('button.submit').on('click', function(e) {
   var handler = $('form').attr('action');
   console.log('handler = ' + handler);
 
+  var _csrf = $('form').find('input').filter('[name="_csrf-frontend"]').val();
+  console.log('_csrf = ', _csrf);
+
   var form = new FormData();
   console.log(control.files);
+  form.append("_csrf-frontend", _csrf);
   form.append("file", control.files);
 
   var xhr = new XMLHttpRequest();
   xhr.onload = function() {
     console.log("Отправка завершена");
   };
-  xhr.open("post", "/index.php?r=site/about", true);
+  xhr.open("post", handler, true);
   xhr.send(form);
+
+
 /*
     $('form').submit(function(){
       // ... здесь обработка
@@ -33,7 +39,7 @@ $('button.submit').on('click', function(e) {
 */
 });
 JS;
-$this->registerJs($script, yii\web\View::POS_READY);
+//$this->registerJs($script, yii\web\View::POS_READY);
 
 
 $this->title = 'File';
@@ -44,7 +50,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
         <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'file-form']); ?>
+            <?php $form = ActiveForm::begin([
+                    'options' => [
+                        'id' => 'file-form',
+                        'accept' => 'image/*',
+                        'enctype' => 'multipart/form-data',
+                     ]
+            ]); ?>
 
 <?= $form->field($model, 'file')->fileInput() ?>
                 <div class="form-group">
