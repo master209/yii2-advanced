@@ -13,27 +13,92 @@ $('button.submit').on('click', function(e) {
 
   var control = document.getElementById("fileform-file");
   var handler = $('form').attr('action');
-  console.log('handler = ' + handler);
+  var _csrf = $('form').find('input').filter('[name="_csrf-frontend"]').val();
 
 /*
-  var _csrf = $('form').find('input').filter('[name="_csrf-frontend"]').val();
-  console.log('_csrf = ', _csrf);
+  var data = {
+        "_csrf-frontend": _csrf,
+        "fileform-file": control.files[0]
+      }
 
-  var form = new FormData();
-  console.log(control.files);
-  form.append("_csrf-frontend", _csrf);
-  form.append("file", control.files);
-
-  var xhr = new XMLHttpRequest();
-  xhr.onload = function() {
-    console.log("Отправка завершена");
-  };
-  xhr.open("post", handler, true);
-  xhr.send(form);
+  console.log('data = ', data);
+  $.post(handler, {"_csrf": '123'})
+  .done(function(res) {
+    console.log('res: ', res);
+  });
 */
-  var data = $('form').serialize();
+
+/*
+  var form = $('form'); 
+  form.append("fileform-file", control.files[0]);
+  var data = form.serialize();
   console.log('data = ', data);
   $.post(handler, $('form').serialize());
+*/
+
+  var http = new XMLHttpRequest();
+  
+      // Процесс загрузки
+    if (http.upload && http.upload.addEventListener) {
+    
+        http.upload.addEventListener( // Создаем обработчик события в процессе загрузки.
+        'progress',
+        function(e) {
+            if (e.lengthComputable) {
+                console.log('addEventListener сколько байтов загружено: ', e.loaded)
+
+                // e.loaded — сколько байтов загружено.
+                // e.total — общее количество байтов загружаемых файлов.
+                // Кто не понял — можно сделать прогресс-бар :-)
+            }
+         },
+        false
+        );
+    
+        http.onreadystatechange = function () {
+            // Действия после загрузки файлов
+            if (this.readyState == 4) { // Считываем только 4 результат, так как их 4 штуки и полная инфа о загрузке находится
+                if(this.status == 200) { // Если все прошло гладко
+    
+                    // Действия после успешной загрузки.
+                    // Например, так
+                    console.log('onreadystatechange response: ', this)
+                    // var result = $.parseJSON(this.response);
+                    // можно получить ответ с сервера после загрузки.
+    
+                } else {
+                    // Сообщаем об ошибке загрузки либо предпринимаем меры.
+                }
+            }
+        };
+    
+        http.upload.addEventListener(
+        'load',
+        function(e) {
+            // Событие после которого также можно сообщить о загрузке файлов.
+            // Но ответа с сервера уже не будет.
+            // Можно удалить.
+        });
+    
+        http.upload.addEventListener(
+        'error',
+        function(e) {
+            // Паникуем, если возникла ошибка!
+        });
+    }
+/*
+  http.onload = function() {
+    console.log("Отправка завершена");
+  };
+*/
+  var form = new FormData();
+  console.log(control.files[0]);
+  form.append("_csrf-frontend", _csrf);
+  form.append("fileform-file", control.files[0]);
+
+  http.open("POST", handler, true);
+  http.send(form);
+
 
 /*
     $('form').submit(function(){

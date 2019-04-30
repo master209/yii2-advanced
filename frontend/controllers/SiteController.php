@@ -128,6 +128,8 @@ class SiteController extends Controller
 
     public function actionAbout()
     {
+//die('actionAbout');
+echo "_FILES<pre>"; print_r($_FILES); echo"</pre>";   die();
         $model = new FileForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
