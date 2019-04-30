@@ -130,6 +130,43 @@ class SiteController extends Controller
     {
         $model = new FileForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+//echo "_FILES<pre>"; print_r($_FILES); echo"</pre>";   die();
+/*
+ _FILES
+Array
+(
+    [FileForm] => Array
+        (
+            [name] => Array
+                (
+                    [file] => 1!.jpg
+                )
+
+            [type] => Array
+                (
+                    [file] => image/jpeg
+                )
+
+            [tmp_name] => Array
+                (
+                    [file] => /var/www/p324657/data/mod-tmp/php9tFkpu
+                )
+
+            [error] => Array
+                (
+                    [file] => 0
+                )
+
+            [size] => Array
+                (
+                    [file] => 7370
+                )
+
+        )
+
+)
+ */
             $model->file = UploadedFile::getInstance($model, 'file');
 /*
 yii\web\UploadedFile Object
