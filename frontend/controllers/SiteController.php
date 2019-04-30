@@ -131,7 +131,7 @@ class SiteController extends Controller
         $model = new FileForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-//echo "_FILES<pre>"; print_r($_FILES); echo"</pre>";   die();
+echo "_FILES<pre>"; print_r($_FILES); echo"</pre>";   die();
 /*
  _FILES
 Array
