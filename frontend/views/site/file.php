@@ -15,6 +15,7 @@ $('button.submit').on('click', function(e) {
   var handler = $('form').attr('action');
   console.log('handler = ' + handler);
 
+/*
   var _csrf = $('form').find('input').filter('[name="_csrf-frontend"]').val();
   console.log('_csrf = ', _csrf);
 
@@ -29,7 +30,10 @@ $('button.submit').on('click', function(e) {
   };
   xhr.open("post", handler, true);
   xhr.send(form);
-
+*/
+  var data = $('form').serialize();
+  console.log('data = ', data);
+  $.post(handler, $('form').serialize());
 
 /*
     $('form').submit(function(){
@@ -39,7 +43,7 @@ $('button.submit').on('click', function(e) {
 */
 });
 JS;
-//$this->registerJs($script, yii\web\View::POS_READY);
+$this->registerJs($script, yii\web\View::POS_READY);
 
 
 $this->title = 'File';
