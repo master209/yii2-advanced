@@ -128,13 +128,26 @@ class SiteController extends Controller
 
     public function actionAbout()
     {
-//die('actionAbout');
-echo "_FILES<pre>"; print_r($_FILES); echo"</pre>";   die();
         $model = new FileForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-echo "_FILES<pre>"; print_r($_FILES); echo"</pre>";   die();
+//echo "actionAbout<pre>"; print_r($model->attributes); echo"</pre>";   die();
+//echo "_FILES<pre>"; print_r($_FILES); echo"</pre>";   die();
 /*
+ _FILES
+Array
+(
+    [fileform-file] => Array
+        (
+            [name] => tXEGljkpyhw.jpg
+            [type] => image/jpeg
+            [tmp_name] => /var/www/p324657/data/mod-tmp/phpQFKVhc
+            [error] => 0
+            [size] => 19800
+        )
+
+)
+
  _FILES
 Array
 (
@@ -180,7 +193,7 @@ yii\web\UploadedFile Object
     [error] => 0
 )
 */
-//echo "actionAbout<pre>"; print_r($model->file); echo"</pre>";   //die();
+//echo "actionAbout<pre>"; print_r($model->file); echo"</pre>";   die();
 
 /*
 Request Headers:
