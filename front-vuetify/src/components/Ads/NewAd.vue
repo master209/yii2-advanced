@@ -3,7 +3,14 @@
     <v-layout row>
       <v-flex xs12 sm6 offset-sm3>
         <h1 class="text--secondary mb-3">Добавить новое объявление</h1>
-        <v-form v-model="valid" ref="form" validation class="mb-3">
+        <v-form
+            action=""
+            method="post"
+            enctype="multipart/form-data"
+            v-model="valid"
+            ref="form"
+            validation class="mb-3"
+        >
           <v-text-field
             name="title"
             label="Заголовок"
@@ -21,22 +28,22 @@
             :rules="[v => !!v || 'Описание является обязательным']"
             :error-messages="messages.description"
           ></v-textarea>
+          <v-layout row class="mb-3">
+            <v-flex xs12>
+                <v-btn class="warning" @click="triggerUpload">
+                Файл
+                <v-icon right dark>cloud_upload</v-icon>
+              </v-btn>
+              <input
+                    ref="fileInput"
+                    type="file"
+                    style="display: inherit;"
+                    accept="image/*"
+                    @change="onFileChange"
+              >
+            </v-flex>
+          </v-layout>
         </v-form>
-        <v-layout row class="mb-3">
-          <v-flex xs12>
-              <v-btn class="warning" @click="triggerUpload">
-              Файл
-              <v-icon right dark>cloud_upload</v-icon>
-            </v-btn>
-            <input
-                  ref="fileInput"
-                  type="file"
-                  style="display: none;"
-                  accept="image/*"
-                  @change="onFileChange"
-            >
-          </v-flex>
-        </v-layout>
         <v-layout row>
           <v-flex xs12>
             <img :src="imageSrc" height="120" v-if="imageSrc">
@@ -122,6 +129,7 @@
       },
       onFileChange (event) {
         const file = event.target.files[0]
+        this.image = file   // объект File
         console.log('onFileChange: ', file)
 
         const reader = new FileReader()   // стандартный класс JavaScript
@@ -134,7 +142,6 @@
 
         // асинхронная операция; считывает изображение в base64 как атрибут src в тег <img>
         reader.readAsDataURL(file)
-        this.image = file   // объект File
       }
     }
   }
