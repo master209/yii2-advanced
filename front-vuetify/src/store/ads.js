@@ -88,6 +88,16 @@ console.log('actions createAd() image: ', payload.image)
         })
         console.log('from createAd(), new ad object: ', ad)
 
+        // 2. Отправка файла на сервер
+        var http = new XMLHttpRequest();
+        http.onload = function() {
+          console.log("Отправка завершена");
+        };
+        var form = new FormData();
+        form.append("image_src", payload.image);
+        http.open('post', `https://api.yii2-advanced.cyberdevel.ru/ads/load-file/${ad.body.id}`, true);
+        http.send(form);
+
         commit('setLoading', false)
 
         commit('createAd', {

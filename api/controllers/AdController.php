@@ -114,6 +114,7 @@ class AdController extends ActiveController
  */
 
         $model->fileInfo = pathinfo($_tmp['name']);
+//echo "actionAbout<pre>"; print_r($model->file); echo"</pre>";   die();
 /*      pathinfo($file)
  uploadFile<pre>Array
 (
@@ -124,8 +125,6 @@ class AdController extends ActiveController
 )
 </pre>
  */
-
-//echo "actionAbout<pre>"; print_r($model->file); echo"</pre>";   die();
 
         if ($model->uploadFile()) {
             $model->save(false);
