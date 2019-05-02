@@ -8,7 +8,8 @@ use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
-use yii\helpers\Url;
+use frontend\models\FileForm;
+use yii\web\UploadedFile;
 use yii\web\ForbiddenHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -32,7 +33,7 @@ class AdController extends ActiveController
 
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['create', 'update', 'delete'],
+            'only' => ['create', 'update', 'delete'/*, 'load-file'*/],
             'rules' => [
                 [
                     'allow' => true,
@@ -76,6 +77,30 @@ class AdController extends ActiveController
             $response->setStatusCode(201);
             $id = implode(',', array_values($model->getPrimaryKey(true)));
 //            $response->getHeaders()->set('Location', Url::toRoute(['view', 'id' => $id], true));
+        } elseif (!$model->hasErrors()) {
+            throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
+        }
+
+        return $model;
+    }
+
+    public function actionLoadFile($id = null)
+    {
+        if(!$id) {
+            throw new ServerErrorHttpException('Failed to load file by NULL ad_id');
+        }
+
+        $model = new FileForm();
+
+        $req = Yii::$app->getRequest()->getBodyParams();
+
+        if ($model->load($req, '')) {
+echo "actionAbout<pre>"; print_r($model->attributes); echo"</pre>";   die();
+            $model->file = UploadedFile::getInstance($model, 'file');
+
+            if ($model->uploadFile()) {
+                $model->save(false);
+            }
         } elseif (!$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
         }

@@ -77,6 +77,7 @@ return [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'car'],
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'ad'],
+                'POST ads/load-file/<id:\d+>' => 'ad/load-file',
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'order'],
                 'PUT,PATCH orders/<order_id:\d+>/mark-done' => 'order/mark-done',
@@ -92,7 +93,6 @@ return [
                 'PUT,PATCH users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/update',
                 'DELETE users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/delete',
                 'OPTIONS users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/options',
-                'POST users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/load-file',
                 'OPTIONS users/<user_id:\d+>/ads' => 'user-ad/options',
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user-order'],

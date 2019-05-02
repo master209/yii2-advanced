@@ -1,5 +1,4 @@
 <?php
-
 namespace api\controllers;
 
 use common\models\Ad;
@@ -9,7 +8,8 @@ use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\Controller;
-use yii\helpers\Url;
+use frontend\models\FileForm;
+use yii\web\UploadedFile;
 use yii\web\ForbiddenHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -75,6 +75,7 @@ class UserAdController extends Controller
 
     public function actionCreate()
     {
+echo "actionCreate<pre>"; print_r(Yii::$app->getRequest()->getBodyParams()); echo"</pre>";   die();
         $model = new Ad();
 
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
@@ -90,6 +91,27 @@ class UserAdController extends Controller
         }
 
         return $model;
+    }
+
+    public function actionLoadFile($id = null)
+    {
+        if(!$id) {
+            throw new ServerErrorHttpException('Failed to load file by NULL ad_id');
+        }
+echo "actionLoadFile<pre>"; print_r($id); echo"</pre>";   die();
+
+        $model = new FileForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+//echo "actionAbout<pre>"; print_r($model->attributes); echo"</pre>";   die();
+            $model->file = UploadedFile::getInstance($model, 'file');
+
+            if ($model->uploadFile()) {
+                $model->save(false);
+            }
+        } else
+            return $this->render('file', [		// 'about'
+                'model' => $model,
+            ]);
     }
 
     public function actionUpdate($id)
