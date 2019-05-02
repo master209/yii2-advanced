@@ -20,7 +20,7 @@ class Ad extends ActiveRecord
 {
     public static function tableName()
     {
-        return '{{%ad}}';
+        return '{{ad}}';
     }
 
     public function rules()

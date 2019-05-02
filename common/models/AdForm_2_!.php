@@ -1,10 +1,10 @@
 <?php
-namespace frontend\models;
+namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
 
-class FileForm extends ActiveRecord
+class AdForm extends ActiveRecord
 {
     public $file;
 /*
@@ -23,36 +23,40 @@ yii\web\UploadedFile Object
 
 	public static function tableName()
 	{
-		return 'files';
-	}
+        return '{{ad}}';
+
+    }
 
     public function formName()	//не использовать префиксы в именах полей на форме
     {
-        return '';
+        return 'ad-form';
     }
+
 
     public function rules()
     {
         return [
-			[['file_name'], 'string', 'max' => 255],
-			[['file'], 'file'],
+            [['image_src'], 'string', 'max' => 500],
+            [['file'], 'file'],
         ];
     }
 
 	public function uploadFile()
 	{
         if ($this->validate()) {
-			if ($this->file->baseName.$this->file->extension != '') {
-                $this->timeFile = date("-d-m-Y_H-i-s" );
-                $this->fullName = $this->file->baseName .$this->timeFile. '.' . $this->file->extension;		// 1.jpg
+            if ($this->file['filename'].$this->file['extension'] != '') {
+                $this->timeFile = date("-Y-m-d-H-i-s" );
+                $this->fullName = $this->file['filename'] .$this->timeFile. '.' . $this->file['extension'];		// 1.jpg
                 $path = Yii::getAlias('@frontend/web'.$this->pathFile);
-                $this->file_name = $this->fullName;
+                $this->image_src = $this->fullName;
+//echo "uploadFile<pre>"; print_r($path.$this->fullName); echo"</pre>";   die();
+//echo ($path.$this->fullName);  die();
 
                 if($this->file->saveAs($path.$this->fullName, false)) {
                 }
                 return true;
-			}
-		}
+            }
+        }
 		return false;
 	}
 

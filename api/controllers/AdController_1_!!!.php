@@ -89,32 +89,16 @@ class AdController extends ActiveController
         if(!$id) {
             throw new ServerErrorHttpException('Failed to load file by NULL ad_id');
         }
+//        $model = new $this->modelClass;
+        $model = new AdForm();
 
-        $model = AdForm::findOne($id);
+//        $req = Yii::$app->getRequest()->getBodyParams();
+//        $model->load($req, '');
 
-        $_tmp = $_FILES['image_src'];
-        $model->file = new UploadedFile([
-            'name' => $_tmp['name'],
-            'tempName' => $_tmp['tmp_name'],
-            'type' => $_tmp['type'],
-            'size' => $_tmp['size'],
-            'error' => $_tmp['error'],
-        ]);
-//echo "UploadedFile<pre>"; print_r($model->file); echo"</pre>";   die();
-/*
- UploadedFile<pre>yii\web\UploadedFile Object
-(
-    [name] => 1!.jpg
-    [tempName] => /var/www/p324657/data/mod-tmp/phpwXJZ1j
-    [type] => image/jpeg
-    [size] => 7370
-    [error] => 0
-)
-</pre>
- */
-
-        $model->fileInfo = pathinfo($_tmp['name']);
-/*      pathinfo($file)
+        if (true) {
+//            $model->file = UploadedFile::getInstance($model, 'file');
+            $model->fileInfo = pathinfo($_FILES['image_src']['name']);
+/*      pathinfo($_FILES['image_src']['name'])
  uploadFile<pre>Array
 (
     [dirname] => .
@@ -127,8 +111,11 @@ class AdController extends ActiveController
 
 //echo "actionAbout<pre>"; print_r($model->file); echo"</pre>";   die();
 
-        if ($model->uploadFile()) {
-            $model->save(false);
+            if ($model->uploadFile()) {
+                $model->save(false);
+            }
+        } elseif (!$model->hasErrors()) {
+            throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
         }
 
         return $model;

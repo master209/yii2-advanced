@@ -4,7 +4,6 @@
       <v-flex xs12 sm6 offset-sm3>
         <h1 class="text--secondary mb-3">Добавить новое объявление</h1>
         <v-form
-            action="https://api.yii2-advanced.cyberdevel.ru/ads/load-file/"
             id="ad-form"
             method="post"
             enctype="multipart/form-data"
@@ -80,7 +79,6 @@
 </template>
 
 <script>
-  import $ from 'jquery';
   export default {
     data () {
       return {
@@ -105,7 +103,6 @@
     methods: {
       createAd () {
         if (this.$refs.form.validate() && this.image) {
-          // logic
           const ad = {
             title: this.title,
             description: this.description,
@@ -115,27 +112,7 @@
           }
 
           this.$store.dispatch('createAd', ad)
-          .then((ad) => {
-            // Отправка файла на сервер
-            console.log("NewAd.vue createAd() ad.id: ", ad.id);
-
-            var control = document.getElementById('file');
-            console.log("NewAd.vue form file: ", control.files[0]);
-
-            var handler = $('form').attr('action');
-            console.log("NewAd.vue form action: ", handler);
-
-            var http = new XMLHttpRequest();
-
-            http.onload = function() {
-              console.log("Отправка завершена");
-            };
-
-            var form = new FormData();
-            form.append("image_src", control.files[0]);
-            console.log("NewAd.vue form obj: ", form);
-            http.open('post', `${handler}${ad.id}`, true);
-            http.send(form);
+          .then(() => {
             this.$router.push('/list')
           })
           .catch((errors) => {
