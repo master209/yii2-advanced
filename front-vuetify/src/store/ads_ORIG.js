@@ -77,7 +77,6 @@ console.log('actions createAd() image: ', payload.image)
             promo: payload.promo
         }
 
-        // 1. Создание новой объявы
         console.log('from createAd(), ads object, token: ', newAd, getters.token)
         // const ad = await Vue.http.post('users/' + getters.user.id + '/ads', newAd, {
         const ad = await Vue.http.post('ads', newAd, {
@@ -88,23 +87,13 @@ console.log('actions createAd() image: ', payload.image)
         })
         console.log('from createAd(), new ad object: ', ad)
 
-        // 2. Отправка файла на сервер
-        var http = new XMLHttpRequest();
-        http.onload = function() {
-          console.log("Отправка завершена");
-        };
-        var form = new FormData();
-        form.append("image_src", payload.image);
-        http.open('post', `https://api.yii2-advanced.cyberdevel.ru/ads/load-file/${ad.body.id}`, true);
-        http.send(form);
+/*
+        const imageExt = image.name.slice(image.name.lastIndexOf('.'))  // расширение файла изобр.
 
-        /*
-                const imageExt = image.name.slice(image.name.lastIndexOf('.'))  // расширение файла изобр.
-
-                // загрузка изображения в storage с заданным именем (`ads/${ad.key}.${imageExt}`)
-                const ref = fb.storage().ref().child(`ads/${ad.key}.${imageExt}`) // reference to image
-                await ref.put(image)  // store image
-        */
+        // загрузка изображения в storage с заданным именем (`ads/${ad.key}.${imageExt}`)
+        const ref = fb.storage().ref().child(`ads/${ad.key}.${imageExt}`) // reference to image
+        await ref.put(image)  // store image
+*/
 
         // получение URL загруженного изображения
         // const imageSrc = await ref.getDownloadURL()

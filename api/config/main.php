@@ -92,6 +92,7 @@ return [
                 'PUT,PATCH users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/update',
                 'DELETE users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/delete',
                 'OPTIONS users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/options',
+                'POST users/<user_id:\d+>/ads/<id:\d+>' => 'user-ad/load-file',
                 'OPTIONS users/<user_id:\d+>/ads' => 'user-ad/options',
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user-order'],

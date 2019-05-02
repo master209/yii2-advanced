@@ -130,9 +130,11 @@
         this.$refs.fileInput.click()
       },
       onFileChange (event) {
-        const file = event.target.files[0]
-        this.image = file   // объект File
+        // const file = event.target.files[0]
+        const control = document.getElementById('file');
+        const file = control.files[0]
         console.log('onFileChange: ', file)
+        this.image = file   // объект File
 
         const reader = new FileReader()   // стандартный класс JavaScript
 

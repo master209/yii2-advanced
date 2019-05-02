@@ -37,8 +37,6 @@
               <input
                     ref="fileInput"
                     type="file"
-                    id="file"
-                    name="file"
                     style="display: inherit;"
                     accept="image/*"
                     @change="onFileChange"

@@ -20,7 +20,7 @@ $('button.submit').on('click', function(e) {
     console.log("Отправка завершена");
   };
   var form = new FormData();
-  console.log(control.files[0]);
+  console.log('submit', control.files[0]);
   form.append("_csrf-frontend", _csrf);
   form.append("file", control.files[0]);
 
