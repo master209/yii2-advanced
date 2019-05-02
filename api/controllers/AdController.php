@@ -92,7 +92,7 @@ class AdController extends ActiveController
 
         $model = AdForm::findOne($id);
 
-        $_tmp = $_FILES['image_src'];
+        $_tmp = $_FILES['image_file'];
         $model->file = new UploadedFile([
             'name' => $_tmp['name'],
             'tempName' => $_tmp['tmp_name'],

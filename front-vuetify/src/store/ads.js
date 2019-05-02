@@ -94,7 +94,7 @@ console.log('actions createAd() image: ', payload.image)
           console.log("Отправка завершена");
         };
         var form = new FormData();
-        form.append("image_src", payload.image);
+        form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
         http.open('post', `https://api.yii2-advanced.cyberdevel.ru/ads/load-file/${ad.body.id}`, true);
         http.send(form);
 
