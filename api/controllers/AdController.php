@@ -117,7 +117,7 @@ class AdController extends ActiveController
             $model->save(false);
         }
 
-        return $model;
+        return $model->image_src;
     }
 
     public function beforeAction($action)

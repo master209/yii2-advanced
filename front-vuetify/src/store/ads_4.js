@@ -52,6 +52,13 @@ export default {
 
 
     async createAd ({commit, getters}, payload) {
+/*
+      if(!getters.token) {
+        const error = 'actions createAd(): token is NULL'
+        commit('setError', error)
+        throw error
+      }
+*/
       // console.log('actions createAd(): ', payload)
       commit('clearError')
       commit('setLoading', true)
@@ -71,39 +78,72 @@ console.log('actions createAd() image: ', payload.image)
         }
 
         // 1. Создание новой объявы
+        console.log('from createAd(), ads object, token: ', newAd, getters.token)
         // const ad = await Vue.http.post('users/' + getters.user.id + '/ads', newAd, {
-        const res = await Vue.http.post('ads', newAd, {
+        const ad = await Vue.http.post('ads', newAd, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + getters.token
           }
         })
-        const o = res.body
-        console.log('from createAd(), o: ', o)
-
-        // 2. Выгрузка файла на сервер
-        // https://stackoverflow.com/questions/36067767/how-do-i-upload-a-file-with-the-js-fetch-api
-        // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-        // https://flaviocopes.com/fetch-api/#response-object
-        var form = new FormData();
-        form.append("image_file", payload.image);   // под таким именем файл будет передан в массив $_FILES
-        const response = await fetch(`${getters.apiUrl}ads/load-file/${o.id}`,{method: 'POST', body: form})
-        const imageSrc = response.json()
-        console.log('imageSrc: ', imageSrc)
-
-        const ad = {
-          title: o.title,
-          description: o.description,
-          ownerId: o.owner_id,
-          imageSrc: `${getters.storageUrl}${imageSrc}`,
-          promo: o.promo,
-          id: o.id
-        }
         console.log('from createAd(), new ad object: ', ad)
 
-        commit('createAd', ad)
-        commit('setLoading', false)
+        // https://stackoverflow.com/questions/36067767/how-do-i-upload-a-file-with-the-js-fetch-api
+        // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+        var form = new FormData();
+        form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
+        fetch(`${getters.apiUrl}ads/load-file/${ad.body.id}`,{
+          method: 'POST',
+          body: form
+        }).then(
+          response => {
+            console.log('response: ', response)
+            // console.log('response: ', response.json())
+            // return $.parseJSON(response)
+            // return JSON.stringify(response)
+          }
+        ).catch(
+          error => console.log(error)
+        );
 
+          // 2. Выгрузка файла на сервер
+/*
+        var http = new XMLHttpRequest();
+        var form = new FormData();
+        form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
+        http.open('post', `${getters.apiUrl}ads/load-file/${ad.body.id}`, true);
+        http.send(form);
+        http.onload = function() {
+          console.log("Отправка файла завершена");
+
+          // 3. Получение имени выгруженного файла
+          fetch(`${getters.apiUrl}ads/${ad.body.id}`)  // https://learn.javascript.ru/fetch
+          .then(res => {
+            return res.text();
+          })
+          .then(obj => {
+            console.log('res: ', obj);
+            var imageSrc = $.parseJSON(obj).image_src   // Имя выгруженного файла
+            console.log('image_src: ', imageSrc);
+
+            commit('createAd', {
+              title: ad.body.title,
+              description: ad.body.description,
+              ownerId: ad.body.owner_id,
+              imageSrc: `${getters.storageUrl}${imageSrc}`,
+              promo: ad.body.promo,
+              id: ad.body.id
+            })
+
+            return ad.body
+          })
+          .catch(error => {
+            log('Request failed', error)
+          });
+        };
+*/
+
+        commit('setLoading', false)
       } catch (error) {
         commit('setError', error.message)
         commit('setLoading', false)
