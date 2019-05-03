@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import $ from 'jquery'
 
 class Ad {
   constructor (title, description, ownerId, imageSrc = '', promo = false, id = null) {
@@ -89,28 +88,23 @@ console.log('actions createAd() image: ', payload.image)
         })
         console.log('from createAd(), new ad object: ', ad)
 
-        // 2. Выгрузка файла на сервер
+        // 2. Отправка файла на сервер
         var http = new XMLHttpRequest();
         var form = new FormData();
         form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
         http.open('post', `${getters.serverUrl}ads/load-file/${ad.body.id}`, true);
         http.send(form);
         http.onload = function() {
-          console.log("Отправка файла завершена");
-
-          // 3. Получение имени выгруженного файла
-          fetch(`${getters.serverUrl}ads/${ad.body.id}`)  // https://learn.javascript.ru/fetch
-          .then(res => {
-            return res.text();
-          })
-          .then(obj => {
-            console.log('res: ', obj);
-            var imageSrc = $.parseJSON(obj).image_src   // Имя выгруженного файла
-            console.log('image_src: ', imageSrc);
-          })
-          .catch(error => {
-            log('Request failed', error)
+          console.log("Отправка завершена");
+          const obj = Vue.http.get(`ads/${ad.body.id}`)
+          // const imageSrc = obj.body.image_src
+          // console.log("http:", http);
+          console.log('http obj: ', obj.promise)  //.Response
+/*
+          obj.promise.each(el => {
+            console.log(el)
           });
+*/
         };
 
         commit('setLoading', false)
@@ -119,7 +113,7 @@ console.log('actions createAd() image: ', payload.image)
           title: ad.body.title,
           description: ad.body.description,
           ownerId: ad.body.owner_id,
-          imageSrc,
+          // imageSrc,
           promo: ad.body.promo,
           id: ad.body.id
         })

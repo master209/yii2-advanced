@@ -116,8 +116,6 @@ class AdController extends ActiveController
         if ($model->uploadFile()) {
             $model->save(false);
         }
-
-        return $model;
     }
 
     public function beforeAction($action)

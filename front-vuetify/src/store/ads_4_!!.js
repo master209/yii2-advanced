@@ -90,6 +90,7 @@ console.log('actions createAd() image: ', payload.image)
         console.log('from createAd(), new ad object: ', ad)
 
         // 2. Выгрузка файла на сервер
+        var imageSrc;
         var http = new XMLHttpRequest();
         var form = new FormData();
         form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
@@ -105,8 +106,8 @@ console.log('actions createAd() image: ', payload.image)
           })
           .then(obj => {
             console.log('res: ', obj);
-            var imageSrc = $.parseJSON(obj).image_src   // Имя выгруженного файла
-            console.log('image_src: ', imageSrc);
+            imageSrc = $.parseJSON(obj).image_src   // Имя выгруженного файла
+            console.log('imageSrc: ', imageSrc);
           })
           .catch(error => {
             log('Request failed', error)

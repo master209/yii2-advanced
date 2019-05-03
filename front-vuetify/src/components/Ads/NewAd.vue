@@ -113,7 +113,7 @@
 
           this.$store.dispatch('createAd', ad)
           .then(() => {
-            this.$router.push('/list')
+            // this.$router.push('/list')
           })
           .catch((errors) => {
             for (let field in errors) {

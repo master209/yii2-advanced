@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import $ from 'jquery'
 
 class Ad {
   constructor (title, description, ownerId, imageSrc = '', promo = false, id = null) {
@@ -89,29 +88,71 @@ console.log('actions createAd() image: ', payload.image)
         })
         console.log('from createAd(), new ad object: ', ad)
 
-        // 2. Выгрузка файла на сервер
+        // 2. Отправка файла на сервер
         var http = new XMLHttpRequest();
+
+
+/*
+        http.onload = function() {
+          // console.log("Отправка завершена");
+          const obj = Vue.http.get(`ads/${ad.body.id}`)
+          // const imageSrc = obj.body.image_src
+          console.log('http obj: ', obj)
+        };
+*/
+
+        if (http.upload && http.upload.addEventListener) {
+
+          http.upload.addEventListener( // Создаем обработчик события в процессе загрузки.
+            'progress',
+            function(e) {
+              if (e.lengthComputable) {
+                console.log('addEventListener сколько байтов загружено: ', e)
+
+                // e.loaded — сколько байтов загружено.
+                // e.total — общее количество байтов загружаемых файлов.
+                // Кто не понял — можно сделать прогресс-бар :-)
+              }
+            },
+            false
+          );
+
+          http.onreadystatechange = function () {
+            // Действия после загрузки файлов
+            if (this.readyState == 4) { // Считываем только 4 результат, так как их 4 штуки и полная инфа о загрузке находится
+              if(this.status == 200) { // Если все прошло гладко
+
+                // Действия после успешной загрузки.
+                // Например, так
+                console.log('onreadystatechange response: ', this)
+                // var result = $.parseJSON(this.response);
+                // можно получить ответ с сервера после загрузки.
+
+              } else {
+                // Сообщаем об ошибке загрузки либо предпринимаем меры.
+              }
+            }
+          };
+
+          http.upload.addEventListener(
+            'load',
+            function(e) {
+              // Событие после которого также можно сообщить о загрузке файлов.
+              // Но ответа с сервера уже не будет.
+              // Можно удалить.
+            });
+
+          http.upload.addEventListener(
+            'error',
+            function(e) {
+              // Паникуем, если возникла ошибка!
+            });
+        }
+
         var form = new FormData();
         form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
         http.open('post', `${getters.serverUrl}ads/load-file/${ad.body.id}`, true);
         http.send(form);
-        http.onload = function() {
-          console.log("Отправка файла завершена");
-
-          // 3. Получение имени выгруженного файла
-          fetch(`${getters.serverUrl}ads/${ad.body.id}`)  // https://learn.javascript.ru/fetch
-          .then(res => {
-            return res.text();
-          })
-          .then(obj => {
-            console.log('res: ', obj);
-            var imageSrc = $.parseJSON(obj).image_src   // Имя выгруженного файла
-            console.log('image_src: ', imageSrc);
-          })
-          .catch(error => {
-            log('Request failed', error)
-          });
-        };
 
         commit('setLoading', false)
 
@@ -119,7 +160,7 @@ console.log('actions createAd() image: ', payload.image)
           title: ad.body.title,
           description: ad.body.description,
           ownerId: ad.body.owner_id,
-          imageSrc,
+          // imageSrc,
           promo: ad.body.promo,
           id: ad.body.id
         })

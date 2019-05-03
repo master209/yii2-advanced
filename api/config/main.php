@@ -78,6 +78,7 @@ return [
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'ad'],
                 'POST ads/load-file/<id:\d+>' => 'ad/load-file',
+                'OPTIONS ads/load-file/<id:\d+>' => 'ad/options',
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'order'],
                 'PUT,PATCH orders/<order_id:\d+>/mark-done' => 'order/mark-done',
