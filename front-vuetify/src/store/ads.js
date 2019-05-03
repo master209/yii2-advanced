@@ -68,7 +68,7 @@ export default {
 console.log('actions createAd() image: ', payload.image)
 
       try {
-// {ownerId: "3", title: "99", description: "999", imageSrc: "", promo: true}
+        // {ownerId: "3", title: "99", description: "999", imageSrc: "", promo: true}
         const newAd = {
             title: payload.title,
             description: payload.description,
@@ -95,7 +95,7 @@ console.log('actions createAd() image: ', payload.image)
         };
         var form = new FormData();
         form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
-        http.open('post', `https://api.yii2-advanced.cyberdevel.ru/ads/load-file/${ad.body.id}`, true);
+        http.open('post', `${getters.serverUrl}ads/load-file/${ad.body.id}`, true);
         http.send(form);
 
         commit('setLoading', false)
