@@ -88,6 +88,10 @@ console.log('actions createAd() image: ', payload.image)
         var form = new FormData();
         form.append("image_file", payload.image);   // под таким именем файл будет передан в массив $_FILES
         const response = await fetch(`${getters.apiUrl}ads/load-file/${o.id}`,{method: 'POST', body: form})
+
+        // TODO: не смог преобразовать imageSrc = [object Promise] в строку
+        // из-за этого ссылка на файл выглядит так:
+        // imageSrc: "https://yii2-advanced.cyberdevel.ru/files/[object Promise]"
         const imageSrc = response.json()
         console.log('imageSrc: ', imageSrc)
 
@@ -122,8 +126,6 @@ console.log('actions createAd() image: ', payload.image)
         const _arr = []
         Object.keys(objs.body).forEach(key => {
           const o = objs.body[key]
-          // const imageSrc = `${getters.storageUrl}${o.image_src}`
-          // console.log('actions fetchAds(), imageSrc: ', imageSrc)
           _arr.push(
             new Ad(o.title, o.description, o.owner_id, `${getters.storageUrl}${o.image_src}`, o.promo, o.id)
           )
