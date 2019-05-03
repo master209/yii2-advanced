@@ -19,7 +19,7 @@ yii\web\UploadedFile Object
 
 	public $timeFile;
 	public $fullName;
-	public $pathFile = '/file/'; //Yii::getAlias('@frontend/file');
+	public $pathFile = '/files/';
 
 	public static function tableName()
 	{

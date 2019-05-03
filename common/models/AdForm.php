@@ -9,7 +9,7 @@ class AdForm extends ActiveRecord
     public $file;
     public $timeFile;
     public $fullName;
-    public $pathFile = '/file/';
+    public $pathFile = '/files/';
 
 	public static function tableName()
 	{

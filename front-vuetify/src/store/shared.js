@@ -2,7 +2,8 @@ export default {
   state: {
     loading: false,
     error: null,
-    serverUrl: 'https://api.yii2-advanced.cyberdevel.ru/'
+    serverUrl: 'https://api.yii2-advanced.cyberdevel.ru/',
+    storageUrl: 'files/'
   },
   mutations: {
     setLoading (state, payload) {
@@ -35,6 +36,9 @@ export default {
     },
     serverUrl (state) {
       return state.serverUrl
+    },
+    storageUrl (state) {
+      return `${state.serverUrl}.${state.serverUrl}`
     }
   }
 }
