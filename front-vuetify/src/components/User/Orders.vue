@@ -38,7 +38,7 @@
         </v-list>
       </v-flex>
       <v-flex xs12 class="text-xs-center" v-else>
-        <h1 class="text--secondary">У Вас нет заказов</h1>
+        <h1 class="text--secondary">У вас нет заказов</h1>
       </v-flex>
     </v-layout>
   </v-container>

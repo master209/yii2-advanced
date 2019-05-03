@@ -34,7 +34,7 @@
     </v-layout>
     <v-layout v-else-if="!loading && myAds.length === 0">
       <v-flex xs12 class="text-xs-center">
-        <h1 class="text--primary">You have no ads</h1>
+        <h1 class="text--primary">У вас нет объявлений</h1>
       </v-flex>
     </v-layout>
     <v-layout v-else>

@@ -93,31 +93,20 @@ console.log('actions createAd() image: ', payload.image)
         var http = new XMLHttpRequest();
         var form = new FormData();
         form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
-        http.open('post', `${getters.apiUrl}ads/load-file/${ad.body.id}`, true);
+        http.open('post', `${getters.serverUrl}ads/load-file/${ad.body.id}`, true);
         http.send(form);
         http.onload = function() {
           console.log("Отправка файла завершена");
 
           // 3. Получение имени выгруженного файла
-          fetch(`${getters.apiUrl}ads/${ad.body.id}`)  // https://learn.javascript.ru/fetch
+          var imageSrc = fetch(`${getters.serverUrl}ads/${ad.body.id}`)  // https://learn.javascript.ru/fetch
           .then(res => {
             return res.text();
           })
           .then(obj => {
             console.log('res: ', obj);
-            var imageSrc = $.parseJSON(obj).image_src   // Имя выгруженного файла
             console.log('image_src: ', imageSrc);
-
-            commit('createAd', {
-              title: ad.body.title,
-              description: ad.body.description,
-              ownerId: ad.body.owner_id,
-              imageSrc: `${getters.storageUrl}${imageSrc}`,
-              promo: ad.body.promo,
-              id: ad.body.id
-            })
-
-            return ad.body
+            return $.parseJSON(obj).image_src   // Имя выгруженного файла
           })
           .catch(error => {
             log('Request failed', error)
@@ -125,6 +114,19 @@ console.log('actions createAd() image: ', payload.image)
         };
 
         commit('setLoading', false)
+
+        console.log('imageSrc!!: ', imageSrc);
+
+        commit('createAd', {
+          title: ad.body.title,
+          description: ad.body.description,
+          ownerId: ad.body.owner_id,
+          imageSrc,
+          promo: ad.body.promo,
+          id: ad.body.id
+        })
+
+        return ad.body
       } catch (error) {
         commit('setError', error.message)
         commit('setLoading', false)
@@ -133,7 +135,7 @@ console.log('actions createAd() image: ', payload.image)
     },
 
 
-    async fetchAds ({commit, getters}) {
+    async fetchAds ({commit}) {
       commit('clearError')
       commit('setLoading', true)
 
@@ -143,10 +145,8 @@ console.log('actions createAd() image: ', payload.image)
         const _arr = []
         Object.keys(objs.body).forEach(key => {
           const o = objs.body[key]
-          // const imageSrc = `${getters.storageUrl}${o.image_src}`
-          // console.log('actions fetchAds(), imageSrc: ', imageSrc)
-          _arr.push(
-            new Ad(o.title, o.description, o.owner_id, `${getters.storageUrl}${o.image_src}`, o.promo, o.id)
+          _arr.push(   // формируется массив объектов
+            new Ad(o.title, o.description, o.owner_id, o.image_src, o.promo, o.id)
           )
         })
 console.log('from fetchAds(), _arr: ', _arr)
@@ -177,7 +177,7 @@ console.log('actions myAds(), ads array: ', objs.body)
         Object.keys(objs.body).forEach(key => {
           const o = objs.body[key]
           _arr.push(
-            new Ad(o.title, o.description, o.owner_id, `${getters.storageUrl}${o.image_src}`, o.promo, o.id)
+            new Ad(o.title, o.description, o.owner_id, o.image_src, o.promo, o.id)
           )
         })
 console.log('from myAds(), _arr: ', _arr)
@@ -202,7 +202,7 @@ console.log('from myAds(), _arr: ', _arr)
         const ad = o.body
 console.log('actions adById(), ad: ', ad)
         commit('setLoading', false)
-        commit('setAd', new Ad(ad.title, ad.description, ad.owner_id, `${getters.storageUrl}${ad.image_src}`, ad.promo, ad.id))
+        commit('setAd', new Ad(ad.title, ad.description, ad.owner_id, ad.image_src, ad.promo, ad.id))
       } catch (error) {
         if(error.body.status == 404) {
           // TODO:обработать 404
