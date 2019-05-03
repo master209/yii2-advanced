@@ -100,7 +100,7 @@ class AdController extends ActiveController
             'size' => $_tmp['size'],
             'error' => $_tmp['error'],
         ]);
-//echo "UploadedFile<pre>"; print_r($model->file); echo"</pre>";   die();
+//echo "UploadedFile<pre>"; print_r($model->file); echo"</pre>";   //die();
 /*
  UploadedFile<pre>yii\web\UploadedFile Object
 (
@@ -116,6 +116,8 @@ class AdController extends ActiveController
         if ($model->uploadFile()) {
             $model->save(false);
         }
+
+        return $model;
     }
 
     public function beforeAction($action)

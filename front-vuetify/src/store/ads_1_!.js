@@ -88,23 +88,15 @@ console.log('actions createAd() image: ', payload.image)
         })
         console.log('from createAd(), new ad object: ', ad)
 
-        // https://stackoverflow.com/questions/36067767/how-do-i-upload-a-file-with-the-js-fetch-api
-        // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-        var form = new FormData();
-        form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
+        // const imageSrc = await Vue.http.post(`${getters.apiUrl}ads/load-file/${ad.body.id}`, payload.image)
         fetch(`${getters.apiUrl}ads/load-file/${ad.body.id}`,{
-          method: 'POST',
-          body: form
-        }).then(
-          response => {
-            console.log('response: ', response)
-            // console.log('response: ', response.json())
-            // return $.parseJSON(response)
-            // return JSON.stringify(response)
-          }
-        ).catch(
-          error => console.log(error)
-        );
+          method: 'post',
+          headers: {
+            "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundarytAe9Vc3A3FhLBJOE"
+          },
+          mode: 'cors',
+          body: payload.image
+        })
 
           // 2. Выгрузка файла на сервер
 /*

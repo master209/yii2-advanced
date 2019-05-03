@@ -65,6 +65,7 @@ export default {
 
       // загруженное изобр. приходит как payload.image (см. NewAd.vue)
       // это объект File с формы
+      const image = payload.image
 console.log('actions createAd() image: ', payload.image)
 
       try {
@@ -73,7 +74,7 @@ console.log('actions createAd() image: ', payload.image)
             title: payload.title,
             description: payload.description,
             owner_id: getters.user.id,
-            image_src: '',
+            image_src:  '', // ссылка на изображение в fb.store
             promo: payload.promo
         }
 
@@ -88,26 +89,7 @@ console.log('actions createAd() image: ', payload.image)
         })
         console.log('from createAd(), new ad object: ', ad)
 
-        // https://stackoverflow.com/questions/36067767/how-do-i-upload-a-file-with-the-js-fetch-api
-        // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-        var form = new FormData();
-        form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
-        fetch(`${getters.apiUrl}ads/load-file/${ad.body.id}`,{
-          method: 'POST',
-          body: form
-        }).then(
-          response => {
-            console.log('response: ', response)
-            // console.log('response: ', response.json())
-            // return $.parseJSON(response)
-            // return JSON.stringify(response)
-          }
-        ).catch(
-          error => console.log(error)
-        );
-
-          // 2. Выгрузка файла на сервер
-/*
+        // 2. Выгрузка файла на сервер
         var http = new XMLHttpRequest();
         var form = new FormData();
         form.append("image_file", payload.image); // под таким именем файл будет передан в массив $_FILES
@@ -141,7 +123,6 @@ console.log('actions createAd() image: ', payload.image)
             log('Request failed', error)
           });
         };
-*/
 
         commit('setLoading', false)
       } catch (error) {
