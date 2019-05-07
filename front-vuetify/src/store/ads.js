@@ -82,30 +82,32 @@ console.log('actions createAd() image: ', payload.image)
         console.log('from createAd(), o: ', o)
 
         // 2. Выгрузка файла на сервер
-        // https://stackoverflow.com/questions/36067767/how-do-i-upload-a-file-with-the-js-fetch-api
-        // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-        // https://flaviocopes.com/fetch-api/#response-object
         var form = new FormData();
         form.append("image_file", payload.image);   // под таким именем файл будет передан в массив $_FILES
-        const response = await fetch(`${getters.apiUrl}ads/load-file/${o.id}`,{method: 'POST', body: form})
+        fetch(`${getters.apiUrl}ads/load-file/${o.id}`,{method: 'POST', body: form})
+          .then(res => {
+            return res.text();
+          })
+          .then(obj => {
+            const imageSrc = $.parseJSON(obj)
+            console.log('imageSrc: ', imageSrc);
 
-        // TODO: не смог преобразовать imageSrc = [object Promise] в строку
-        // из-за этого ссылка на файл выглядит так:
-        // imageSrc: "https://yii2-advanced.cyberdevel.ru/files/[object Promise]"
-        const imageSrc = response.json()
-        console.log('imageSrc: ', imageSrc)
+            const ad = {
+              title: o.title,
+              description: o.description,
+              ownerId: o.owner_id,
+              imageSrc: `${getters.storageUrl}${imageSrc}`,
+              promo: o.promo,
+              id: o.id
+            }
+            console.log('createAd() fetch promise ad: ', ad)
 
-        const ad = {
-          title: o.title,
-          description: o.description,
-          ownerId: o.owner_id,
-          imageSrc: `${getters.storageUrl}${imageSrc}`,
-          promo: o.promo,
-          id: o.id
-        }
-        console.log('from createAd(), new ad object: ', ad)
+            commit('createAd', ad)
+          })
+          .catch(error => {
+            log('Request failed', error)
+          });
 
-        commit('createAd', ad)
         commit('setLoading', false)
 
       } catch (error) {
