@@ -62,6 +62,7 @@ return [
                 '' => 'site/index',
 
                 'auth' => 'site/login',
+                'signup' => 'site/signup',
 
                 'POST,OPTIONS check-identity' => 'site/check-identity',
 

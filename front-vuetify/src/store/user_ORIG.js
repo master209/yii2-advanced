@@ -29,10 +29,6 @@ export default {
       try {
         // const user = await fb.auth().createUserWithEmailAndPassword(email, password)
         // commit('setUser', new User(user.uid))
-        console.log('actions registerUser(), username, password: ', username, password)
-        const res = await Vue.http.post('signup', {username, password})
-        console.log('actions registerUser(), response: ', res)
-
         commit('setUser', new User(res.body.id))
         commit('setLoading', false)
       } catch (error) {

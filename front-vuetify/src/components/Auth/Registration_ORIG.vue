@@ -4,22 +4,22 @@
       <v-flex xs12 sm8 md6>
         <v-card class="elevation-12">
           <v-toolbar dark color="primary">
-            <v-toolbar-title>Регистрация</v-toolbar-title>
+            <v-toolbar-title>Registration form</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-form v-model="valid" ref="form" validation>
               <v-text-field
                 prepend-icon="person"
-                name="username"
-                label="Логин"
-                type="username"
-                v-model="username"
-                :rules="usernameRules"
+                name="email"
+                label="Email"
+                type="email"
+                v-model="email"
+                :rules="emailRules"
               ></v-text-field>
               <v-text-field
                 prepend-icon="lock"
                 name="password"
-                label="Пароль"
+                label="Password"
                 type="password"
                 :counter="6"
                 v-model="password"
@@ -28,7 +28,7 @@
               <v-text-field
                 prepend-icon="lock"
                 name="confirm-password"
-                label="Подтверждение пароля"
+                label="Confirm Password"
                 type="password"
                 :counter="6"
                 v-model="confirmPassword"
@@ -43,7 +43,7 @@
               @click="onSubmit"
               :loading="loading"
               :disabled="!valid || loading"
-            >Создать аккаунт!</v-btn>
+            >Create account!</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -52,54 +52,45 @@
 </template>
 
 <script>
+  const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+
   export default {
     data () {
       return {
-        username: '',
+        email: '',
         password: '',
         confirmPassword: '',
         valid: false,
-        messages: {
-          username: [],
-          password: [],
-        }
+        emailRules: [
+          v => !!v || 'E-mail is required',
+          v => emailRegex.test(v) || 'E-mail must be valid'
+        ],
+        passwordRules: [
+          v => !!v || 'Password is required',
+          v => (v && v.length >= 6) || 'Password must be equal or more than 6 characters'
+        ],
+        confirmPasswordRules: [
+          v => !!v || 'Password is required',
+          v => v === this.password || 'Password should match'
+        ]
       }
     },
     computed: {
       loading () {
         return this.$store.getters.loading
-      },
-      usernameRules() {
-        return [
-          v => !!v || 'Необходимо заполнить поле «Логин»',
-          v => (v && v.length >= 2) || 'не менее 2 символов',
-          v => (v && v.length <= 20) || 'не более 20 символов'
-        ]
-      },
-      passwordRules() {
-        return [
-          v => !!v || 'Необходимо заполнить поле «Пароль»',
-          v => (v && v.length >= 6) || 'не менее 6 символов'
-        ]
-      },
-      confirmPasswordRules() {
-        return [
-          v => !!v || 'Необходимо заполнить поле «Подтверждение пароля»',
-          v => v === this.password || 'Пароли должны совпадать'
-        ]
       }
     },
     methods: {
       onSubmit () {
         if (this.$refs.form.validate()) {
           const user = {
-            username: this.username,
+            email: this.email,
             password: this.password
           }
 
           this.$store.dispatch('registerUser', user)
           .then(() => {
-            // console.log('Registration.vue')
+            // console.log(user)
             this.$router.push('/')
           })
           .catch(() => {})
