@@ -7,7 +7,7 @@
             <v-toolbar-title>Регистрация</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form v-model="valid" ref="form" validation>
+            <v-form v-model="validClient" ref="form" validation>
               <v-text-field
                 prepend-icon="person"
                 name="username"
@@ -15,6 +15,7 @@
                 type="username"
                 v-model="username"
                 :rules="usernameRules"
+                :error-messages="messages.username"
               ></v-text-field>
               <v-text-field
                 prepend-icon="lock"
@@ -24,6 +25,7 @@
                 :counter="6"
                 v-model="password"
                 :rules="passwordRules"
+                :error-messages="messages.password"
               ></v-text-field>
               <v-text-field
                 prepend-icon="lock"
@@ -42,7 +44,7 @@
               color="primary"
               @click="onSubmit"
               :loading="loading"
-              :disabled="!valid || loading"
+              :disabled="!validClient || loading"
             >Создать аккаунт!</v-btn>
           </v-card-actions>
         </v-card>
@@ -55,10 +57,11 @@
   export default {
     data () {
       return {
+        validClient: false,
+        validServer: true,
         username: '',
         password: '',
         confirmPassword: '',
-        valid: false,
         messages: {
           username: [],
           password: [],
@@ -90,6 +93,12 @@
       }
     },
     methods: {
+      validateServer () {
+        if (!this.validServer) {    //если ошибка пришла с сервера,
+          this.validClient = true   //то при фокусе в инпуте разблокирую кнопку Submit на форме
+          this.messages.password = null
+        }
+      },
       onSubmit () {
         if (this.$refs.form.validate()) {
           const user = {
@@ -102,7 +111,14 @@
             // console.log('Registration.vue')
             this.$router.push('/')
           })
-          .catch(() => {})
+          .catch((errors) => {  // {"username":["Данный логин уже используется."]}
+            for (let field in errors) {
+              for (let mes in errors[field]) {
+                this.messages[field] = errors[field][mes]
+              }
+            }
+            this.validServer = false;
+          })
         }
       }
     }

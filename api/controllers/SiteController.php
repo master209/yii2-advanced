@@ -72,14 +72,26 @@ class SiteController extends Controller
 
     public function actionSignup()
     {
-echo"actionSignup<pre>"; print_r(Yii::$app->request->bodyParams); echo"</pre>"; die();
+//echo"actionSignup<pre>"; print_r(Yii::$app->request->bodyParams); echo"</pre>"; die();
         $model = new SignupForm();
 //        if ($model->load(Yii::$app->request->post())) {
         if ($model->load(Yii::$app->request->bodyParams, '')) {
             if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
+/*                if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
+                }*/
+                return $user;
+            } else {
+                $errors = [];
+                foreach ($model->errors as $i => $err) {
+                    $errors[$i] = $model->errors[$i];
                 }
+/*                foreach ($errors as $key => $err) {
+                    foreach ($err as $k => $mes) {
+                        $errors[$key][$k] = Yii::t('forms', $errors[$key][$k]);
+                    }
+                }*/
+                return $errors;
             }
         }
 

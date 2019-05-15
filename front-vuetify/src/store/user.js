@@ -32,13 +32,19 @@ export default {
         console.log('actions registerUser(), username, password: ', username, password)
         const res = await Vue.http.post('signup', {username, password})
         console.log('actions registerUser(), response: ', res)
-
-        commit('setUser', new User(res.body.id))
         commit('setLoading', false)
+        if (res.status === 200) {
+          if (res.body.token) {
+            commit('setUser', new User(res.body.id, res.body.token))
+          } else {
+            throw res.bodyText
+          }
+        }
       } catch (error) {
+        console.log('actions registerUser(), catch error: ', error)
         commit('setLoading', false)
-        commit('setError', error.message)
-        throw error
+        // commit('setError', error)
+        throw JSON.parse(error)
       }
     },
     async loginUser ({commit}, {username, password}) {
