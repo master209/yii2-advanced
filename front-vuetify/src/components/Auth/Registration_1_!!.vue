@@ -18,15 +18,6 @@
                 :error-messages="messages.username"
               ></v-text-field>
               <v-text-field
-                  prepend-icon="alternate_email"
-                  name="email"
-                  label="E-mail"
-                  type="email"
-                  v-model="email"
-                  :rules="emailRules"
-                  :error-messages="messages.email"
-              ></v-text-field>
-              <v-text-field
                 prepend-icon="lock"
                 name="password"
                 label="Пароль"
@@ -63,20 +54,16 @@
 </template>
 
 <script>
-  const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
-
   export default {
     data () {
       return {
         validClient: false,
         validServer: true,
         username: '',
-        email: '',
         password: '',
         confirmPassword: '',
         messages: {
           username: [],
-          email: [],
           password: [],
         }
       }
@@ -90,12 +77,6 @@
           v => !!v || 'Необходимо заполнить поле «Логин»',
           v => (v && v.length >= 2) || 'не менее 2 символов',
           v => (v && v.length <= 20) || 'не более 20 символов'
-        ]
-      },
-      emailRules() {
-        return [
-          v => !!v || 'Необходимо заполнить поле «E-mail»',
-          v => emailRegex.test(v) || 'Некорректный E-mail'
         ]
       },
       passwordRules() {
@@ -122,7 +103,6 @@
         if (this.$refs.form.validate()) {
           const user = {
             username: this.username,
-            email: this.email,
             password: this.password
           }
 

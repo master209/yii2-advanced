@@ -26,11 +26,11 @@ class SignupForm extends Model
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Данный логин уже используется'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
-/*            ['email', 'trim'],
+            ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Данный email уже используется'],*/
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Данный email уже используется'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
@@ -51,7 +51,7 @@ class SignupForm extends Model
         $user = new User();
         $user->status = User::STATUS_ACTIVE;
         $user->username = $this->username;
-//        $user->email = $this->email;
+        $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
 
@@ -65,15 +65,18 @@ class SignupForm extends Model
 */
 
 //        return $user->save() ? $user : null;
-        if($user->save()) {
-            $_token = new Token();
-            $_token->user_id = $user->id;
-            $_token->generateToken(time() + 3600 * 24 * 365);   //60 + 3
-            $token = $_token->save() ? $_token : null;
-//echo"signup() token<pre>"; print_r($token->attributes); echo"</pre>";    die();     //DEBUG
-            return $token;
-        }
 
+        if($user->save()) {
+            $token = new Token();
+            $token->user_id = $user->id;
+            $token->generateToken(time() + 3600 * 24 * 365);   //60 + 3
+            if($token->save()) {
+//echo"signup() token<pre>"; print_r($token->attributes); echo"</pre>";    die();     //DEBUG
+                return $token;
+            }
+        } else {
+            echo"signup() save user ERROR:<pre>"; print_r($user->errors); echo"</pre>";    die();     //DEBUG
+        }
         return null;
     }
 }

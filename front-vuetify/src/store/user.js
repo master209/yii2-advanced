@@ -23,14 +23,14 @@ export default {
     }
   },
   actions: {
-    async registerUser ({commit}, {username, password}) {
+    async registerUser ({commit}, {username, email, password}) {
       commit('clearError')
       commit('setLoading', true)
       try {
         // const user = await fb.auth().createUserWithEmailAndPassword(email, password)
         // commit('setUser', new User(user.uid))
-        console.log('actions registerUser(), username, password: ', username, password)
-        const res = await Vue.http.post('signup', {username, password})
+        console.log('actions registerUser(), username, email, password: ', username, email, password)
+        const res = await Vue.http.post('signup', {username, email, password})
         console.log('actions registerUser(), response: ', res)
         commit('setLoading', false)
         if (res.status === 200) {
