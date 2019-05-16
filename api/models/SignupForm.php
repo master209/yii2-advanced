@@ -3,6 +3,7 @@ namespace api\models;
 
 use yii\base\Model;
 use common\models\User;
+use common\models\Token;
 
 /**
  * Signup form
@@ -62,6 +63,17 @@ class SignupForm extends Model
     [auth_key] => vBVZmzgNGank9eS5hvekj07S
 )
 */
-        return $user->save() ? $user : null;
+
+//        return $user->save() ? $user : null;
+        if($user->save()) {
+            $_token = new Token();
+            $_token->user_id = $user->id;
+            $_token->generateToken(time() + 3600 * 24 * 365);   //60 + 3
+            $token = $_token->save() ? $_token : null;
+//echo"signup() token<pre>"; print_r($token->attributes); echo"</pre>";    die();     //DEBUG
+            return $token;
+        }
+
+        return null;
     }
 }
