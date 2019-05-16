@@ -14,6 +14,7 @@
                 label="Логин"
                 type="username"
                 v-model="username"
+                @focus="validateServer"
                 :rules="usernameRules"
                 :error-messages="messages.username"
               ></v-text-field>
@@ -23,6 +24,7 @@
                   label="E-mail"
                   type="email"
                   v-model="email"
+                  @focus="validateServer"
                   :rules="emailRules"
                   :error-messages="messages.email"
               ></v-text-field>
@@ -33,6 +35,7 @@
                 type="password"
                 :counter="6"
                 v-model="password"
+                @focus="validateServer"
                 :rules="passwordRules"
                 :error-messages="messages.password"
               ></v-text-field>
@@ -43,6 +46,7 @@
                 type="password"
                 :counter="6"
                 v-model="confirmPassword"
+                @focus="validateServer"
                 :rules="confirmPasswordRules"
               ></v-text-field>
             </v-form>
@@ -115,6 +119,8 @@
       validateServer () {
         if (!this.validServer) {    //если ошибка пришла с сервера,
           this.validClient = true   //то при фокусе в инпуте разблокирую кнопку Submit на форме
+          this.messages.username = null
+          this.messages.email = null
           this.messages.password = null
         }
       },
