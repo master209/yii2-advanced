@@ -49,17 +49,18 @@
                 @focus="validateServer"
                 :rules="confirmPasswordRules"
               ></v-text-field>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  type="submit"
+                  color="primary"
+                  @click="onSubmit"
+                  :loading="loading"
+                  :disabled="!validClient || loading"
+                >Создать аккаунт!</v-btn>
+              </v-card-actions>
             </v-form>
           </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              @click="onSubmit"
-              :loading="loading"
-              :disabled="!validClient || loading"
-            >Создать аккаунт!</v-btn>
-          </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
