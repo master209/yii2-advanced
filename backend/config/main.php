@@ -46,5 +46,11 @@ return [
         ],
         */
     ],
+    'as access' => [
+        'class' => 'mdm\admin\classes\AccessControl',
+        'allowActions' => [
+            'admin/*',
+        ]
+    ],
     'params' => $params,
 ];

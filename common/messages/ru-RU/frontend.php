@@ -60,7 +60,7 @@ return [
     'Thank you for contacting us. We will respond to you as soon as possible.' => 'Спасибо. Мы свяжемся с вами в ближайшее время.',
     'There was an error sending email.' => 'Ошибка при отправке сообщения.',
     'Update' => 'Редактировать',
-    'Username' => 'Имя пользователя',
+    'Username' => 'Логин',  //Имя пользователя
     'Users' => 'Пользователи',
     'Verification code' => 'Проверочный код',
     'Website' => 'Веб-сайт',

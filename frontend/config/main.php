@@ -1,4 +1,8 @@
 <?php
+
+$modules = array_merge(
+    require __DIR__ . '/../../common/config/modules.php'
+);
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -8,28 +12,10 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
-    'language'=>'ru-RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
-        'i18n' => [
-            'translations' => [
-                'app' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@common/messages',
-                ],
-                '*' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@common/messages',
-                    'fileMap' => [
-                        'common' => 'common.php',
-                        'backend' => 'backend.php',
-                        'frontend' => 'frontend.php',
-                    ],
-                ],
-            ],
-        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
@@ -63,5 +49,12 @@ return [
         ],
         */
     ],
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+//            'site/*',
+        ]
+    ],
+    'modules' => $modules,
     'params' => $params,
 ];
