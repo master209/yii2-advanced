@@ -62,28 +62,27 @@ return [
                 ],
 
                 /* user */
-                /*            [
-                                'controllers' => ['user/user'],
-                                'allow' => true,
-                                'actions' => ['index','view'],
-                                'roles' => ['viewUser'],
-                            ],
-                            [
-                                'controllers' => ['user/user'],
-                                'allow' => true,
-                                'actions' => ['index','view','create','update'],
-                                'roles' => ['manageUser'],
-                            ],
-                            [
-                                'allow' => true,
-                                'actions' => ['index','view','create','update','delete'],
-                                'roles' => ['adminUser'],
-                            ],
-                            [
-                                'controllers' => ['user/user'],
-                                'allow' => false,
-                            ],*/
-
+                [
+                    'controllers' => ['user'],
+                    'allow' => true,
+                    'actions' => ['index','view'],
+                    'roles' => ['@'],      //viewUser
+                ],
+                [
+                    'controllers' => ['user'],
+                    'allow' => true,
+                    'actions' => ['index','view','create','update'],
+                    'roles' => ['@'],       //manageUser
+                ],
+                [
+                    'allow' => true,
+                    'actions' => ['index','view','create','update','delete'],
+                    'roles' => ['@'],       //adminUser
+                ],
+                [
+                    'controllers' => ['user'],
+                    'allow' => false,
+                ],
 
                 /* rbac */
                 [
@@ -125,6 +124,7 @@ return [
             'class' => 'mdm\admin\components\AccessControl',
             'allowActions' => [
                 'site/*',
+                'user/*',
             ]
         ],
 ];

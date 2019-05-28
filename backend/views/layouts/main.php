@@ -40,7 +40,7 @@ AppAsset::register($this);
         ['label' => 'Доступы', 'url' => ['/user/index'],
             'options' => ['class' => 'dropdown'],
             'items' => [
-                ['label' => 'Пользователи', 'url' => ['/user/user/index']],
+                ['label' => 'Пользователи', 'url' => ['/user/index']],
                 ['label' => 'Роли', 'url' => ['/rbac/role/index']],
                 ['label' => 'Разрешения', 'url' => ['/rbac/permission/index']],
                 ['label' => 'Правила', 'url' => ['/rbac/rule/index']],
