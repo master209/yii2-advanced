@@ -37,20 +37,6 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
-    ],
-    'as access' => [
-        'class' => 'mdm\admin\classes\AccessControl',
-        'allowActions' => [
-            'admin/*',
-        ]
     ],
     'params' => $params,
 ];

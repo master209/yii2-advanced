@@ -37,6 +37,19 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Доступы', 'url' => ['/user/index'],
+            'options' => ['class' => 'dropdown'],
+            'items' => [
+                ['label' => 'Пользователи', 'url' => ['/user/user/index']],
+                ['label' => 'Роли', 'url' => ['/rbac/role/index']],
+                ['label' => 'Разрешения', 'url' => ['/rbac/permission/index']],
+                ['label' => 'Правила', 'url' => ['/rbac/rule/index']],
+                ['label' => 'Назначения', 'url' => ['/rbac/assignment/index']],
+                ['label' => 'Дерево ролей', 'url' => ['/rbac/roletree/index']],
+                ['label' => 'Маршруты', 'url' => ['/rbac/route/index']],
+            ],
+        ],
+
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];

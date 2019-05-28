@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'rbac' => [
+/*    'rbac' => [
         'class' => 'mdm\admin\Module',
-    ],
+    ],*/
 ];
