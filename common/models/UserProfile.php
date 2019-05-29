@@ -48,7 +48,6 @@ class UserProfile extends ActiveRecord
 			['lastname', 'match', 'pattern' => '/^[a-zа-яё]+(-[a-zа-яё]+)?$/iu'],
 			['user_id', 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
 			[['firstname', 'lastname', 'byfather', 'birthday', 'phone_mob', 'gender', 'website', 'position', 'other'], 'default', 'value' => null],
-			[['company_id'], 'safe'],
 		];
 	}
 
@@ -62,20 +61,11 @@ class UserProfile extends ActiveRecord
 			'birthday' => 'Дата рождения',
 			'avatar_path' => 'Фото',
 			'gender' => 'Пол',
-			'company_id' => 'Компания',
 			'position' => 'Должность',
 			'website' => 'Веб-сайт',
 			'other' => 'Доп инфо',
 		];
 	}
-
-
-//relation
-	public function getCompany()
-	{
-		return $this->hasOne(\app\modules\book\models\BookCompany::className(), ['id'=>'company_id']);
-	}
-
 
 // Возвращает ФИО в формате Иванов Иван Иванович
 	public function getFullname()

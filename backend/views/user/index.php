@@ -7,10 +7,6 @@ use yii\helpers\Url;
 use common\models\User;
 use common\models\UserProfile;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\search\UserSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = 'Пользователи';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -26,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'columns' => [
-			//['class' => 'yii\grid\SerialColumn'],
+			['class' => 'yii\grid\SerialColumn'],
 
 			[
 				'attribute'=>'id', 
@@ -45,12 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'label' => 'Мобильный тел.',
 				'value' => 'userProfile.phone_mob',
 			],
-			[
-				'header' => 'Компания',
-				'value' => function ($model) {
-					return UserProfile::findOne($model->id)->company->name;
-				},
-			],
+            'email',
 			[
 				'attribute' => 'status',
 				'value' => function ($model) {
@@ -65,18 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			[
 				'class' => 'yii\grid\ActionColumn',
-				'template' => '{update}{delete}',
-				'visibleButtons' => [
-					'update' => function($model){
-						$userprofile = UserProfile::findOne(Yii::$app->user->id);		//профиль пользователя авторизованного в системе
-						$modelprofile = UserProfile::findOne($model->id);					//профиль пользователя их строки грида
-						return \Yii::$app->user->can('updateUser', ['user' => $userprofile, 'model_company_id' => $modelprofile->company_id]);
-					},
-					'delete' => function($model){
-						return \Yii::$app->user->can('adminUser') && $model->status != User::STATUS_DELETED;
-					},
-				 ]
-
+//				'template' => '{update}{delete}',
 			],
 		],
 	]) ?>

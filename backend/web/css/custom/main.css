@@ -1,0 +1,11 @@
+.right {
+    float:right !important;
+}
+a.filter-reset {
+    background-image: url("/images/filter-reset-2.png");
+    display: block;
+    height: 20px;
+    width: 20px;
+    margin-bottom: 4px;
+}
+

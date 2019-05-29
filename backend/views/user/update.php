@@ -6,7 +6,6 @@ use common\models\User;
 use common\models\UserProfile;
 use yii\widgets\MaskedInput;
 use trntv\yii\datetime\DateTimeWidget;
-use vova07\fileapi\Widget;
 
 /* @var $this yii\web\View */
 /* @var $profile common\models\UserProfile */
@@ -58,12 +57,6 @@ $this->params['breadcrumbs'][] = $profile->fullname;
 		],
 		['prompt' => '']
 	) ?>
-
-	<?= $form->field($profile, 'company_id')->dropdownList(
-					app\modules\book\models\BookCompany::find()->select(['name', 'id'])->indexBy('id')->orderBy('name')->column(),
-					['prompt'=>'Выберите компанию']
-			);
-	?>
 
 	<?= $form->field($profile, 'position')->textInput(['maxlength' => true]) ?>
 

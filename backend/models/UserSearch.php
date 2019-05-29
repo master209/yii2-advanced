@@ -6,11 +6,9 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\User;
 
-/**
- * UserSearch represents the model behind the search form about `common\models\User`.
- */
 class UserSearch extends User
 {
+    public $phone_mob;
     /**
      * @inheritdoc
      */
@@ -18,7 +16,7 @@ class UserSearch extends User
     {
         return [
             [['id', 'status', 'created_at', 'updated_at'/*, 'action_at'*/], 'integer'],
-            [['username', 'email'], 'safe'],
+            [['username', 'phone_mob', 'email'], 'safe'],
         ];
     }
 
@@ -27,7 +25,6 @@ class UserSearch extends User
      */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
@@ -39,26 +36,22 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find();
-
-        // add conditions that should always apply here
+        $query = User::find()->joinWith(['userProfile']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'pagesize' => 30,
             ],
+            'sort' => ['defaultOrder' => ['id' => SORT_ASC]]
         ]);
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
@@ -68,7 +61,8 @@ class UserSearch extends User
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'email', $this->email]);
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'phone_mob', $this->phone_mob]);
 
         return $dataProvider;
     }

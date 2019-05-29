@@ -24,8 +24,10 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
+    const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 10;
+    const STATUS_BANNED = 20;
+    const STATUS_DELETED = 30;
 
 
     /**
@@ -46,29 +48,56 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            ['email', 'required'],
-            ['email', 'email'],
+            [['username', 'email'], 'unique'],
+            ['username', 'filter', 'filter' => '\yii\helpers\Html::encode'],
+            ['status', 'default', 'value' => self::STATUS_INACTIVE],
+            ['status', 'in', 'range' => array_keys(self::statuses())],
             ['description', 'string'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'id',
+            'username' => 'Логин',
+            'email' => 'Почта',
+            'status' => 'Статус',
+            'created_at' => 'Когда создано',
+            'updated_at' => 'Когда изменено',
+        ];
+    }
+
+    public function getUserProfile()
+    {
+        return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
+    }
+
+    public static function statuses($status = null)
+    {
+        $statuses = [
+            self::STATUS_INACTIVE => 'отключен',
+            self::STATUS_ACTIVE => 'активен',
+            self::STATUS_BANNED => 'забанен',
+            self::STATUS_DELETED => 'удален',
+        ];
+
+        if ($status === null) {
+            return $statuses;
+        }
+
+        return $statuses[$status];
+    }
+
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
         return static::find()
