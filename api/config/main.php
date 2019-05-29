@@ -78,6 +78,8 @@ return [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'car'],
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'ad'],
+
+//                'GET ads' => 'ads/index',
                 'POST ads/load-file/<id:\d+>' => 'ad/load-file',
                 'OPTIONS ads/load-file/<id:\d+>' => 'ad/options',
 
