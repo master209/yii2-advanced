@@ -1,12 +1,10 @@
 <?php
 namespace common\models;
-
 use common\models\query\UserQuery;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-
 /**
  * User model
  *
@@ -24,12 +22,8 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_INACTIVE = 0;
+    const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-    const STATUS_BANNED = 20;
-    const STATUS_DELETED = 30;
-
-
     /**
      * @inheritdoc
      */
@@ -37,7 +31,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return '{{%user}}';
     }
-
     /**
      * @inheritdoc
      */
@@ -47,57 +40,27 @@ class User extends ActiveRecord implements IdentityInterface
             TimestampBehavior::className(),
         ];
     }
-
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
-            [['username', 'email'], 'unique'],
-            ['username', 'filter', 'filter' => '\yii\helpers\Html::encode'],
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => array_keys(self::statuses())],
+            ['email', 'required'],
+            ['email', 'email'],
             ['description', 'string'],
         ];
     }
-
-
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'id',
-            'username' => 'Логин',
-            'email' => 'Почта',
-            'status' => 'Статус',
-            'created_at' => 'Когда создано',
-            'updated_at' => 'Когда изменено',
-        ];
-    }
-
-    public function getUserProfile()
-    {
-        return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
-    }
-
-    public static function statuses($status = null)
-    {
-        $statuses = [
-            self::STATUS_INACTIVE => 'отключен',
-            self::STATUS_ACTIVE => 'активен',
-            self::STATUS_BANNED => 'забанен',
-            self::STATUS_DELETED => 'удален',
-        ];
-
-        if ($status === null) {
-            return $statuses;
-        }
-
-        return $statuses[$status];
-    }
-
+    /**
+     * @inheritdoc
+     */
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
-
+    /**
+     * @inheritdoc
+     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
         return static::find()
@@ -106,7 +69,6 @@ class User extends ActiveRecord implements IdentityInterface
             ->andWhere(['>', 't.expired_at', time()])
             ->one();
     }
-
     /**
      * Finds user by username
      *
@@ -117,7 +79,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
-
     /**
      * Finds user by password reset token
      *
@@ -129,13 +90,11 @@ class User extends ActiveRecord implements IdentityInterface
         if (!static::isPasswordResetTokenValid($token)) {
             return null;
         }
-
         return static::findOne([
             'password_reset_token' => $token,
             'status' => self::STATUS_ACTIVE,
         ]);
     }
-
     /**
      * Finds out if password reset token is valid
      *
@@ -147,12 +106,10 @@ class User extends ActiveRecord implements IdentityInterface
         if (empty($token)) {
             return false;
         }
-
         $timestamp = (int) substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         return $timestamp + $expire >= time();
     }
-
     /**
      * @inheritdoc
      */
@@ -160,7 +117,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->getPrimaryKey();
     }
-
     /**
      * @inheritdoc
      */
@@ -168,7 +124,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->auth_key;
     }
-
     /**
      * @inheritdoc
      */
@@ -176,7 +131,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->getAuthKey() === $authKey;
     }
-
     /**
      * Validates password
      *
@@ -187,7 +141,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
-
     /**
      * Generates password hash from password and sets it to the model
      *
@@ -197,7 +150,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
-
     /**
      * Generates "remember me" authentication key
      */
@@ -205,7 +157,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->auth_key = Yii::$app->security->generateRandomString();
     }
-
     /**
      * Generates new password reset token
      */
@@ -213,7 +164,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
-
     /**
      * Removes password reset token
      */
@@ -221,7 +171,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
-
     /**
      * @return UserQuery
      */
@@ -229,7 +178,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return new UserQuery(get_called_class());
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -237,7 +185,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Token::className(), ['user_id' => 'id']);
     }
-
     // возвращает один последний действующий токен по юзеру с username, пришедшему с формы авторизации
     public function getValidToken()
     {
@@ -246,7 +193,6 @@ class User extends ActiveRecord implements IdentityInterface
             ->orderBy('id DESC')
             ->one();
     }
-
     public function fields()
     {
         return [
