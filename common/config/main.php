@@ -32,12 +32,14 @@ return [
         ],
     ],
 
+
+/*
     'as globalAccess' => [
             'class' => 'common\behaviors\GlobalAccessBehavior',
             'rules' => [
 
 
-                /* site */
+                //site
                 [
                     'controllers' => ['site'],
                     'allow' => true,
@@ -61,7 +63,7 @@ return [
                     'allow' => false,
                 ],
 
-                /* user */
+                //user
                 [
                     'controllers' => ['user'],
                     'allow' => true,
@@ -84,7 +86,7 @@ return [
                     'allow' => false,
                 ],
 
-                /* rbac */
+                //rbac
                 [
                     'controllers' => [
                         'rbac/user',
@@ -111,7 +113,7 @@ return [
                     'allow' => false,
                 ],
 
-                /* all */
+                //all
                 [
                     'allow' => true,
                     'roles' => ['user'],
@@ -127,4 +129,6 @@ return [
                 'user/*',
             ]
         ],
+*/
+
 ];
