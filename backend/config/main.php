@@ -58,7 +58,7 @@ return [
             [
                 'controllers' => ['site'],
                 'allow' => true,
-                'actions' => ['error', 'index', 'about', 'contact'],
+                'actions' => ['error', 'index'],
                 'roles' => ['?', '@'],
             ],
             [
@@ -127,21 +127,10 @@ return [
                 ],
                 'allow' => false,
             ],
-
-            /*                //ads
-                            [
-                                'controllers' => ['ads'],
-                                'allow' => true,
-                                'actions' => ['index','load-file'],
-                                'roles' => ['*'],
-                            ],*/
-
-            //all
             [
                 'allow' => true,
                 'roles' => ['user'],
             ],
-
         ],
     ],
 
@@ -151,7 +140,6 @@ return [
             'site/*',
             'user/*',
             'rbac/*',
-//                'ads/*',
         ]
     ],
 

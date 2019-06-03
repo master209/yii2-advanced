@@ -42,6 +42,45 @@ return [
             'errorAction' => 'site/error',
         ],
     ],
+
+    'as globalAccess' => [
+        'class' => 'common\behaviors\GlobalAccessBehavior',
+        'rules' => [
+
+
+            //site
+            [
+                'controllers' => ['site'],
+                'allow' => true,
+                'actions' => ['error', 'index', 'about', 'contact'],
+                'roles' => ['?', '@'],
+            ],
+            [
+                'controllers' => ['site'],
+                'allow' => true,
+                'actions' => ['login', 'signup'],
+                'roles' => ['?'],
+            ],
+            [
+                'controllers' => ['site'],
+                'allow' => true,
+                'actions' => ['logout'],
+                'roles' => ['@'],
+            ],
+            [
+                'controllers' => ['site'],
+                'allow' => false,
+            ],
+        ],
+    ],
+
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            'site/*',
+        ]
+    ],
+
 //    'modules' => $modules,
     'modules' => [],
     'params' => $params,
