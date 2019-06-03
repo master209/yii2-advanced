@@ -1,8 +1,9 @@
 <?php
 
-$modules = array_merge(
+/*$modules = array_merge(
     require __DIR__ . '/../../common/config/modules.php'
-);
+);*/
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -41,6 +42,7 @@ return [
             'errorAction' => 'site/error',
         ],
     ],
-    'modules' => $modules,
+//    'modules' => $modules,
+    'modules' => [],
     'params' => $params,
 ];
