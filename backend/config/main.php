@@ -14,6 +14,12 @@ return [
     'modules' => [
         'rbac' => [
             'class' => 'mdm\admin\Module',
+            'controllerMap' => [
+                'roletree' => [
+                    'class' => 'backend\components\rbac\controllers\RoletreeController',		//назначается контроллер для роута /rbac/roletree
+                ],
+            ],
+
         ],
     ],
     'components' => [
