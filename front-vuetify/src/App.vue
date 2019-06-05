@@ -106,7 +106,8 @@ export default {
         return [
           {title: 'Orders', icon: 'bookmark_border', url: '/orders'},
           {title: 'New ad', icon: 'note_add', url: '/new'},
-          {title: 'My ads', icon: 'list', url: '/list'}
+          {title: 'My ads', icon: 'list', url: '/list'},
+          {title: 'Grids', icon: 'grid_on', url: '/grids'},
         ]
       }
 
