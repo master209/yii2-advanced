@@ -2,13 +2,25 @@
     <v-container fluid>
         <v-layout row>
             <v-flex xs12>
-                <h1>Grid standard</h1>
+                <h1>Grid headerCell slot</h1>
 
                 <v-data-table
                         :headers="headers"
                         :items="desserts"
                         class="elevation-1"
                 >
+                    <template slot="headerCell" slot-scope="props">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                  <span v-on="on">
+                                    {{ props.header.text }}
+                                  </span>
+                            </template>
+                            <span>
+                                  {{ props.header.text }}
+                            </span>
+                        </v-tooltip>
+                    </template>
                     <template v-slot:items="props">
                         <td>{{ props.item.name }}</td>
                         <td class="text-xs-right">{{ props.item.calories }}</td>

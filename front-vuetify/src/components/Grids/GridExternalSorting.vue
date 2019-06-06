@@ -2,11 +2,13 @@
     <v-container fluid>
         <v-layout row>
             <v-flex xs12>
-                <h1>Grid standard</h1>
+                <h1>Grid external sorting</h1>
 
                 <v-data-table
                         :headers="headers"
                         :items="desserts"
+                        :search="search"
+                        :pagination.sync="pagination"
                         class="elevation-1"
                 >
                     <template v-slot:items="props">
@@ -18,6 +20,10 @@
                         <td class="text-xs-right">{{ props.item.iron }}</td>
                     </template>
                 </v-data-table>
+                <div class="text-xs-center pt-2">
+                    <v-btn color="primary" @click="toggleOrder">Toggle sort order</v-btn>
+                    <v-btn color="primary" @click="nextSort">Sort next column</v-btn>
+                </div>
 
             </v-flex>
         </v-layout>
@@ -28,6 +34,11 @@
   export default {
     data () {
       return {
+        search: '',
+        pagination: {
+          sortBy: 'fat'
+        },
+        selected: [],
         headers: [
           {
             text: 'Dessert (100g serving)',
@@ -123,6 +134,17 @@
             iron: '6%'
           }
         ]
+      }
+    },
+    methods: {
+      toggleOrder () {
+        this.pagination.descending = !this.pagination.descending
+      },
+      nextSort () {
+        let index = this.headers.findIndex(h => h.value === this.pagination.sortBy)
+        index = (index + 1) % this.headers.length
+        index = index === 0 ? index + 1 : index
+        this.pagination.sortBy = this.headers[index].value
       }
     }
   }

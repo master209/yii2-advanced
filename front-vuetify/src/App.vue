@@ -138,13 +138,18 @@ export default {
     },
     gridItems () {
       return [
+        {title: 'Grid no-data', url: '/grid-no-data'},
         {title: 'Grid standard', url: '/grid-standard'},
-        {title: 'Grid no-data', url: '/grids'},
-        {title: 'Grid progress', url: '/grids'},
-        {title: 'Grid footer', url: '/grids'},
-        {title: 'Grid expandable', url: '/grids'},
-        {title: 'Grid selectable rows', url: '/grids'},
-        {title: 'Grid search filter', url: '/grids'},
+        {title: 'Grid items and headers slots', url: '/grid-items-and-headers-slots'},
+        {title: 'Grid headerCell slot', url: '/grid-headercell-slot'},
+        {title: 'Grid progress', url: '/grid-progress'},
+        {title: 'Grid footer', url: '/grid-footer'},
+        {title: 'Grid expandable', url: '/grid-expandable'},
+        {title: 'Grid selectable rows', url: '/grid-selectable-rows'},
+        {title: 'Grid search filter', url: '/grid-search-filter'},
+        {title: 'Grid paginator custom icons', url: '/grid-paginator-custom-icons'},
+        {title: 'Grid external pagination', url: '/grid-external-pagination'},
+        {title: 'Grid external sorting', url: '/grid-external-sorting'},
       ]
     }
   },

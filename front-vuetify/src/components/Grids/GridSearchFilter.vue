@@ -1,33 +1,43 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <v-container fluid>
-        <v-layout row>
-            <v-flex xs12>
-                <h1>Grid standard</h1>
-
-                <v-data-table
-                        :headers="headers"
-                        :items="desserts"
-                        class="elevation-1"
-                >
-                    <template v-slot:items="props">
-                        <td>{{ props.item.name }}</td>
-                        <td class="text-xs-right">{{ props.item.calories }}</td>
-                        <td class="text-xs-right">{{ props.item.fat }}</td>
-                        <td class="text-xs-right">{{ props.item.carbs }}</td>
-                        <td class="text-xs-right">{{ props.item.protein }}</td>
-                        <td class="text-xs-right">{{ props.item.iron }}</td>
-                    </template>
-                </v-data-table>
-
-            </v-flex>
-        </v-layout>
-    </v-container>
+    <v-card>
+        <v-card-title>
+            <v-toolbar-title>Grid Search filter with custom no-results slot</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-text-field
+                    v-model="search"
+                    append-icon="search"
+                    label="Search"
+                    single-line
+                    hide-details
+            ></v-text-field>
+        </v-card-title>
+        <v-data-table
+                :headers="headers"
+                :items="desserts"
+                :search="search"
+        >
+            <template v-slot:items="props">
+                <td>{{ props.item.name }}</td>
+                <td class="text-xs-right">{{ props.item.calories }}</td>
+                <td class="text-xs-right">{{ props.item.fat }}</td>
+                <td class="text-xs-right">{{ props.item.carbs }}</td>
+                <td class="text-xs-right">{{ props.item.protein }}</td>
+                <td class="text-xs-right">{{ props.item.iron }}</td>
+            </template>
+            <template v-slot:no-results>
+                <v-alert :value="true" color="error" icon="warning">
+                    Your search for "{{ search }}" found no results.
+                </v-alert>
+            </template>
+        </v-data-table>
+    </v-card>
 </template>
 
 <script>
   export default {
     data () {
       return {
+        search: '',
         headers: [
           {
             text: 'Dessert (100g serving)',

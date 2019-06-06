@@ -2,12 +2,15 @@
     <v-container fluid>
         <v-layout row>
             <v-flex xs12>
-                <h1>Grid standard</h1>
+                <h1>Grid paginator custom icons (не отображаются значки пагинации)</h1>
 
                 <v-data-table
                         :headers="headers"
                         :items="desserts"
                         class="elevation-1"
+                        prev-icon="mdi-menu-left"
+                        next-icon="mdi-menu-right"
+                        sort-icon="mdi-menu-down"
                 >
                     <template v-slot:items="props">
                         <td>{{ props.item.name }}</td>

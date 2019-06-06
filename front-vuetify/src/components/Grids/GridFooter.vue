@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-layout row>
             <v-flex xs12>
-                <h1>Grid standard</h1>
+                <h1>Grid footer</h1>
 
                 <v-data-table
                         :headers="headers"
@@ -16,6 +16,11 @@
                         <td class="text-xs-right">{{ props.item.carbs }}</td>
                         <td class="text-xs-right">{{ props.item.protein }}</td>
                         <td class="text-xs-right">{{ props.item.iron }}</td>
+                    </template>
+                    <template v-slot:footer>
+                        <td :colspan="headers.length">
+                            <strong>This is an extra footer</strong>
+                        </td>
                     </template>
                 </v-data-table>
 

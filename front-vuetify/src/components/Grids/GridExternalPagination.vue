@@ -2,11 +2,14 @@
     <v-container fluid>
         <v-layout row>
             <v-flex xs12>
-                <h1>Grid standard</h1>
+                <h1>Grid external pagination</h1>
 
                 <v-data-table
                         :headers="headers"
                         :items="desserts"
+                        :search="search"
+                        hide-actions
+                        :pagination.sync="pagination"
                         class="elevation-1"
                 >
                     <template v-slot:items="props">
@@ -18,6 +21,9 @@
                         <td class="text-xs-right">{{ props.item.iron }}</td>
                     </template>
                 </v-data-table>
+                <div class="text-xs-center pt-2">
+                    <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
+                </div>
 
             </v-flex>
         </v-layout>
@@ -28,6 +34,9 @@
   export default {
     data () {
       return {
+        search: '',
+        pagination: {},
+        selected: [],
         headers: [
           {
             text: 'Dessert (100g serving)',
@@ -123,6 +132,15 @@
             iron: '6%'
           }
         ]
+      }
+    },
+    computed: {
+      pages () {
+        if (this.pagination.rowsPerPage == null ||
+          this.pagination.totalItems == null
+        ) return 0
+
+        return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
       }
     }
   }

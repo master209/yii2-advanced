@@ -2,14 +2,24 @@
     <v-container fluid>
         <v-layout row>
             <v-flex xs12>
-                <h1>Grid standard</h1>
+                <h1>Grid selectable rows</h1>
 
                 <v-data-table
+                        v-model="selected"
                         :headers="headers"
                         :items="desserts"
+                        item-key="name"
+                        select-all
                         class="elevation-1"
                 >
                     <template v-slot:items="props">
+                        <td>
+                            <v-checkbox
+                                    v-model="props.selected"
+                                    primary
+                                    hide-details
+                            ></v-checkbox>
+                        </td>
                         <td>{{ props.item.name }}</td>
                         <td class="text-xs-right">{{ props.item.calories }}</td>
                         <td class="text-xs-right">{{ props.item.fat }}</td>
@@ -28,6 +38,7 @@
   export default {
     data () {
       return {
+        selected: [],
         headers: [
           {
             text: 'Dessert (100g serving)',
