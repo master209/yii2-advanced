@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-app>
     <v-navigation-drawer
             app
@@ -45,11 +45,32 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
+          <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                  <v-btn
+                          v-on="on"
+                          flat
+                  >
+                      <v-icon left>grid_on</v-icon>
+                      Grids
+                  </v-btn>
+              </template>
+              <v-list>
+                  <v-list-tile
+                          v-for="(item, index) in gridItems"
+                          :key="index"
+                          :to="item.url"
+                  >
+                      <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                  </v-list-tile>
+              </v-list>
+          </v-menu>
+
           <v-btn
-              v-for="link in links"
-              :key="link.title"
-              :to="link.url"
-              flat
+                  v-for="link in links"
+                  :key="link.title"
+                  :to="link.url"
+                  flat
           >
               <v-icon left>{{link.icon}}</v-icon>
               {{link.title}}
@@ -107,13 +128,23 @@ export default {
           {title: 'Orders', icon: 'bookmark_border', url: '/orders'},
           {title: 'New ad', icon: 'note_add', url: '/new'},
           {title: 'My ads', icon: 'list', url: '/list'},
-          {title: 'Grids', icon: 'grid_on', url: '/grids'},
         ]
       }
 
       return [
         {title: 'Login', icon: 'lock', url: '/login'},
         {title: 'Registration', icon: 'face', url: '/registration'}
+      ]
+    },
+    gridItems () {
+      return [
+        {title: 'Grid standard', url: '/grid-standard'},
+        {title: 'Grid no-data', url: '/grids'},
+        {title: 'Grid progress', url: '/grids'},
+        {title: 'Grid footer', url: '/grids'},
+        {title: 'Grid expandable', url: '/grids'},
+        {title: 'Grid selectable rows', url: '/grids'},
+        {title: 'Grid search filter', url: '/grids'},
       ]
     }
   },

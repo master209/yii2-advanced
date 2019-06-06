@@ -9,7 +9,7 @@ import NewAd from '@/components/Ads/NewAd'
 import Login from '@/components/Auth/Login'
 import Registration from '@/components/Auth/Registration'
 import Orders from '@/components/User/Orders'
-import Grids from '@/components/Grids/Grids'
+import GridStandard from '@/components/Grids/GridStandard'
 
 Vue.use(Router)
 
@@ -55,9 +55,9 @@ export default new Router({
       beforeEnter: AuthGuard
     },
     {
-      path: '/grids',
-      name: 'grids',
-      component: Grids
+      path: '/grid-standard',
+      name: 'grid-standard',
+      component: GridStandard
     },
     {
       path: '*',          // обработка несуществующего роута
