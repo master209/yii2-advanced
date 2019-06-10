@@ -27,8 +27,6 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        // const user = await fb.auth().createUserWithEmailAndPassword(email, password)
-        // commit('setUser', new User(user.uid))
         console.log('actions registerUser(), username, email, password: ', username, email, password)
         const res = await Vue.http.post('signup', {username, email, password})
         console.log('actions registerUser(), response: ', res)
@@ -106,10 +104,10 @@ export default {
         store.dispatch('autoLoginUser', user)
       }
     },
-*/
     autoLoginUser ({commit}, {id, token}) {
       commit('setUser', new User(id, token))
     },
+*/
     logoutUser ({commit}) {
       console.log('actions logoutUser()')
       localStorage.removeItem('user_id');
