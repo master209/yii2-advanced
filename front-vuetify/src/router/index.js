@@ -21,6 +21,10 @@ import GridSearchFilter from '@/components/Grids/GridSearchFilter'
 import GridPaginatorCustomIcons from '@/components/Grids/GridPaginatorCustomIcons'
 import GridExternalPagination from '@/components/Grids/GridExternalPagination'
 import GridExternalSorting from '@/components/Grids/GridExternalSorting'
+import GridPaginateAndSortServerSide from '@/components/Grids/GridPaginateAndSortServerSide'
+import GridRemoveHeaderAndFooter from '@/components/Grids/GridRemoveHeaderAndFooter'
+import GridInlineEditing from '@/components/Grids/GridInlineEditing'
+import GridCrudActions from '@/components/Grids/GridCrudActions'
 
 Vue.use(Router)
 
@@ -125,6 +129,26 @@ export default new Router({
       path: '/grid-external-sorting',
       name: 'grid-external-sorting',
       component: GridExternalSorting
+    },
+    {
+      path: '/grid-paginate-and-sort-server-side',
+      name: 'grid-paginate-and-sort-server-side',
+      component: GridPaginateAndSortServerSide
+    },
+    {
+      path: '/grid-remove-header-and-footer',
+      name: 'grid-remove-header-and-footer',
+      component: GridRemoveHeaderAndFooter
+    },
+    {
+      path: '/grid-inline-editing',
+      name: 'grid-inline-editing',
+      component: GridInlineEditing
+    },
+    {
+      path: '/grid-crud-actions',
+      name: 'grid-crud-actions',
+      component: GridCrudActions
     },
 
     {
