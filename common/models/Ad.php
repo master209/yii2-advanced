@@ -47,18 +47,6 @@ class Ad extends ActiveRecord
         ];
     }
 
-    public function fields()
-    {
-        return [
-            'id' => 'id',
-            'owner_id' => 'owner_id',
-            'title' => 'title',
-            'description' => 'description',
-            'image_src' => 'image_src',
-            'promo' => 'promo',
-        ];
-    }
-
     public function behaviors()
     {
         return [
@@ -76,13 +64,18 @@ class Ad extends ActiveRecord
         return $this->hasMany(Order::className(), ['ad_id' => 'id']);
     }
 
-    /**
-     * @return AdQuery
-     */
-    public static function find()
+    public function fields()
     {
-        return new AdQuery(get_called_class());
+        return [
+            'id' => 'id',
+            'owner_id' => 'owner_id',
+            'title' => 'title',
+            'description' => 'description',
+            'image_src' => 'image_src',
+            'promo' => 'promo',
+        ];
     }
+
 
     public function extraFields()
     {
@@ -90,5 +83,13 @@ class Ad extends ActiveRecord
             'user' => 'user',
             'orders' => 'orders',
         ];
+    }
+
+    /**
+     * @return AdQuery
+     */
+    public static function find()
+    {
+        return new AdQuery(get_called_class());
     }
 }

@@ -191,5 +191,12 @@ class UserProfile extends ActiveRecord
 		return $usersByRole;
 	}
 
+    public function fields()
+    {
+        return [
+            'shortname' => 'shortname',
+            'phone_mob' => 'phone_mob',
+        ];
+    }
 
 }

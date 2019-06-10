@@ -9,6 +9,7 @@ import NewAd from '@/components/Ads/NewAd'
 import Login from '@/components/Auth/Login'
 import Registration from '@/components/Auth/Registration'
 import Orders from '@/components/User/Orders'
+import Users from '@/components/User/Users'
 import GridNoData from '@/components/Grids/GridNoData'
 import GridStandard from '@/components/Grids/GridStandard'
 import GridItemsAndHeadersSlots from '@/components/Grids/GridItemsAndHeadersSlots'
@@ -67,6 +68,12 @@ export default new Router({
       path: '/orders',
       name: 'orders',
       component: Orders,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: Users,
       beforeEnter: AuthGuard
     },
 

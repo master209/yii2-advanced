@@ -88,6 +88,8 @@ return [
 //                '<_c:[\w-]+>/<id:\d+>/<_a:[\w-]+>' => '<_c>/<_a>',
 //                '<controller:\w+>/<id:\d+>/<action:\w+>' => '<controller>/<action>',
 
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
+
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user-ad'],
                 'GET users/<user_id:\d+>/ads' => 'user-ad/index',
                 'POST users/<user_id:\d+>/ads' => 'user-ad/create',

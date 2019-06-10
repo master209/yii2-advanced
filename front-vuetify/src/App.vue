@@ -125,6 +125,7 @@ export default {
     links () {
       if (this.isUserLoggedIn) {
         return [
+          {title: 'Users', icon: 'people', url: '/users'},
           {title: 'Orders', icon: 'bookmark_border', url: '/orders'},
           {title: 'New ad', icon: 'note_add', url: '/new'},
           {title: 'My ads', icon: 'list', url: '/list'},
