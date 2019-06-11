@@ -50,7 +50,6 @@ export default {
 
   actions: {
 
-
     async createAd ({commit, getters}, payload) {
       // console.log('actions createAd(): ', payload)
       commit('clearError')
