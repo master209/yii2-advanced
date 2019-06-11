@@ -54,8 +54,8 @@
         <v-flex xs12 class="text-xs-center pt-5">
           <v-progress-circular
                   indeterminate
-                  :size="100"
-                  :width="6"
+                  :size="50"
+                  :width="3"
                   color="purple"
           ></v-progress-circular>
         </v-flex>

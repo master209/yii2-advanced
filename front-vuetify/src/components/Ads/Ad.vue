@@ -20,8 +20,8 @@
         <div v-else class="text-xs-center">
           <v-progress-circular
             indeterminate
-            :size="100"
-            :width="4"
+            :size="50"
+            :width="3"
             color="purple"
           ></v-progress-circular>
         </div>
