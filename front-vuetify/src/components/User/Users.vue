@@ -94,7 +94,7 @@
           { text: 'E-mail', value: 'email' },
           { text: 'Статус', value: 'status' }
         ],
-        editedIndex: -1,
+        editedIndex: -1,  // признак созд. нового элемента (-1) или редактировния старого
         editedItem: {
           id: '',
           username: 0,
@@ -136,9 +136,11 @@
     },
 
     methods: {
-      editItem (item) {
+      editItem (item) {   //копирует редактируемый объект и отображает его в модальном окне
+        console.log('Users.vue editItem(editItem): ', item)   //весь объект User
         this.editedIndex = this.users.indexOf(item)
-        this.editedItem = Object.assign({}, item)
+        console.log('Users.vue editedIndex: ', this.editedIndex)  //индекс объекта item в массиве Users[]
+        this.editedItem = Object.assign({}, item)   //копирование объекта из item в {}
         this.dialog = true
       },
 
@@ -150,15 +152,15 @@
       close () {
         this.dialog = false
         setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedItem = Object.assign({}, this.defaultItem)   //копирование объекта (очистка editedItem пустыми значениями из defaultItem)
           this.editedIndex = -1
         }, 300)
       },
 
       save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.users[this.editedIndex], this.editedItem)
-        } else {
+        if (this.editedIndex > -1) {    //если редактирование
+          Object.assign(this.users[this.editedIndex], this.editedItem)    //копирование отредактированного объекта в свой исходный элемент в массиве Users[]
+        } else {                        //иначе - новый объект
           this.users.push(this.editedItem)
         }
         this.close()
