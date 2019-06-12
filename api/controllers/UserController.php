@@ -8,6 +8,7 @@ use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
 use api\models\UserSearch;
+use yii\web\ForbiddenHttpException;
 
 class UserController extends ActiveController
 {

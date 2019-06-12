@@ -3,6 +3,7 @@
     <v-layout row>
       <v-flex xs12>
 
+      <div v-if="!error">
         <h1>Пользователи</h1>
 
         <v-toolbar flat color="white">
@@ -76,7 +77,10 @@
             </td>
           </template>
         </v-data-table>
-
+      </div>
+        <div v-else>
+          <h2 style="color: red;">403 Forbidden. {{error}}</h2>
+        </div>
       </v-flex>
     </v-layout>
   </v-container>
@@ -86,6 +90,7 @@
   export default {
     data: () => ({
         dialog: false,
+        error: false,
         headers: [
           {text: 'id', value: 'id',},
           { text: 'Логин', value: 'username' },
@@ -133,6 +138,11 @@
 
     created () {
       this.$store.dispatch('fetchUsers')
+      .catch((error) => {
+        if(error.body.status === 403) {
+          this.error = 'Вы не можете просматривать эту страницу'
+        }
+      })
     },
 
     methods: {
