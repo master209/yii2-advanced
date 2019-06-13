@@ -50,8 +50,38 @@ export default {
         commit('setError', error.message)
         throw error
       }
-    }
+    },
+
+    async updateUser ({commit, getters}, {id, username, password, email, status}) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        console.log('actions updateUser(), id, username, password, email, status: ', id, username, password, email, status)
+        const res = await Vue.http.put(`users/${id}`, {username, password, email, status}, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getters.token
+          }
+        })
+        console.log('actions updateUser(), response: ', res)
+        commit('setLoading', false)
+        if (res.status === 200) {
+          if (res.body.token) {
+            commit('setUser', new User(res.body.id, res.body.token))
+          } else {
+            throw res.bodyText
+          }
+        }
+      } catch (error) {
+        console.log('actions updateUser(), catch error: ', error)
+        commit('setLoading', false)
+        // commit('setError', error)
+        throw JSON.parse(error)
+      }
+    },
+    
   },
+  
   getters: {
     users (state) {
       return state.users

@@ -24,16 +24,19 @@
                       <v-text-field v-model="editedItem.username" label="Логин"></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6 md4>
-                      <v-text-field v-model="editedItem.fio" label="ФИО"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6 md4>
-                      <v-text-field v-model="editedItem.phoneMob" label="Телефон"></v-text-field>
+                      <v-text-field v-model="editedItem.password" label="Пароль"></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6 md4>
                       <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6 md4>
                       <v-text-field v-model="editedItem.status" label="Статус"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                      <v-text-field v-model="editedItem.fio" label="ФИО"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                      <v-text-field v-model="editedItem.phoneMob" label="Телефон"></v-text-field>
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -56,10 +59,11 @@
           <template v-slot:items="props">
             <td>{{ props.item.id }}</td>
             <td>{{ props.item.username }}</td>
-            <td >{{ props.item.fio }}</td>
-            <td >{{ props.item.phoneMob }}</td>
+            <td >{{ props.item.password }}</td>
             <td >{{ props.item.email }}</td>
             <td >{{ props.item.status }}</td>
+            <td >{{ props.item.fio }}</td>
+            <td >{{ props.item.phoneMob }}</td>
             <td class="justify-center layout px-0">
               <v-icon
                       small
@@ -94,27 +98,30 @@
         headers: [
           {text: 'id', value: 'id',},
           { text: 'Логин', value: 'username' },
+          { text: 'Пароль', value: 'password' },
+          { text: 'E-mail', value: 'email' },
+          { text: 'Статус', value: 'status' },
           { text: 'ФИО', value: 'fio' },
           { text: 'Телефон', value: 'phoneMob' },
-          { text: 'E-mail', value: 'email' },
-          { text: 'Статус', value: 'status' }
         ],
         editedIndex: -1,  // признак созд. нового элемента (-1) или редактировния старого
         editedItem: {
           id: '',
           username: 0,
+          password: 0,
+          email: 0,
+          status: 0,
           fio: 0,
           phoneMob: 0,
-          email: 0,
-          status: 0
         },
         defaultItem: {
           id: '',
           username: 0,
+          password: 0,
+          email: 0,
+          status: 0,
           fio: 0,
           phoneMob: 0,
-          email: 0,
-          status: 0
         }
     }),
 
@@ -169,7 +176,16 @@
 
       save () {
         if (this.editedIndex > -1) {    //если редактирование
-          Object.assign(this.users[this.editedIndex], this.editedItem)    //копирование отредактированного объекта в свой исходный элемент в массиве Users[]
+          // Object.assign(this.users[this.editedIndex], this.editedItem)    //копирование отредактированного объекта в свой исходный элемент в массиве Users[]
+          const user = {
+            id: this.editedItem.id,
+            username: this.editedItem.username,
+            password: this.editedItem.password,
+            email: this.editedItem.email,
+            status: 20,   // this.editedItem.status
+          }
+          console.log('Users.vue save() user: ', user)
+          this.$store.dispatch('updateUser', user)
         } else {                        //иначе - новый объект
           this.users.push(this.editedItem)
         }
