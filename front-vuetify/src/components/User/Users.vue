@@ -19,33 +19,65 @@
 
               <v-card-text>
                 <v-container grid-list-md>
-                  <v-layout wrap>
-                    <v-flex xs12 sm6 md4>
-                      <v-text-field v-model="editedItem.username" label="Логин"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6 md4>
-                      <v-text-field v-model="editedItem.password" label="Пароль"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6 md4>
-                      <v-text-field v-model="editedItem.email" label="E-mail"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6 md4>
-                      <v-text-field v-model="editedItem.status" label="Статус"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6 md4>
-                      <v-text-field v-model="editedItem.fio" label="ФИО"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6 md4>
-                      <v-text-field v-model="editedItem.phoneMob" label="Телефон"></v-text-field>
-                    </v-flex>
-                  </v-layout>
+                  <v-form v-model="validClient" ref="form" validation>
+                    <v-layout wrap>
+                      <v-flex xs12 sm6 md4>
+                        <v-text-field
+                                v-model="editedItem.username"
+                                name="username"
+                                label="Логин"
+                                prepend-icon="person"
+                                :rules="usernameRules"
+                                :error-messages="messages.username"
+                        ></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-text-field
+                                v-model="editedItem.password"
+                                name="password"
+                                label="Пароль"
+                                type="password"
+                                prepend-icon="lock"
+                                :counter="6"
+                                :rules="passwordRules"
+                                :error-messages="messages.password"
+                        ></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-text-field
+                                v-model="editedItem.email"
+                                name="email"
+                                label="E-mail"
+                                type="email"
+                                prepend-icon="alternate_email"
+                                :rules="emailRules"
+                                :error-messages="messages.email"
+                        ></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-text-field v-model="editedItem.status" label="Статус"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-text-field v-model="editedItem.fio" label="ФИО"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-text-field v-model="editedItem.phoneMob" label="Телефон"></v-text-field>
+                      </v-flex>
+                    </v-layout>
+                  </v-form>
                 </v-container>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" flat @click="close">Отменить</v-btn>
-                <v-btn color="blue darken-1" flat @click="save">Сохранить</v-btn>
+                <v-btn
+                        type="submit"
+                        color="primary"
+                        @click="save"
+                        :loading="loading"
+                        :disabled="!validClient || loading"
+                >Сохранить</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -91,10 +123,14 @@
 </template>
 
 <script>
+  const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+
   export default {
     data: () => ({
         dialog: false,
         error: false,
+        validClient: false,
+        validServer: true,
         headers: [
           {text: 'id', value: 'id',},
           { text: 'Логин', value: 'username' },
@@ -122,6 +158,11 @@
           status: 0,
           fio: 0,
           phoneMob: 0,
+        },
+        messages: {
+          username: [],
+          email: [],
+          password: [],
         }
     }),
 
@@ -134,7 +175,26 @@
       },
       formTitle () {
         return this.editedIndex === -1 ? 'Новый элемент' : 'Редактировать элемент'
-      }
+      },
+      usernameRules() {
+        return [
+          v => !!v || 'Необходимо заполнить поле «Логин»',
+          v => (v && v.length >= 2) || 'не менее 2 символов',
+          v => (v && v.length <= 20) || 'не более 20 символов'
+        ]
+      },
+      emailRules() {
+        return [
+          v => !!v || 'Необходимо заполнить поле «E-mail»',
+          v => emailRegex.test(v) || 'Некорректный E-mail'
+        ]
+      },
+      passwordRules() {
+        return [
+          v => !!v || 'Необходимо заполнить поле «Пароль»',
+          v => (v && v.length >= 6) || 'не менее 6 символов'
+        ]
+      },
     },
 
     watch: {
@@ -176,16 +236,17 @@
 
       save () {
         if (this.editedIndex > -1) {    //если редактирование
-          // Object.assign(this.users[this.editedIndex], this.editedItem)    //копирование отредактированного объекта в свой исходный элемент в массиве Users[]
-          const user = {
-            id: this.editedItem.id,
-            username: this.editedItem.username,
-            password: this.editedItem.password,
-            email: this.editedItem.email,
-            status: 20,   // this.editedItem.status
+          if (this.$refs.form.validate()) {
+            const user = {
+              id: this.editedItem.id,
+              username: this.editedItem.username,
+              password: this.editedItem.password,
+              email: this.editedItem.email,
+              status: 20,   // this.editedItem.status
+            }
+            console.log('Users.vue save() user: ', user)
+            this.$store.dispatch('updateUser', user)
           }
-          console.log('Users.vue save() user: ', user)
-          this.$store.dispatch('updateUser', user)
         } else {                        //иначе - новый объект
           this.users.push(this.editedItem)
         }
