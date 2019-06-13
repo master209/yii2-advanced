@@ -73,6 +73,14 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
+/*  app->request->bodyParams
+ Array
+(
+    [username] => 123
+    [email] => test1@mail.ru
+    [password] => 123456
+)
+ */
         if ($model->load(Yii::$app->request->bodyParams, '')) {
             if ($token = $model->signup()) {
                 return $token;

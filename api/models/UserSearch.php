@@ -19,15 +19,13 @@ class UserSearch extends User
      * @param array $params
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search()
     {
         $query = User::find()->joinWith(['userProfile']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-        $this->load($params);
 
         if (!$this->validate()) {
             return $dataProvider;

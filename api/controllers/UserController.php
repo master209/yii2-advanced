@@ -6,19 +6,29 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
-use yii\rest\ActiveController;
+use yii\rest\Controller;
+use common\models\User;
+use common\models\UserForm;
+use common\models\UserProfile;
 use api\models\UserSearch;
 use yii\web\ForbiddenHttpException;
 
-class UserController extends ActiveController
+class UserController extends Controller
 {
-    public $modelClass = 'common\models\User';
+    /**
+     * @var array the HTTP verbs that are supported by the collection URL
+     */
+    public $collectionOptions = ['GET', 'POST', 'HEAD', 'OPTIONS'];
+    /**
+     * @var array the HTTP verbs that are supported by the resource URL
+     */
+    public $resourceOptions = ['GET', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
 
     public function behaviors()
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['only'] = ['index',];
+        $behaviors['authenticator']['only'] = ['index', 'view', 'create', 'update', 'delete'];
         $behaviors['authenticator']['authMethods'] = [
             HttpBasicAuth::className(),
             HttpBearerAuth::className(),
@@ -30,7 +40,7 @@ class UserController extends ActiveController
 
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['index'],
+            'only' => ['index', 'view', 'create', 'update', 'delete'],
             'rules' => [
                 [
                     'allow' => true,
@@ -42,30 +52,81 @@ class UserController extends ActiveController
         return $behaviors;
     }
 
-    public function actions()
-    {
-        $actions = parent::actions();
-        unset($actions['create, update, delete']);
-        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
-        return $actions;
-    }
-
-    public function prepareDataProvider()
-    {
-        $searchModel = new UserSearch();
-        return $searchModel->search(Yii::$app->request->queryParams);
-    }
-
     public function actionIndex()
     {
+        $this->checkAccess('index');
         $searchModel = new UserSearch();
         return $searchModel->search();
     }
-    
+
+    public function actionUpdate($id)
+    {
+        $user = new UserForm();
+        $user->setModel($this->findModel($id));
+
+/*
+ Array
+(
+    [username] => u2
+    [email] => u2@mail.ru
+    [password] =>
+    [status] => 30
+    [roles] => Array
+        (
+        )
+)
+ */
+
+        $profile = UserProfile::findOne($id);
+/*
+ Array
+(
+    [user_id] => 12
+    [firstname] => Н
+    [lastname] => Ивлева
+    [byfather] => А
+    [birthday] =>
+    [avatar_path] =>
+    [gender] => 2
+    [position] => Диспетчер
+    [website] =>
+    [other] =>
+    [phone_mob] =>
+)
+ */
+        if ($user->load(Yii::$app->getRequest()->getBodyParams(), '') && $profile->load(Yii::$app->getRequest()->getBodyParams(), '')) {
+echo "user:<pre>"; print_r($user); echo"</pre>";
+echo "profile:<pre>"; print_r($profile); echo"</pre>"; die();      //DEBUG!
+            $isValid = $user->validate();
+            $isValid = $profile->validate() && $isValid;
+            if ($isValid) {
+//                $user->save(false);
+//                $profile->save(false);
+
+                return $this->redirect(['index']);
+            }
+        }
+
+/*        $roles = ArrayHelper::map(
+            Yii::$app->authManager->getRoles(),
+            'name', 'description'
+        );
+        asort($roles);*/
+
+    }
+
+    public function actionOptions()
+    {
+        //кажется, здесь может быть и пусто чтобы OPTIONS работал
+    }
+
     public function verbs()
     {
         return [
             'index' => ['get', 'options'],
+            'create' => ['post'],
+            'update' => ['put', 'patch', 'options'],
+            'delete' => ['delete'],
         ];
     }
 
@@ -81,4 +142,8 @@ class UserController extends ActiveController
         return true;
     }
 
+    public function findModel($id)
+    {
+        return User::findOne($id);
+    }
 }

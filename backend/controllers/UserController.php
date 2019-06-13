@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 use common\models\User;
 use common\models\UserProfile;
 use backend\models\UserSearch;
-use backend\models\UserForm;
+use common\models\UserForm;
 
 /**
  * Class UserController.

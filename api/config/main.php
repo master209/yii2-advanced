@@ -89,6 +89,9 @@ return [
 //                '<controller:\w+>/<id:\d+>/<action:\w+>' => '<controller>/<action>',
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
+                'GET users' => 'user/index',
+                'PUT,PATCH users/<id:\d+>' => 'user/update',
+                'OPTIONS users' => 'user/options',
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user-ad'],
                 'GET users/<user_id:\d+>/ads' => 'user-ad/index',

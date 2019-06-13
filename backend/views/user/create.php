@@ -4,7 +4,7 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\UserForm */
+/* @var $model common\models\UserForm */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $roles yii\rbac\Role[] */
 /* @var $permissions yii\rbac\Permission[] */

@@ -1,11 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
-use common\models\User;
 
 /**
  * Create user form.

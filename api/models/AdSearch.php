@@ -29,7 +29,7 @@ class AdSearch extends Ad
             'query' => $query,
         ]);
 
-        $this->load($params);
+//        $this->load($params);
 
         if (!$this->validate()) {
             return $dataProvider;

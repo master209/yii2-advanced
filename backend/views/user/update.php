@@ -9,7 +9,7 @@ use trntv\yii\datetime\DateTimeWidget;
 
 /* @var $this yii\web\View */
 /* @var $profile common\models\UserProfile */
-/* @var $user backend\models\UserForm */
+/* @var $user common\models\UserForm */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $roles yii\rbac\Role[] */
 /* @var $permissions yii\rbac\Permission[] */
