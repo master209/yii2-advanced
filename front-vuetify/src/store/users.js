@@ -1,13 +1,21 @@
 import Vue from 'vue'
 
 class User {
-  constructor (id, username, email, status, fio, phoneMob) {
+  constructor (id, username, email, status, fio, lastname, firstname, byfather, phoneMob, birthday, gender, position, other) {
     this.id = id,
     this.username = username,
     this.email = email,
     this.status = status,
-    this.fio = fio,
-    this.phoneMob = phoneMob
+
+    this.fio = fio
+    this.lastname = lastname,
+    this.firstname = firstname,
+    this.byfather = byfather,
+    this.phoneMob = phoneMob,
+    this.birthday = birthday,
+    this.gender = gender,
+    this.position = position,
+    this.other = other
   }
 }
 
@@ -37,8 +45,13 @@ export default {
         const _arr = []
         Object.keys(objs.body).forEach(key => {
           const o = objs.body[key]
+          const p = o.profile
+          // console.log('actions fetchUsers(), profile: ', p)
           _arr.push(
-            new User(o.id, o.username, o.email, o.status, o.profile.shortname, o.profile.phone_mob)
+            new User(
+              o.id, o.username, o.email, o.status,
+              p.shortname, p.lastname, p.firstname, p.byfather, p.phoneMob, p.birthday, p.gender, p.position, p.other
+            )
           )
         })
         console.log('from fetchUsers(), _arr: ', _arr)
@@ -52,17 +65,25 @@ export default {
       }
     },
 
-    async updateUser ({commit, getters}, {id, username, password, email, status}) {
+    async updateUser ({commit, getters}, {
+            id, username, password, email, status,
+            lastname, firstname, byfather, phoneMob, birthday, gender, position, other
+          })
+    {
       commit('clearError')
       commit('setLoading', true)
       try {
-        console.log('actions updateUser(), id, username, password, email, status: ', id, username, password, email, status)
-        const res = await Vue.http.put(`users/${id}`, {username, password, email, status}, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getters.token
-          }
-        })
+        console.log('actions updateUser(): ', id, username, password, email, status, lastname, firstname, byfather, phoneMob, birthday, gender, position, other)
+        const res = await Vue.http.put(`users/${id}`, {
+                  username, password, email, status,
+                  lastname, firstname, byfather, phoneMob, birthday, gender, position, other
+              },
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + getters.token
+                }
+              })
         console.log('actions updateUser(), response: ', res)
         commit('setLoading', false)
         if (res.status === 200) {

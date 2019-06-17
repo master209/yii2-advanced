@@ -95,17 +95,20 @@ class UserController extends Controller
 )
  */
 
-//        if ($user->load(Yii::$app->getRequest()->getBodyParams(), '') && $profile->load(Yii::$app->getRequest()->getBodyParams(), '')) {
-        if ($user->load(Yii::$app->getRequest()->getBodyParams(), '')) {
+        if ($user->load(Yii::$app->getRequest()->getBodyParams(), '') && $profile->load(Yii::$app->getRequest()->getBodyParams(), '')) {
+//        if ($user->load(Yii::$app->getRequest()->getBodyParams(), '')) {
 //echo "user:<pre>"; print_r($user); echo"</pre>"; die();      //DEBUG!
-//echo "profile:<pre>"; print_r($profile); echo"</pre>"; die();      //DEBUG!
+echo "profile:<pre>"; print_r($profile); echo"</pre>"; die();      //DEBUG!
             $isValid = $user->validate();
-//            $isValid = $profile->validate() && $isValid;
+            $isValid = $profile->validate() && $isValid;
             if ($isValid) {
 //                $user->save(false);
 //                $profile->save(false);
 
-                return ['user' => 'isValid'];
+                return [
+                    'user' => 'isValid',
+                    'userProfile' => 'isValid'
+                ];
             } else {
                 $errors = [];
                 foreach ($user->errors as $i => $err) {

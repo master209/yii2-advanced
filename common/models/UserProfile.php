@@ -195,7 +195,14 @@ class UserProfile extends ActiveRecord
     {
         return [
             'shortname' => 'shortname',
-            'phone_mob' => 'phone_mob',
+            'lastname' => 'lastname',
+            'firstname' => 'firstname',
+            'byfather' => 'byfather',
+            'phoneMob' => 'phone_mob',
+            'birthday' => 'birthday',
+            'gender' => 'gender',
+            'position' => 'position',
+            'other' => 'other',
         ];
     }
 
