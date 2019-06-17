@@ -32,7 +32,8 @@ class UserForm extends Model
 					if (!$this->getModel()->isNewRecord) {
 						$query->andWhere(['not', ['id' => $this->getModel()->id]]);
 					}
-				}
+				},
+                'message' => 'Данный логин уже используется'
 			],
 			['username', 'string', 'min' => 2, 'max' => 32],
 

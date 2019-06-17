@@ -66,9 +66,8 @@ export default {
         console.log('actions updateUser(), response: ', res)
         commit('setLoading', false)
         if (res.status === 200) {
-          if (res.body.token) {
-            commit('setUser', new User(res.body.id, res.body.token))
-          } else {
+          if (res.body.user === 'isValid') {}
+          else {
             throw res.bodyText
           }
         }

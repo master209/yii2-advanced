@@ -27,6 +27,7 @@
                                 name="username"
                                 label="Логин"
                                 prepend-icon="person"
+                                @focus="validateServer"
                                 :rules="usernameRules"
                                 :error-messages="messages.username"
                         ></v-text-field>
@@ -39,6 +40,7 @@
                                 type="password"
                                 prepend-icon="lock"
                                 :counter="6"
+                                @focus="validateServer"
                                 :rules="passwordRules"
                                 :error-messages="messages.password"
                         ></v-text-field>
@@ -50,6 +52,7 @@
                                 label="E-mail"
                                 type="email"
                                 prepend-icon="alternate_email"
+                                @focus="validateServer"
                                 :rules="emailRules"
                                 :error-messages="messages.email"
                         ></v-text-field>
@@ -123,7 +126,7 @@
 </template>
 
 <script>
-  const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+  const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,5})+$/
 
   export default {
     data: () => ({
@@ -228,12 +231,24 @@
 
       close () {
         this.dialog = false
+        this.validClient = true   //разблокирую кнопку Submit на форме
+        this.messages.username = null
+        this.messages.password = null
+        this.messages.email = null
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)   //копирование объекта (очистка editedItem пустыми значениями из defaultItem)
           this.editedIndex = -1
         }, 300)
       },
 
+      validateServer () {
+        if (!this.validServer) {    //если ошибка пришла с сервера,
+          this.validClient = true   //то при фокусе в инпуте разблокирую кнопку Submit на форме
+          this.messages.username = null
+          this.messages.password = null
+          this.messages.email = null
+        }
+      },
       save () {
         if (this.editedIndex > -1) {    //если редактирование
           if (this.$refs.form.validate()) {
@@ -246,11 +261,24 @@
             }
             console.log('Users.vue save() user: ', user)
             this.$store.dispatch('updateUser', user)
+              .then(() => {
+                console.log('Users.vue')
+                this.validServer = true;
+                this.close()
+                // this.$router.push('/')
+              })
+              .catch((errors) => {  // {"username":["Данный логин уже используется."]}
+                for (let field in errors) {
+                    for (let mes in errors[field]) {
+                      this.messages[field] = errors[field][mes]
+                    }
+                }
+                this.validServer = false;
+              })
           }
         } else {                        //иначе - новый объект
           this.users.push(this.editedItem)
         }
-        this.close()
       }
     }
 
