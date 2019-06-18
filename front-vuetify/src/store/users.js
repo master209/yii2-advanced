@@ -87,7 +87,7 @@ export default {
         console.log('actions updateUser(), response: ', res)
         commit('setLoading', false)
         if (res.status === 200) {
-          if (res.body.user === 'isValid') {}
+          if (res.body.user === 'isValid' && res.body.profile === 'isValid') {}
           else {
             throw res.bodyText
           }

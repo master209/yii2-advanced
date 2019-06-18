@@ -25,7 +25,6 @@ class UserForm extends Model
 		return [
 			['username', 'trim'],
 			['username', 'required'],
-			['username', 'match', 'pattern' => '#^[\w\._-]+$#i'],
 			['username', 'unique',
 				'targetClass' => User::className(),
 				'filter' => function ($query) {
@@ -36,6 +35,8 @@ class UserForm extends Model
                 'message' => 'Данный логин уже используется'
 			],
 			['username', 'string', 'min' => 2, 'max' => 32],
+//			['username', 'match', 'pattern' => '#^[\w\._-]+$#i'],
+            ['username', 'match', 'pattern' => '/^[a-z0-9_-]+$/iu', 'message' => 'Значение «Логин» содержит недопустимые символы.'],
 
 			['email', 'trim'],
 			//['email', 'required'],
@@ -54,7 +55,9 @@ class UserForm extends Model
 			['password', 'string', 'min' => 6, 'max' => 32],
 
 			['status', 'integer'],
+            ['status', 'required'],
 			['status', 'in', 'range' => array_keys(User::statuses())],
+
 			['roles', 'each',
 				'rule' => ['in', 'range' => ArrayHelper::getColumn(
 					Yii::$app->authManager->getRoles(),

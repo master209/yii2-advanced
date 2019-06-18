@@ -44,8 +44,8 @@ class UserProfile extends ActiveRecord
 			['website', 'url', 'defaultScheme' => 'http', 'validSchemes' => ['http', 'https']],
 			['other', 'string', 'max' => 1024],
 			[['firstname', 'lastname', 'byfather', 'avatar_path', 'website', 'position'], 'string', 'max' => 255],
-			['firstname', 'match', 'pattern' => '/^[a-zа-яё]+$/iu'],
-			['lastname', 'match', 'pattern' => '/^[a-zа-яё]+(-[a-zа-яё]+)?$/iu'],
+			['firstname', 'match', 'pattern' => '/^[a-zа-яё]+$/iu', 'message' => 'Значение «Имя» содержит недопустимые символы.'],
+			['lastname', 'match', 'pattern' => '/^[a-zа-яё]+(-[a-zа-яё]+)?$/iu', 'message' => 'Значение «Фамилия» содержит недопустимые символы.'],
 			['user_id', 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
 			[['firstname', 'lastname', 'byfather', 'birthday', 'phone_mob', 'gender', 'website', 'position', 'other'], 'default', 'value' => null],
 		];

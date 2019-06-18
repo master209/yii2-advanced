@@ -253,10 +253,10 @@ class User extends ActiveRecord implements IdentityInterface
             'id' => 'id',
             'username' => 'username',
             'email' => 'email',
-//            'status' => 'status',
-            'status' => function () {
+            'status' => 'status',
+/*            'status' => function () {
                 return self::statuses($this->status);
-            },
+            },*/
         ];
     }
 

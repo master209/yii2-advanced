@@ -21,6 +21,7 @@
                 <v-container grid-list-md>
                   <v-form v-model="validClient" ref="form" validation>
                     <v-layout wrap>
+
                       <v-flex xs12 sm6>
                         <v-text-field
                                 v-model="editedItem.username"
@@ -32,6 +33,7 @@
                                 :error-messages="messages.username"
                         ></v-text-field>
                       </v-flex>
+
                       <v-flex xs12 sm6>
                         <v-text-field
                                 v-model="editedItem.password"
@@ -45,6 +47,7 @@
                                 :error-messages="messages.password"
                         ></v-text-field>
                       </v-flex>
+
                       <v-flex xs12 sm6>
                         <v-text-field
                                 v-model="editedItem.email"
@@ -57,44 +60,102 @@
                                 :error-messages="messages.email"
                         ></v-text-field>
                       </v-flex>
+
                       <v-flex xs12 sm6>
-                        <v-text-field v-model="editedItem.status" label="Статус"></v-text-field>
+                        <v-text-field
+                                v-model="editedItem.status"
+                                name="status"
+                                label="Статус"
+                                @focus="validateServer"
+                                :rules="statusRules"
+                                :error-messages="messages.status"
+                        ></v-text-field>
                       </v-flex>
 
-                      <v-text-field
-                              v-model="editedItem.lastname"
-                              name="lastname"
-                              label="Фамилия"
-                              @focus="validateServer"
-                              :rules="lastnameRules"
-                              :error-messages="messages.lastname"
-                      ></v-text-field>
-                      <v-text-field
-                              v-model="editedItem.firstname"
-                              name="firstname"
-                              label="Имя"
-                              @focus="validateServer"
-                              :rules="firstnameRules"
-                              :error-messages="messages.firstname"
-                      ></v-text-field>
                       <v-flex xs12 sm6>
-                        <v-text-field v-model="editedItem.byfather" label="Отчество"></v-text-field>
+                        <v-text-field
+                                v-model="editedItem.lastname"
+                                name="lastname"
+                                label="Фамилия"
+                                @focus="validateServer"
+                                :rules="lastnameRules"
+                                :error-messages="messages.lastname"
+                        ></v-text-field>
                       </v-flex>
+
                       <v-flex xs12 sm6>
-                        <v-text-field v-model="editedItem.phoneMob" label="Телефон"></v-text-field>
+                        <v-text-field
+                                v-model="editedItem.firstname"
+                                name="firstname"
+                                label="Имя"
+                                @focus="validateServer"
+                                :rules="firstnameRules"
+                                :error-messages="messages.firstname"
+                        ></v-text-field>
                       </v-flex>
+
                       <v-flex xs12 sm6>
-                        <v-text-field v-model="editedItem.birthday" label="Дата рождения"></v-text-field>
+                        <v-text-field
+                                v-model="editedItem.byfather"
+                                name="byfather"
+                                label="Отчество"
+                                @focus="validateServer"
+                                :error-messages="messages.byfather"
+                        ></v-text-field>
                       </v-flex>
+
                       <v-flex xs12 sm6>
-                        <v-text-field v-model="editedItem.gender" label="Пол"></v-text-field>
+                        <v-text-field
+                                v-model="editedItem.phoneMob"
+                                name="phoneMob"
+                                label="Телефон"
+                                @focus="validateServer"
+                                :error-messages="messages.phoneMob"
+                        ></v-text-field>
                       </v-flex>
+
                       <v-flex xs12 sm6>
-                        <v-text-field v-model="editedItem.position" label="Должность"></v-text-field>
+                        <v-text-field
+                                v-model="editedItem.birthday"
+                                name="birthday"
+                                label="Дата рождения"
+                                @focus="validateServer"
+                                :error-messages="messages.birthday"
+                        ></v-text-field>
                       </v-flex>
+
                       <v-flex xs12 sm6>
-                        <v-text-field v-model="editedItem.other" label="Доп инфо"></v-text-field>
+                        <v-text-field
+                                v-model="editedItem.gender"
+                                name="gender"
+                                label="Пол"
+                                @focus="validateServer"
+                                :rules="genderRules"
+                                :error-messages="messages.gender"
+                        ></v-text-field>
                       </v-flex>
+
+                      <v-flex xs12 sm6>
+                        <v-text-field
+                                v-model="editedItem.position"
+                                name="position"
+                                label="Должность"
+                                @focus="validateServer"
+                                :error-messages="messages.position"
+                        ></v-text-field>
+                      </v-flex>
+
+                      <v-flex xs12 sm6>
+                        <v-text-field
+                                v-model="editedItem.other"
+                                name="other"
+                                type="text"
+                                label="Доп инфо"
+                                @focus="validateServer"
+                                :error-messages="messages.other"
+                        ></v-text-field>
+                      </v-flex>
+
                     </v-layout>
                   </v-form>
                 </v-container>
@@ -181,6 +242,7 @@
           password: 0,
           email: 0,
           status: 0,
+
           lastname: 0,
           firstname: 0,
           byfather: 0,
@@ -196,6 +258,7 @@
           password: 0,
           email: 0,
           status: 0,
+
           lastname: 0,
           firstname: 0,
           byfather: 0,
@@ -209,8 +272,16 @@
           username: [],
           email: [],
           password: [],
+          status: [],
+
           lastname: [],
           firstname: [],
+          byfather: [],
+          phoneMob: [],
+          birthday: [],
+          gender: [],
+          position: [],
+          other: [],
         }
     }),
 
@@ -224,17 +295,12 @@
       formTitle () {
         return this.editedIndex === -1 ? 'Новый элемент' : `Редактирование пользователя ${this.editedItem.username}`
       },
+
       usernameRules() {
         return [
           v => !!v || 'Необходимо заполнить поле «Логин»',
           v => (v && v.length >= 2) || 'не менее 2 символов',
           v => (v && v.length <= 20) || 'не более 20 символов'
-        ]
-      },
-      emailRules() {
-        return [
-          v => !!v || 'Необходимо заполнить поле «E-mail»',
-          v => emailRegex.test(v) || 'Некорректный E-mail'
         ]
       },
       passwordRules() {
@@ -243,10 +309,26 @@
           v => (v && v.length >= 6) || 'не менее 6 символов'
         ]
       },
+      emailRules() {
+        return [
+          v => !!v || 'Необходимо заполнить поле «E-mail»',
+          v => emailRegex.test(v) || 'Некорректный E-mail'
+        ]
+      },
+      statusRules() {
+        return [
+          v => !!v || 'Необходимо заполнить поле «Статус»',
+        ]
+      },
       lastnameRules() {
         return [
           v => !!v || 'Необходимо заполнить поле «Фамилия»',
           v => (v && v.length <= 255) || 'не более 255 символов'
+        ]
+      },
+      genderRules() {
+        return [
+          v => !!v || 'Необходимо заполнить поле «Пол»',
         ]
       },
       firstnameRules() {
@@ -288,11 +370,7 @@
 
       close () {
         this.dialog = false
-        this.validClient = true   //разблокирую кнопку Submit на форме
-        this.messages.username = null
-        this.messages.password = null
-        this.messages.email = null
-        this.messages.firstname = null
+        this.resetFields()
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)   //копирование объекта (очистка editedItem пустыми значениями из defaultItem)
           this.editedIndex = -1
@@ -301,11 +379,7 @@
 
       validateServer () {
         if (!this.validServer) {    //если ошибка пришла с сервера,
-          this.validClient = true   //то при фокусе в инпуте разблокирую кнопку Submit на форме
-          this.messages.username = null
-          this.messages.password = null
-          this.messages.email = null
-          this.messages.firstname = null
+          this.resetFields()        //то при фокусе в инпуте разблокирую кнопку Submit на форме
         }
       },
       save () {
@@ -316,7 +390,16 @@
               username: this.editedItem.username,
               password: this.editedItem.password,
               email: this.editedItem.email,
-              status: 20,   // this.editedItem.status
+              status: this.editedItem.status,
+
+              lastname: this.editedItem.lastname,
+              firstname: this.editedItem.firstname,
+              byfather: this.editedItem.byfather,
+              phoneMob: this.editedItem.phoneMob,
+              birthday: this.editedItem.birthday,
+              gender: this.editedItem.gender,
+              position: this.editedItem.position,
+              other: this.editedItem.other,
             }
             console.log('Users.vue save() user: ', user)
             this.$store.dispatch('updateUser', user)
@@ -338,6 +421,23 @@
         } else {                        //иначе - новый объект
           this.users.push(this.editedItem)
         }
+      },
+
+      resetFields () {
+        this.validClient = true   //разблокирую кнопку Submit на форме
+        this.messages.username = null
+        this.messages.password = null
+        this.messages.email = null
+        this.messages.status = null
+
+        this.messages.lastname = null
+        this.messages.firstname = null
+        this.messages.byfather = null
+        this.messages.phoneMob = null
+        this.messages.birthday = null
+        this.messages.gender = null
+        this.messages.position = null
+        this.messages.other = null
       }
     }
 
