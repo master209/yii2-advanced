@@ -95,16 +95,15 @@ class UserController extends Controller
 )
  */
 
-//echo "params:<pre>"; print_r(Yii::$app->getRequest()->getBodyParams()); echo"</pre>"; die();      //DEBUG!
         if ($user->load(Yii::$app->getRequest()->getBodyParams(), '') && $profile->load(Yii::$app->getRequest()->getBodyParams(), '')) {
-//        if ($profile->load(Yii::$app->getRequest()->getBodyParams(), '')) {
 //echo "user:<pre>"; print_r($user); echo"</pre>"; die();      //DEBUG!
 //echo "profile:<pre>"; print_r($profile->attributes); echo"</pre>"; die();      //DEBUG!
             $isValid = $user->validate();
             $isValid = $profile->validate() && $isValid;
             if ($isValid) {
-//                $user->save(false);
-//                $profile->save(false);
+                $user->save(false);
+                $profile->phone_mob = preg_replace('/[+\s-\(\)]/', '',$profile->phone_mob);
+                $profile->save(false);
 
                 return [
                     'user' => 'isValid',

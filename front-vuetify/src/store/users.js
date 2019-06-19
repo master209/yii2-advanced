@@ -76,7 +76,7 @@ export default {
         console.log('actions updateUser(): ', id, username, password, email, status, lastname, firstname, byfather, phoneMob, birthday, gender, position, other)
         const res = await Vue.http.put(`users/${id}`, {
                   username, password, email, status,
-                  lastname, firstname, byfather, phoneMob, birthday, gender, position, other
+                  lastname, firstname, byfather, 'phone_mob': phoneMob, birthday, gender, position, other
               },
               {
                 headers: {

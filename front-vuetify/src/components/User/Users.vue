@@ -63,12 +63,13 @@
 
                       <v-flex xs12 sm6>
                         <v-text-field
-                                v-model="editedItem.status"
-                                name="status"
-                                label="Статус"
+                                v-model="editedItem.phoneMob"
+                                name="phoneMob"
+                                label="Телефон"
+                                :mask="phoneMask"
+                                prepend-icon="phone"
                                 @focus="validateServer"
-                                :rules="statusRules"
-                                :error-messages="messages.status"
+                                :error-messages="messages.phone_mob"
                         ></v-text-field>
                       </v-flex>
 
@@ -106,11 +107,12 @@
 
                       <v-flex xs12 sm6>
                         <v-text-field
-                                v-model="editedItem.phoneMob"
-                                name="phoneMob"
-                                label="Телефон"
+                                v-model="editedItem.status"
+                                name="status"
+                                label="Статус"
                                 @focus="validateServer"
-                                :error-messages="messages.phoneMob"
+                                :rules="statusRules"
+                                :error-messages="messages.status"
                         ></v-text-field>
                       </v-flex>
 
@@ -187,8 +189,8 @@
             <td >{{ props.item.password }}</td>
             <td >{{ props.item.email }}</td>
             <td >{{ props.item.status }}</td>
-            <td >{{ props.item.fio }}</td>
-            <td >{{ props.item.phoneMob }}</td>
+            <td >{{ props.item.lastname }} {{ props.item.firstname }}</td>
+            <td >{{ props.item.phoneMob }} </td>
             <td >{{ props.item.position }}</td>
             <td class="justify-center layout px-0">
               <v-icon
@@ -225,6 +227,7 @@
         error: false,
         validClient: false,
         validServer: true,
+        phoneMask: 'phone',
         headers: [
           {text: 'id', value: 'id',},
           { text: 'Логин', value: 'username' },
@@ -277,7 +280,7 @@
           lastname: [],
           firstname: [],
           byfather: [],
-          phoneMob: [],
+          phone_mob: [],
           birthday: [],
           gender: [],
           position: [],
@@ -404,8 +407,8 @@
             console.log('Users.vue save() user: ', user)
             this.$store.dispatch('updateUser', user)
               .then(() => {
-                console.log('Users.vue')
                 this.validServer = true;
+                Object.assign(this.users[this.editedIndex], this.editedItem)
                 this.close()
                 // this.$router.push('/')
               })
@@ -418,7 +421,7 @@
                 this.validServer = false;
               })
           }
-        } else {                        //иначе - новый объект
+        } else {    //иначе - новый объект
           this.users.push(this.editedItem)
         }
       },
@@ -433,7 +436,7 @@
         this.messages.lastname = null
         this.messages.firstname = null
         this.messages.byfather = null
-        this.messages.phoneMob = null
+        this.messages.phone_mob = null
         this.messages.birthday = null
         this.messages.gender = null
         this.messages.position = null

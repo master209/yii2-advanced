@@ -37,8 +37,9 @@ class UserProfile extends ActiveRecord
 		return [
 			[['firstname','lastname','gender'], 'required'],
 			['birthday', 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
-			[['phone_mob'], 'match', 'pattern' => '/^\+7\s\([0-9]{3}\)\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/', 
-					'message' => 'Некорректный номер телефона'],		//+7 (999) 999-99-99
+//			[['phone_mob'], 'match', 'pattern' => '/^\+7\s\([0-9]{3}\)\s[0-9]{3}\-[0-9]{2}\-[0-9]{2}$/',    //+7 (999) 999-99-99
+			[['phone_mob'], 'match', 'pattern' => '/^[0-9]{10}$/',   //(999) 999-9999
+					'message' => 'Некорректный номер телефона'],		//9999999999
 			['gender', 'in', 'range' => [null, self::GENDER_MALE, self::GENDER_FEMALE]],
 			['website', 'trim'],
 			['website', 'url', 'defaultScheme' => 'http', 'validSchemes' => ['http', 'https']],
