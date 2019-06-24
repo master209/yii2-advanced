@@ -227,7 +227,7 @@ console.log('actions adById(), ad: ', ad)
     ads (state) {
       return state.ads
     },
-    ad: (state) => (id) => {                      // You can also pass arguments to getters
+    adById: (state) => (id) => {                  // You can also pass arguments to getters
       return state.ads.find(ad => ad.id == id)    // https://vuex.vuejs.org/guide/getters.html
     },
     promoAds (state) {

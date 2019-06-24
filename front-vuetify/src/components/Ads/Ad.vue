@@ -50,8 +50,8 @@ export default {
     console.log('Ad.vue created this.id: ', this.id)
     this.$store.dispatch('adById', this.id)
       .then(() => {
-        this.ad = this.$store.getters.ad(this.id)
-        console.log('Ad.vue created getters.ad: ', this.ad)
+        this.ad = this.$store.getters.adById(this.id)
+        console.log('Ad.vue created getters.adById: ', this.ad)
         if(!this.$store.getters.user) {
           return false
         }
