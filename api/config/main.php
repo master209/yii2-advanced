@@ -90,8 +90,10 @@ return [
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
                 'GET users' => 'user/index',
-                'PUT,PATCH users/<id:\d+>' => 'user/update',
                 'OPTIONS users' => 'user/options',
+                'GET users/statuses' => 'user/statuses',
+                'OPTIONS users/statuses' => 'user/options',
+                'PUT,PATCH users/<id:\d+>' => 'user/update',
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user-ad'],
                 'GET users/<user_id:\d+>/ads' => 'user-ad/index',

@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['only'] = ['index', 'view', 'create', 'update', 'delete'];
+        $behaviors['authenticator']['only'] = ['index', 'view', 'create', 'update', 'delete', 'statuses'];
         $behaviors['authenticator']['authMethods'] = [
             HttpBasicAuth::className(),
             HttpBearerAuth::className(),
@@ -40,7 +40,7 @@ class UserController extends Controller
 
         $behaviors['access'] = [
             'class' => AccessControl::className(),
-            'only' => ['index', 'view', 'create', 'update', 'delete'],
+            'only' => ['index', 'view', 'create', 'update', 'delete', 'statuses'],
             'rules' => [
                 [
                     'allow' => true,
@@ -133,6 +133,18 @@ class UserController extends Controller
 
     }
 
+    public function actionStatuses()    //statuses
+    {
+        $_statuses =  User::statuses();
+        $statuses = [];
+        foreach ($_statuses as $k=>$val) {
+            $_arr['id'] = $k;
+            $_arr['name'] = $val;
+            array_push($statuses, $_arr);
+        }
+        return $statuses;
+    }
+
     public function actionOptions()
     {
         //кажется, здесь может быть и пусто чтобы OPTIONS работал
@@ -142,6 +154,7 @@ class UserController extends Controller
     {
         return [
             'index' => ['get', 'options'],
+            'statuses' => ['get', 'options'],
             'create' => ['post'],
             'update' => ['put', 'patch', 'options'],
             'delete' => ['delete'],

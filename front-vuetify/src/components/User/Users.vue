@@ -298,7 +298,6 @@
         return this.$store.getters.loading
       },
       statusList () {
-        console.log('statusList(): ', this.$store.getters.statusList)
         return this.$store.getters.statusList
       },
       formTitle () {
@@ -350,12 +349,15 @@
     },
 
     created () {
-      this.$store.dispatch('fetchUsers')
-      .catch((error) => {
-        if(error.body.status === 403) {
-          this.error = 'Вы не можете просматривать эту страницу'
-        }
-      })
+      this.$store.dispatch('statusList')
+        .then(() => {                           //грид юзеров не отобразится пока не будет готов массив статусов
+          this.$store.dispatch('fetchUsers')
+            .catch((error) => {
+              if(error.body.status === 403) {
+                this.error = 'Вы не можете просматривать эту страницу'
+              }
+            })
+        })
     },
 
     methods: {

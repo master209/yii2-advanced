@@ -22,17 +22,16 @@ class User {
 export default {
   state: {
     users: [],
-    statusList: [
-      {'id':0, 'name':'отключен'},
-      {'id':10, 'name':'активен'},
-      {'id':20, 'name':'забанен'},
-      {'id':30, 'name':'удален'},
-    ],
+    statusList: [],
   },
   mutations: {
     setUsers (state, payload) {
       state.users = payload
       console.log('mutations setUsers() users arr: ', state.users)
+    },
+    setStatuses (state, payload) {
+      state.statusList = payload
+      console.log('mutations setStatuses() state.statusList: ', state.statusList)
     }
   },
   actions: {
@@ -40,7 +39,7 @@ export default {
       commit('clearError')
       commit('setLoading', true)
       try {
-        console.log('actions fetchUsers(), token', getters.token)
+        // console.log('actions fetchUsers(), token', getters.token)
         const objs = await Vue.http.get('users?expand=profile', {
           headers: {
             'Content-Type': 'application/json',
@@ -105,7 +104,27 @@ export default {
         throw JSON.parse(error)
       }
     },
-    
+
+    async statusList ({commit, getters}) {
+      commit('clearError')
+      commit('setLoading', true)
+      try {
+        const objs = await Vue.http.get('users/statuses', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getters.token
+          }
+        })
+        console.log('actions statusList(), statuses array: ', objs.body)
+        commit('setStatuses', objs.body)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setLoading', false)
+        commit('setError', error.message)
+        throw error
+      }
+    },
+
   },
   
   getters: {
