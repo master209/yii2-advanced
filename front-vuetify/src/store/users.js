@@ -21,7 +21,13 @@ class User {
 
 export default {
   state: {
-    users: []
+    users: [],
+    statusList: [
+      {'id':0, 'name':'отключен'},
+      {'id':10, 'name':'активен'},
+      {'id':20, 'name':'забанен'},
+      {'id':30, 'name':'удален'},
+    ],
   },
   mutations: {
     setUsers (state, payload) {
@@ -105,6 +111,13 @@ export default {
   getters: {
     users (state) {
       return state.users
-    }
+    },
+    statusList (state) {
+      return state.statusList
+    },
+    statusById: (state) => (id) => {                             // You can also pass arguments to getters
+      return state.statusList.find(status => status.id == id)    // https://vuex.vuejs.org/guide/getters.html
+    },
+
   }
 }

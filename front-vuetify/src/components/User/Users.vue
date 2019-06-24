@@ -106,14 +106,16 @@
                       </v-flex>
 
                       <v-flex xs12 sm6>
-                        <v-text-field
+                        <v-select
                                 v-model="editedItem.status"
+                                :items="statusList"
+                                item-value="id"
+                                item-text="name"
                                 name="status"
                                 label="Статус"
                                 @focus="validateServer"
-                                :rules="statusRules"
                                 :error-messages="messages.status"
-                        ></v-text-field>
+                        ></v-select>
                       </v-flex>
 
                       <v-flex xs12 sm6>
@@ -188,7 +190,7 @@
             <td>{{ props.item.username }}</td>
             <td >{{ props.item.password }}</td>
             <td >{{ props.item.email }}</td>
-            <td >{{ props.item.status }}</td>
+            <td >{{ statusById(props.item.status).name }}</td>
             <td >{{ props.item.lastname }} {{ props.item.firstname }}</td>
             <td >{{ props.item.phoneMob }} </td>
             <td >{{ props.item.position }}</td>
@@ -295,6 +297,10 @@
       loading () {
         return this.$store.getters.loading
       },
+      statusList () {
+        console.log('statusList(): ', this.$store.getters.statusList)
+        return this.$store.getters.statusList
+      },
       formTitle () {
         return this.editedIndex === -1 ? 'Новый элемент' : `Редактирование пользователя ${this.editedItem.username}`
       },
@@ -316,11 +322,6 @@
         return [
           v => !!v || 'Необходимо заполнить поле «E-mail»',
           v => emailRegex.test(v) || 'Некорректный E-mail'
-        ]
-      },
-      statusRules() {
-        return [
-          v => !!v || 'Необходимо заполнить поле «Статус»',
         ]
       },
       lastnameRules() {
@@ -441,7 +442,11 @@
         this.messages.gender = null
         this.messages.position = null
         this.messages.other = null
-      }
+      },
+
+      statusById (id) {
+        return this.$store.getters.statusById(id)
+      },
     }
 
   }
