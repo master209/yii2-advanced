@@ -27,7 +27,7 @@
                                 v-model="editedItem.username"
                                 name="username"
                                 label="Логин"
-                                prepend-icon="person"
+                                prepend-inner-icon="person"
                                 @focus="validateServer"
                                 :rules="usernameRules"
                                 :error-messages="messages.username"
@@ -40,7 +40,7 @@
                                 name="password"
                                 label="Пароль"
                                 type="password"
-                                prepend-icon="lock"
+                                prepend-inner-icon="lock"
                                 :counter="30"
                                 @focus="validateServer"
                                 :rules="passwordRules"
@@ -54,7 +54,7 @@
                                 name="email"
                                 label="E-mail"
                                 type="email"
-                                prepend-icon="alternate_email"
+                                prepend-inner-icon="alternate_email"
                                 @focus="validateServer"
                                 :rules="emailRules"
                                 :error-messages="messages.email"
@@ -67,7 +67,7 @@
                                 name="phoneMob"
                                 label="Телефон"
                                 :mask="phoneMask"
-                                prepend-icon="phone"
+                                prepend-inner-icon="phone"
                                 @focus="validateServer"
                                 :error-messages="messages.phone_mob"
                         ></v-text-field>
@@ -173,7 +173,7 @@
                         color="primary"
                         @click="save"
                         :loading="loading"
-                        :disabled="!validClient || loading"
+                        :disabled="loading"
                 >Сохранить</v-btn>
               </v-card-actions>
             </v-card>
@@ -188,7 +188,6 @@
           <template v-slot:items="props">
             <td>{{ props.item.id }}</td>
             <td>{{ props.item.username }}</td>
-            <td >{{ props.item.password }}</td>
             <td >{{ props.item.email }}</td>
             <td >{{ statusById(props.item.status).name }}</td>
             <td >{{ props.item.lastname }} {{ props.item.firstname }}</td>
@@ -233,7 +232,6 @@
         headers: [
           {text: 'id', value: 'id',},
           { text: 'Логин', value: 'username' },
-          { text: 'Пароль', value: 'password' },
           { text: 'E-mail', value: 'email' },
           { text: 'Статус', value: 'status' },
           { text: 'ФИО', value: 'fio' },
@@ -243,35 +241,35 @@
         editedIndex: -1,  // признак созд. нового элемента (-1) или редактировния старого
         editedItem: {
           id: '',
-          username: 0,
-          password: 0,
-          email: 0,
-          status: 0,
+          username: '',
+          password: '',
+          email: '',
+          status: '',
 
-          lastname: 0,
-          firstname: 0,
-          byfather: 0,
-          phoneMob: 0,
-          birthday: 0,
-          gender: 0,
-          position: 0,
-          other: 0,
+          lastname: '',
+          firstname: '',
+          byfather: '',
+          phoneMob: '',
+          birthday: '',
+          gender: '',
+          position: '',
+          other: '',
         },
         defaultItem: {
           id: '',
-          username: 0,
-          password: 0,
-          email: 0,
-          status: 0,
+          username: '',
+          password: '',
+          email: '',
+          status: '',
 
-          lastname: 0,
-          firstname: 0,
-          byfather: 0,
-          phoneMob: 0,
-          birthday: 0,
-          gender: 0,
-          position: 0,
-          other: 0,
+          lastname: '',
+          firstname: '',
+          byfather: '',
+          phoneMob: '',
+          birthday: '',
+          gender: '',
+          position: '',
+          other: '',
         },
         messages: {
           username: [],
@@ -425,6 +423,7 @@
               })
           }
         } else {    //иначе - новый объект
+          console.log('Users.vue create() editedItem: ', this.editedItem)
           this.users.push(this.editedItem)
         }
       },
