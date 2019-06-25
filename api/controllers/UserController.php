@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['authenticator']['only'] = ['index', 'view', 'create', 'update', 'delete'];
+        $behaviors['authenticator']['only'] = ['index', 'view', 'create', 'update', 'delete', 'statuses'];
         $behaviors['authenticator']['authMethods'] = [
             HttpBasicAuth::className(),
             HttpBearerAuth::className(),
