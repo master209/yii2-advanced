@@ -1,4 +1,9 @@
 <?php
+
+/*$modules = array_merge(
+    require __DIR__ . '/../../common/config/modules.php'
+);*/
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -36,14 +41,47 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
+    ],
+
+    'as globalAccess' => [
+        'class' => 'common\behaviors\GlobalAccessBehavior',
+        'rules' => [
+
+
+            //site
+            [
+                'controllers' => ['site'],
+                'allow' => true,
+                'actions' => ['error', 'index', 'about', 'contact'],
+                'roles' => ['?', '@'],
+            ],
+            [
+                'controllers' => ['site'],
+                'allow' => true,
+                'actions' => ['login', 'signup'],
+                'roles' => ['?'],
+            ],
+            [
+                'controllers' => ['site'],
+                'allow' => true,
+                'actions' => ['logout'],
+                'roles' => ['@'],
+            ],
+            [
+                'controllers' => ['site'],
+                'allow' => false,
             ],
         ],
-        */
     ],
+
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            'site/*',
+        ]
+    ],
+
+//    'modules' => $modules,
+    'modules' => [],
     'params' => $params,
 ];

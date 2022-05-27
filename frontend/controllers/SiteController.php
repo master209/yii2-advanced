@@ -12,19 +12,15 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\FileForm;
+use yii\web\UploadedFile;
 
-/**
- * Site controller
- */
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
-            'access' => [
+/*            'access' => [                                         //вынес в /frontend/config/main.php
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'signup'],
                 'rules' => [
@@ -39,7 +35,7 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                 ],
-            ],
+            ],*/
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -49,9 +45,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         return [
@@ -133,16 +126,34 @@ class SiteController extends Controller
         }
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return mixed
-     */
     public function actionAbout()
     {
-        return $this->render('about');
+/*  Yii::$app->request->post()
+(
+    [_csrf-frontend] => vRGq_tuaG1VB8LPqCIztHSjGwjIkk1VReefiEt7G9UreUPKz7fRKOgOChI9b4LsoTqmBQ0r8ZgM-rIFUmPO4DQ==
+)*/
+
+        $model = new FileForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+//echo "actionAbout<pre>"; print_r($model->file); echo"</pre>";   die();
+
+            if ($model->uploadFile()) {
+                $model->save(false);
+            }
+        } else
+            return $this->render('file', [		// 'about'
+                'model' => $model,
+            ]);
     }
 
+    public function beforeAction($action)
+    {
+        if ($action->id == 'about__') {
+            $this->enableCsrfValidation = false;
+        }
+        return parent::beforeAction($action);
+    }
     /**
      * Signs user up.
      *
